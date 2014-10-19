@@ -27,7 +27,6 @@ body {
 }
 .wrench {
   fill: #333333;
-  stroke: #ddd;
   animation-name: screw;
   animation-duration: 2s;
   animation: dash 5s linear;

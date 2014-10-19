@@ -6,22 +6,31 @@ body { margin:0; padding:0; }
         -webkit-transform: rotate(0deg);
     }
 
-    62% {
-        -webkit-transform: rotate(180deg);
+    72% {
+        -webkit-transform: rotate(150deg);
+    }
+
+    80% {
+        -webkit-transform: rotate(170deg);
+    }
+
+    90% {
+        -webkit-transform: rotate(172deg);
     }
 
     100% {
-        -webkit-transform: rotate(220deg);
+        -webkit-transform: rotate(180deg);
     }
 }
 
 .wrench {
     fill: #333333;
+    stroke: #ddd;
     animation-name: screw;
     //.animation-iteration-count(1);
-    animation-duration: 3s;
+    animation-duration: 2s;
     animation: dash 5s linear;
     transform-origin: 50% 10%;
 
-    -webkit-animation: screw 5s linear alternate infinite;
+    -webkit-animation: screw 2s linear alternate infinite;
 }

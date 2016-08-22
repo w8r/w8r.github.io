@@ -1,12 +1,12 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/w8r/Projects/w8r.github.com/config.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports={
     "mapbox": {
         "APIToken": "pk.eyJ1IjoidzhyIiwiYSI6IlF2Nlh6QVkifQ.D7BkmeoMI7GEkMDtg3durw",
-        "mapId": "w8r.k0aohog3"
+        "mapId": "mapbox.emerald"
     }
 }
 
-},{}],"/Users/w8r/Projects/w8r.github.com/index.js":[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 (function (global){
 require('mapbox.js');
 var config = require('./config.json');
@@ -15,13 +15,13 @@ console.log(L, config)
 
 L.mapbox.accessToken = config.mapbox.APIToken;
 var map = global.map = L.mapbox.map('map', config.mapbox.mapId)
-    .setView([52.07444, 4.280243], 15),
+    .setView([51.9215571, 4.5011478], 15),
     geocoder = L.mapbox.geocoder('mapbox.places-v1');
 
 map._controlCorners.topright.appendChild(document.querySelector('.block'));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./config.json":"/Users/w8r/Projects/w8r.github.com/config.json","mapbox.js":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/corslite/corslite.js":[function(require,module,exports){
+},{"./config.json":1,"mapbox.js":16}],3:[function(require,module,exports){
 function corslite(url, callback, cors) {
     var sent = false;
 
@@ -116,7 +116,7 @@ function corslite(url, callback, cors) {
 
 if (typeof module !== 'undefined') module.exports = corslite;
 
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/leaflet/dist/leaflet-src.js":[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /*
  Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
  (c) 2010-2013, Vladimir Agafonkin
@@ -126,7 +126,7 @@ if (typeof module !== 'undefined') module.exports = corslite;
 var oldL = window.L,
     L = {};
 
-L.version = '0.7.2';
+L.version = '0.7.7';
 
 // define Leaflet for Node module pattern loaders, including Browserify
 if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -638,9 +638,8 @@ L.Mixin.Events.fire = L.Mixin.Events.fireEvent;
 		gecko = ua.indexOf('gecko') !== -1,
 
 	    mobile = typeof orientation !== undefined + '',
-	    msPointer = window.navigator && window.navigator.msPointerEnabled &&
-	              window.navigator.msMaxTouchPoints && !window.PointerEvent,
-		pointer = (window.PointerEvent && window.navigator.pointerEnabled && window.navigator.maxTouchPoints) ||
+	    msPointer = !window.PointerEvent && window.MSPointerEvent,
+		pointer = (window.PointerEvent && window.navigator.pointerEnabled) ||
 				  msPointer,
 	    retina = ('devicePixelRatio' in window && window.devicePixelRatio > 1) ||
 	             ('matchMedia' in window && window.matchMedia('(min-resolution:144dpi)') &&
@@ -653,38 +652,8 @@ L.Mixin.Events.fire = L.Mixin.Events.fireEvent;
 	    opera3d = 'OTransition' in doc.style,
 	    any3d = !window.L_DISABLE_3D && (ie3d || webkit3d || gecko3d || opera3d) && !phantomjs;
 
-
-	// PhantomJS has 'ontouchstart' in document.documentElement, but doesn't actually support touch.
-	// https://github.com/Leaflet/Leaflet/pull/1434#issuecomment-13843151
-
-	var touch = !window.L_NO_TOUCH && !phantomjs && (function () {
-
-		var startName = 'ontouchstart';
-
-		// IE10+ (We simulate these into touch* events in L.DomEvent and L.DomEvent.Pointer) or WebKit, etc.
-		if (pointer || (startName in doc)) {
-			return true;
-		}
-
-		// Firefox/Gecko
-		var div = document.createElement('div'),
-		    supported = false;
-
-		if (!div.setAttribute) {
-			return false;
-		}
-		div.setAttribute(startName, 'return;');
-
-		if (typeof div[startName] === 'function') {
-			supported = true;
-		}
-
-		div.removeAttribute(startName);
-		div = null;
-
-		return supported;
-	}());
-
+	var touch = !window.L_NO_TOUCH && !phantomjs && (pointer || 'ontouchstart' in window ||
+		(window.DocumentTouch && document instanceof window.DocumentTouch));
 
 	L.Browser = {
 		ie: ie,
@@ -1751,14 +1720,15 @@ L.Map = L.Class.extend({
 		var paddingTL = L.point(options.paddingTopLeft || options.padding || [0, 0]),
 		    paddingBR = L.point(options.paddingBottomRight || options.padding || [0, 0]),
 
-		    zoom = this.getBoundsZoom(bounds, false, paddingTL.add(paddingBR)),
-		    paddingOffset = paddingBR.subtract(paddingTL).divideBy(2),
+		    zoom = this.getBoundsZoom(bounds, false, paddingTL.add(paddingBR));
+
+		zoom = (options.maxZoom) ? Math.min(options.maxZoom, zoom) : zoom;
+
+		var paddingOffset = paddingBR.subtract(paddingTL).divideBy(2),
 
 		    swPoint = this.project(bounds.getSouthWest(), zoom),
 		    nePoint = this.project(bounds.getNorthEast(), zoom),
 		    center = this.unproject(swPoint.add(nePoint).divideBy(2).add(paddingOffset), zoom);
-
-		zoom = options && options.maxZoom ? Math.min(options.maxZoom, zoom) : zoom;
 
 		return this.setView(center, zoom, options);
 	},
@@ -2901,7 +2871,7 @@ L.TileLayer = L.Class.extend({
 		}
 
 		if (options.bounds) {
-			var tileSize = options.tileSize,
+			var tileSize = this._getTileSize(),
 			    nwPoint = tilePoint.multiplyBy(tileSize),
 			    sePoint = nwPoint.add([tileSize, tileSize]),
 			    nw = this._map.unproject(nwPoint),
@@ -3686,10 +3656,8 @@ L.Marker = L.Class.extend({
 
 	update: function () {
 		if (this._icon) {
-			var pos = this._map.latLngToLayerPoint(this._latlng).round();
-			this._setPos(pos);
+			this._setPos(this._map.latLngToLayerPoint(this._latlng).round());
 		}
-
 		return this;
 	},
 
@@ -3712,7 +3680,7 @@ L.Marker = L.Class.extend({
 			if (options.title) {
 				icon.title = options.title;
 			}
-			
+
 			if (options.alt) {
 				icon.alt = options.alt;
 			}
@@ -4347,6 +4315,7 @@ L.Marker.include({
 		if (content instanceof L.Popup) {
 			L.setOptions(content, options);
 			this._popup = content;
+			content._source = this;
 		} else {
 			this._popup = new L.Popup(options, this)
 				.setContent(content);
@@ -4539,7 +4508,9 @@ L.FeatureGroup = L.LayerGroup.extend({
 			layer = this._layers[layer];
 		}
 
-		layer.off(L.FeatureGroup.EVENTS, this._propagateEvent, this);
+		if ('off' in layer) {
+			layer.off(L.FeatureGroup.EVENTS, this._propagateEvent, this);
+		}
 
 		L.LayerGroup.prototype.removeLayer.call(this, layer);
 
@@ -4859,7 +4830,7 @@ L.Path = L.Path.extend({
 	},
 
 	_fireMouseEvent: function (e) {
-		if (!this.hasEventListeners(e.type)) { return; }
+		if (!this._map || !this.hasEventListeners(e.type)) { return; }
 
 		var map = this._map,
 		    containerPoint = map.mouseEventToContainerPoint(e),
@@ -5233,6 +5204,13 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 		if (options.fill) {
 			this._ctx.fillStyle = options.fillColor || options.color;
 		}
+
+		if (options.lineCap) {
+			this._ctx.lineCap = options.lineCap;
+		}
+		if (options.lineJoin) {
+			this._ctx.lineJoin = options.lineJoin;
+		}
 	},
 
 	_drawPath: function () {
@@ -5270,7 +5248,7 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 
 		if (options.fill) {
 			ctx.globalAlpha = options.fillOpacity;
-			ctx.fill();
+			ctx.fill(options.fillRule || 'evenodd');
 		}
 
 		if (options.stroke) {
@@ -5285,15 +5263,14 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 
 	_initEvents: function () {
 		if (this.options.clickable) {
-			// TODO dblclick
 			this._map.on('mousemove', this._onMouseMove, this);
-			this._map.on('click', this._onClick, this);
+			this._map.on('click dblclick contextmenu', this._fireMouseEvent, this);
 		}
 	},
 
-	_onClick: function (e) {
+	_fireMouseEvent: function (e) {
 		if (this._containsPoint(e.layerPoint)) {
-			this.fire('click', e);
+			this.fire(e.type, e);
 		}
 	},
 
@@ -7311,8 +7288,9 @@ L.extend(L.DomEvent, {
 		    pointers = this._pointers;
 
 		var cb = function (e) {
-
-			L.DomEvent.preventDefault(e);
+			if (e.pointerType !== 'mouse' && e.pointerType !== e.MSPOINTER_TYPE_MOUSE) {
+				L.DomEvent.preventDefault(e);
+			}
 
 			var alreadyInArray = false;
 			for (var i = 0; i < pointers.length; i++) {
@@ -9071,20 +9049,25 @@ L.Map.include(!L.DomUtil.TRANSITION ? {} : {
 				delta: delta,
 				backwards: backwards
 			});
+			// horrible hack to work around a Chrome bug https://github.com/Leaflet/Leaflet/issues/3689
+			setTimeout(L.bind(this._onZoomTransitionEnd, this), 250);
 		}, this);
 	},
 
 	_onZoomTransitionEnd: function () {
+		if (!this._animatingZoom) { return; }
 
 		this._animatingZoom = false;
 
 		L.DomUtil.removeClass(this._mapPane, 'leaflet-zoom-anim');
 
-		this._resetView(this._animateToCenter, this._animateToZoom, true, true);
+		L.Util.requestAnimFrame(function () {
+			this._resetView(this._animateToCenter, this._animateToZoom, true, true);
 
-		if (L.Draggable) {
-			L.Draggable._disabled = false;
-		}
+			if (L.Draggable) {
+				L.Draggable._disabled = false;
+			}
+		}, this);
 	}
 });
 
@@ -9119,6 +9102,11 @@ L.TileLayer.include({
 
 		// force reflow
 		L.Util.falseFn(bg.offsetWidth);
+
+		var zoom = this._map.getZoom();
+		if (zoom > this.options.maxZoom || zoom < this.options.minZoom) {
+			this._clearBgBuffer();
+		}
 
 		this._animating = false;
 	},
@@ -9297,384 +9285,2476 @@ L.Map.include({
 
 
 }(window, document));
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/mustache/mustache.js":[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+module.exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
+
+},{}],6:[function(require,module,exports){
+module.exports={
+  "_args": [
+    [
+      {
+        "raw": "mapbox.js@^2.1.2",
+        "scope": null,
+        "escapedName": "mapbox.js",
+        "name": "mapbox.js",
+        "rawSpec": "^2.1.2",
+        "spec": ">=2.1.2 <3.0.0",
+        "type": "range"
+      },
+      "/Users/alexandermilevski/Projects/w8r.github.com"
+    ]
+  ],
+  "_from": "mapbox.js@>=2.1.2 <3.0.0",
+  "_id": "mapbox.js@2.4.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/mapbox.js",
+  "_nodeVersion": "5.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/mapbox.js-2.4.0.tgz_1459367631719_0.44528863835148513"
+  },
+  "_npmUser": {
+    "name": "tmcw",
+    "email": "tom@macwright.org"
+  },
+  "_npmVersion": "3.7.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "mapbox.js@^2.1.2",
+    "scope": null,
+    "escapedName": "mapbox.js",
+    "name": "mapbox.js",
+    "rawSpec": "^2.1.2",
+    "spec": ">=2.1.2 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "http://registry.npmjs.org/mapbox.js/-/mapbox.js-2.4.0.tgz",
+  "_shasum": "c43b084a5dd71334c83ee1df28fa67443d73c29c",
+  "_shrinkwrap": null,
+  "_spec": "mapbox.js@^2.1.2",
+  "_where": "/Users/alexandermilevski/Projects/w8r.github.com",
+  "author": {
+    "name": "Mapbox"
+  },
+  "bugs": {
+    "url": "https://github.com/mapbox/mapbox.js/issues"
+  },
+  "dependencies": {
+    "corslite": "0.0.6",
+    "isarray": "0.0.1",
+    "leaflet": "0.7.7",
+    "mustache": "2.2.1",
+    "sanitize-caja": "0.1.3"
+  },
+  "description": "mapbox javascript api",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "clean-css": "~2.0.7",
+    "eslint": "^0.23.0",
+    "expect.js": "0.3.1",
+    "happen": "0.1.3",
+    "leaflet-fullscreen": "0.0.4",
+    "leaflet-hash": "0.2.1",
+    "marked": "~0.3.0",
+    "minifyify": "^6.1.0",
+    "minimist": "0.0.5",
+    "mocha": "2.4.5",
+    "mocha-phantomjs": "4.0.2",
+    "sinon": "1.10.2"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "c43b084a5dd71334c83ee1df28fa67443d73c29c",
+    "tarball": "https://registry.npmjs.org/mapbox.js/-/mapbox.js-2.4.0.tgz"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "gitHead": "60c85505a0c99805a94c9ea9262412c43c9e971a",
+  "homepage": "http://mapbox.com/",
+  "license": "BSD-3-Clause",
+  "main": "src/index.js",
+  "maintainers": [
+    {
+      "name": "1ec5",
+      "email": "mxn@1ec5.org"
+    },
+    {
+      "name": "aaronlidman",
+      "email": "aaronlidman@gmail.com"
+    },
+    {
+      "name": "ajashton",
+      "email": "aj.ashton@gmail.com"
+    },
+    {
+      "name": "alulsh",
+      "email": "ulsh@mapbox.com"
+    },
+    {
+      "name": "ansis",
+      "email": "ansis.brammanis@gmail.com"
+    },
+    {
+      "name": "apendleton",
+      "email": "andrew@mapbox.com"
+    },
+    {
+      "name": "bergwerkgis",
+      "email": "wb@bergwerk-gis.at"
+    },
+    {
+      "name": "bhousel",
+      "email": "bryan@mapbox.com"
+    },
+    {
+      "name": "bsudekum",
+      "email": "bobby@mapbox.com"
+    },
+    {
+      "name": "camilleanne",
+      "email": "camille@mapbox.com"
+    },
+    {
+      "name": "dnomadb",
+      "email": "damon@mapbox.com"
+    },
+    {
+      "name": "dthompson",
+      "email": "dthompson@gmail.com"
+    },
+    {
+      "name": "emilymcafee",
+      "email": "emily@mapbox.com"
+    },
+    {
+      "name": "flippmoke",
+      "email": "flippmoke@gmail.com"
+    },
+    {
+      "name": "freenerd",
+      "email": "spam@freenerd.de"
+    },
+    {
+      "name": "gretacb",
+      "email": "carol@mapbox.com"
+    },
+    {
+      "name": "ian29",
+      "email": "ian.villeda@gmail.com"
+    },
+    {
+      "name": "ianshward",
+      "email": "ian@mapbox.com"
+    },
+    {
+      "name": "ingalls",
+      "email": "nicholas.ingalls@gmail.com"
+    },
+    {
+      "name": "jfirebaugh",
+      "email": "john.firebaugh@gmail.com"
+    },
+    {
+      "name": "jrpruit1",
+      "email": "jake@jakepruitt.com"
+    },
+    {
+      "name": "karenzshea",
+      "email": "karen@mapbox.com"
+    },
+    {
+      "name": "kelvinabrokwa",
+      "email": "kelvinabrokwa@gmail.com"
+    },
+    {
+      "name": "kkaefer",
+      "email": "kkaefer@gmail.com"
+    },
+    {
+      "name": "lbud",
+      "email": "lauren@mapbox.com"
+    },
+    {
+      "name": "lucaswoj",
+      "email": "lucas@lucaswoj.com"
+    },
+    {
+      "name": "lxbarth",
+      "email": "alex@mapbox.com"
+    },
+    {
+      "name": "lyzidiamond",
+      "email": "lyzi@mapbox.com"
+    },
+    {
+      "name": "mapbox-admin",
+      "email": "accounts@mapbox.com"
+    },
+    {
+      "name": "mateov",
+      "email": "matt@mapbox.com"
+    },
+    {
+      "name": "mcwhittemore",
+      "email": "mcwhittemore@gmail.com"
+    },
+    {
+      "name": "miccolis",
+      "email": "jeff@miccolis.net"
+    },
+    {
+      "name": "mikemorris",
+      "email": "michael.patrick.morris@gmail.com"
+    },
+    {
+      "name": "morganherlocker",
+      "email": "morgan.herlocker@gmail.com"
+    },
+    {
+      "name": "mourner",
+      "email": "agafonkin@gmail.com"
+    },
+    {
+      "name": "mtirwin",
+      "email": "irwin@mapbox.com"
+    },
+    {
+      "name": "nickidlugash",
+      "email": "nicki@mapbox.com"
+    },
+    {
+      "name": "rclark",
+      "email": "ryan.clark.j@gmail.com"
+    },
+    {
+      "name": "samanbb",
+      "email": "saman@mapbox.com"
+    },
+    {
+      "name": "sbma44",
+      "email": "tlee@mapbox.com"
+    },
+    {
+      "name": "scothis",
+      "email": "scothis@gmail.com"
+    },
+    {
+      "name": "sgillies",
+      "email": "sean@mapbox.com"
+    },
+    {
+      "name": "springmeyer",
+      "email": "dane@mapbox.com"
+    },
+    {
+      "name": "themarex",
+      "email": "patrick@mapbox.com"
+    },
+    {
+      "name": "tmcw",
+      "email": "tom@macwright.org"
+    },
+    {
+      "name": "tristen",
+      "email": "tristen.brown@gmail.com"
+    },
+    {
+      "name": "willwhite",
+      "email": "will@mapbox.com"
+    },
+    {
+      "name": "yhahn",
+      "email": "young@mapbox.com"
+    }
+  ],
+  "name": "mapbox.js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mapbox/mapbox.js.git"
+  },
+  "scripts": {
+    "test": "eslint --no-eslintrc -c .eslintrc src && mocha-phantomjs test/index.html"
+  },
+  "version": "2.4.0"
+}
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+    HTTP_URL: 'http://a.tiles.mapbox.com/v4',
+    HTTPS_URL: 'https://a.tiles.mapbox.com/v4',
+    FORCE_HTTPS: false,
+    REQUIRE_ACCESS_TOKEN: true
+};
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+var util = require('./util'),
+    format_url = require('./format_url'),
+    request = require('./request'),
+    marker = require('./marker'),
+    simplestyle = require('./simplestyle');
+
+// # featureLayer
+//
+// A layer of features, loaded from Mapbox or else. Adds the ability
+// to reset features, filter them, and load them from a GeoJSON URL.
+var FeatureLayer = L.FeatureGroup.extend({
+    options: {
+        filter: function() { return true; },
+        sanitizer: require('sanitize-caja'),
+        style: simplestyle.style,
+        popupOptions: { closeButton: false }
+    },
+
+    initialize: function(_, options) {
+        L.setOptions(this, options);
+
+        this._layers = {};
+
+        if (typeof _ === 'string') {
+            util.idUrl(_, this);
+        // javascript object of TileJSON data
+        } else if (_ && typeof _ === 'object') {
+            this.setGeoJSON(_);
+        }
+    },
+
+    setGeoJSON: function(_) {
+        this._geojson = _;
+        this.clearLayers();
+        this._initialize(_);
+        return this;
+    },
+
+    getGeoJSON: function() {
+        return this._geojson;
+    },
+
+    loadURL: function(url) {
+        if (this._request && 'abort' in this._request) this._request.abort();
+        this._request = request(url, L.bind(function(err, json) {
+            this._request = null;
+            if (err && err.type !== 'abort') {
+                util.log('could not load features at ' + url);
+                this.fire('error', {error: err});
+            } else if (json) {
+                this.setGeoJSON(json);
+                this.fire('ready');
+            }
+        }, this));
+        return this;
+    },
+
+    loadID: function(id) {
+        return this.loadURL(format_url('/v4/' + id + '/features.json', this.options.accessToken));
+    },
+
+    setFilter: function(_) {
+        this.options.filter = _;
+        if (this._geojson) {
+            this.clearLayers();
+            this._initialize(this._geojson);
+        }
+        return this;
+    },
+
+    getFilter: function() {
+        return this.options.filter;
+    },
+
+    _initialize: function(json) {
+        var features = L.Util.isArray(json) ? json : json.features,
+            i, len;
+
+        if (features) {
+            for (i = 0, len = features.length; i < len; i++) {
+                // Only add this if geometry or geometries are set and not null
+                if (features[i].geometries || features[i].geometry || features[i].features) {
+                    this._initialize(features[i]);
+                }
+            }
+        } else if (this.options.filter(json)) {
+
+            var opts = {accessToken: this.options.accessToken},
+                pointToLayer = this.options.pointToLayer || function(feature, latlon) {
+                  return marker.style(feature, latlon, opts);
+                },
+                layer = L.GeoJSON.geometryToLayer(json, pointToLayer),
+                popupHtml = marker.createPopup(json, this.options.sanitizer),
+                style = this.options.style,
+                defaultStyle = style === simplestyle.style;
+
+            if (style && 'setStyle' in layer &&
+                // if the style method is the simplestyle default, then
+                // never style L.Circle or L.CircleMarker because
+                // simplestyle has no rules over them, only over geometry
+                // primitives directly from GeoJSON
+                (!(defaultStyle && (layer instanceof L.Circle ||
+                  layer instanceof L.CircleMarker)))) {
+                if (typeof style === 'function') {
+                    style = style(json);
+                }
+                layer.setStyle(style);
+            }
+
+            layer.feature = json;
+
+            if (popupHtml) {
+                layer.bindPopup(popupHtml, this.options.popupOptions);
+            }
+
+            this.addLayer(layer);
+        }
+    }
+});
+
+module.exports.FeatureLayer = FeatureLayer;
+
+module.exports.featureLayer = function(_, options) {
+    return new FeatureLayer(_, options);
+};
+
+},{"./format_url":10,"./marker":24,"./request":25,"./simplestyle":27,"./util":30,"sanitize-caja":32}],9:[function(require,module,exports){
+'use strict';
+
+var Feedback = L.Class.extend({
+    includes: L.Mixin.Events,
+    data: {},
+    record: function(data) {
+        L.extend(this.data, data);
+        this.fire('change');
+    }
+});
+
+module.exports = new Feedback();
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+var config = require('./config'),
+    version = require('../package.json').version;
+
+module.exports = function(path, accessToken) {
+    accessToken = accessToken || L.mapbox.accessToken;
+
+    if (!accessToken && config.REQUIRE_ACCESS_TOKEN) {
+        throw new Error('An API access token is required to use Mapbox.js. ' +
+            'See https://www.mapbox.com/mapbox.js/api/v' + version + '/api-access-tokens/');
+    }
+
+    var url = (document.location.protocol === 'https:' || config.FORCE_HTTPS) ? config.HTTPS_URL : config.HTTP_URL;
+    url = url.replace(/\/v4$/, '');
+    url += path;
+
+    if (config.REQUIRE_ACCESS_TOKEN) {
+        if (accessToken[0] === 's') {
+            throw new Error('Use a public access token (pk.*) with Mapbox.js, not a secret access token (sk.*). ' +
+                'See https://www.mapbox.com/mapbox.js/api/v' + version + '/api-access-tokens/');
+        }
+
+        url += url.indexOf('?') !== -1 ? '&access_token=' : '?access_token=';
+        url += accessToken;
+    }
+
+    return url;
+};
+
+module.exports.tileJSON = function(urlOrMapID, accessToken) {
+
+    if (urlOrMapID.indexOf('mapbox://styles') === 0) {
+        throw new Error('Styles created with Mapbox Studio need to be used with ' +
+            'L.mapbox.styleLayer, not L.mapbox.tileLayer');
+    }
+
+    if (urlOrMapID.indexOf('/') !== -1)
+        return urlOrMapID;
+
+    var url = module.exports('/v4/' + urlOrMapID + '.json', accessToken);
+
+    // TileJSON requests need a secure flag appended to their URLs so
+    // that the server knows to send SSL-ified resource references.
+    if (url.indexOf('https') === 0)
+        url += '&secure';
+
+    return url;
+};
+
+
+module.exports.style = function(styleURL, accessToken) {
+    if (styleURL.indexOf('mapbox://styles/') === -1) throw new Error('Incorrectly formatted Mapbox style at ' + styleURL);
+
+    var ownerIDStyle = styleURL.split('mapbox://styles/')[1];
+    var url = module.exports('/styles/v1/' + ownerIDStyle, accessToken)
+        .replace('http://', 'https://');
+
+    return url;
+};
+
+},{"../package.json":6,"./config":7}],11:[function(require,module,exports){
+'use strict';
+
+var isArray = require('isarray'),
+    util = require('./util'),
+    format_url = require('./format_url'),
+    feedback = require('./feedback'),
+    request = require('./request');
+
+// Low-level geocoding interface - wraps specific API calls and their
+// return values.
+module.exports = function(url, options) {
+    if (!options) options = {};
+    var geocoder = {};
+
+    util.strict(url, 'string');
+
+    if (url.indexOf('/') === -1) {
+        url = format_url('/geocoding/v5/' + url + '/{query}.json', options.accessToken, 5);
+    }
+
+    function roundTo(latLng, precision) {
+        var mult = Math.pow(10, precision);
+        latLng.lat = Math.round(latLng.lat * mult) / mult;
+        latLng.lng = Math.round(latLng.lng * mult) / mult;
+        return latLng;
+    }
+
+    geocoder.getURL = function() {
+        return url;
+    };
+
+    geocoder.queryURL = function(_) {
+        var isObject = !(isArray(_) || typeof _ === 'string'),
+            query = isObject ? _.query : _;
+
+        if (isArray(query)) {
+            var parts = [];
+            for (var i = 0; i < query.length; i++) {
+                parts[i] = encodeURIComponent(query[i]);
+            }
+            query = parts.join(';');
+        } else {
+            query = encodeURIComponent(query);
+        }
+
+        feedback.record({ geocoding: query });
+
+        var url = L.Util.template(geocoder.getURL(), {query: query});
+
+        if (isObject) {
+            if (_.types) {
+                if (isArray(_.types)) {
+                    url += '&types=' + _.types.join();
+                } else {
+                    url += '&types=' + _.types;
+                }
+            }
+
+            if (_.country) {
+                if (isArray(_.country)) {
+                    url += '&country=' + _.country.join();
+                } else {
+                    url += '&country=' + _.country;
+                }
+            }
+
+            if (_.proximity) {
+                var proximity = roundTo(L.latLng(_.proximity), 3);
+                url += '&proximity=' + proximity.lng + ',' + proximity.lat;
+            }
+
+            if (typeof _.autocomplete === 'boolean') {
+                url += '&autocomplete=' + _.autocomplete;
+            }
+        }
+
+        return url;
+    };
+
+    geocoder.query = function(_, callback) {
+        util.strict(callback, 'function');
+
+        request(geocoder.queryURL(_), function(err, json) {
+            if (json && (json.length || json.features)) {
+                var res = {
+                    results: json
+                };
+                if (json.features && json.features.length) {
+                    res.latlng = [
+                        json.features[0].center[1],
+                        json.features[0].center[0]];
+
+                    if (json.features[0].bbox) {
+                        res.bounds = json.features[0].bbox;
+                        res.lbounds = util.lbounds(res.bounds);
+                    }
+                }
+                callback(null, res);
+            } else callback(err || true);
+        });
+
+        return geocoder;
+    };
+
+    // a reverse geocode:
+    //
+    //  geocoder.reverseQuery([80, 20])
+    geocoder.reverseQuery = function(_, callback) {
+        var q = '';
+
+        // sort through different ways people represent lat and lon pairs
+        function normalize(x) {
+            var latLng;
+            if (x.lat !== undefined && x.lng !== undefined) {
+                latLng = L.latLng(x.lat, x.lng);
+            } else if (x.lat !== undefined && x.lon !== undefined) {
+                latLng = L.latLng(x.lat, x.lon);
+            } else {
+                latLng = L.latLng(x[1], x[0]);
+            }
+            latLng = roundTo(latLng, 5);
+            return latLng.lng + ',' + latLng.lat;
+        }
+
+        if (_.length && _[0].length) {
+            for (var i = 0, pts = []; i < _.length; i++) {
+                pts.push(normalize(_[i]));
+            }
+            q = pts.join(';');
+        } else {
+            q = normalize(_);
+        }
+
+        request(geocoder.queryURL(q), function(err, json) {
+            callback(err, json);
+        });
+
+        return geocoder;
+    };
+
+    return geocoder;
+};
+
+},{"./feedback":9,"./format_url":10,"./request":25,"./util":30,"isarray":5}],12:[function(require,module,exports){
+'use strict';
+
+var geocoder = require('./geocoder'),
+    util = require('./util');
+
+var GeocoderControl = L.Control.extend({
+    includes: L.Mixin.Events,
+
+    options: {
+        proximity: true,
+        position: 'topleft',
+        pointZoom: 16,
+        keepOpen: false,
+        autocomplete: false,
+        queryOptions: {}
+    },
+
+    initialize: function(_, options) {
+        L.Util.setOptions(this, options);
+        this.setURL(_);
+        this._updateSubmit = L.bind(this._updateSubmit, this);
+        this._updateAutocomplete = L.bind(this._updateAutocomplete, this);
+        this._chooseResult = L.bind(this._chooseResult, this);
+    },
+
+    setURL: function(_) {
+        this.geocoder = geocoder(_, {
+            accessToken: this.options.accessToken
+        });
+        return this;
+    },
+
+    getURL: function() {
+        return this.geocoder.getURL();
+    },
+
+    setID: function(_) {
+        return this.setURL(_);
+    },
+
+    setTileJSON: function(_) {
+        return this.setURL(_.geocoder);
+    },
+
+    _toggle: function(e) {
+        if (e) L.DomEvent.stop(e);
+        if (L.DomUtil.hasClass(this._container, 'active')) {
+            L.DomUtil.removeClass(this._container, 'active');
+            this._results.innerHTML = '';
+            this._input.blur();
+        } else {
+            L.DomUtil.addClass(this._container, 'active');
+            this._input.focus();
+            this._input.select();
+        }
+    },
+
+    _closeIfOpen: function() {
+        if (L.DomUtil.hasClass(this._container, 'active') &&
+            !this.options.keepOpen) {
+            L.DomUtil.removeClass(this._container, 'active');
+            this._results.innerHTML = '';
+            this._input.blur();
+        }
+    },
+
+    onAdd: function(map) {
+
+        var container = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder leaflet-bar leaflet-control'),
+            link = L.DomUtil.create('a', 'leaflet-control-mapbox-geocoder-toggle mapbox-icon mapbox-icon-geocoder', container),
+            results = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder-results', container),
+            wrap = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder-wrap', container),
+            form = L.DomUtil.create('form', 'leaflet-control-mapbox-geocoder-form', wrap),
+            input = L.DomUtil.create('input', '', form);
+
+        link.href = '#';
+        link.innerHTML = '&nbsp;';
+
+        input.type = 'text';
+        input.setAttribute('placeholder', 'Search');
+
+        L.DomEvent.addListener(form, 'submit', this._geocode, this);
+        L.DomEvent.addListener(input, 'keyup', this._autocomplete, this);
+        L.DomEvent.disableClickPropagation(container);
+
+        this._map = map;
+        this._results = results;
+        this._input = input;
+        this._form = form;
+
+        if (this.options.keepOpen) {
+            L.DomUtil.addClass(container, 'active');
+        } else {
+            this._map.on('click', this._closeIfOpen, this);
+            L.DomEvent.addListener(link, 'click', this._toggle, this);
+        }
+
+        return container;
+    },
+
+    _updateSubmit: function(err, resp) {
+        L.DomUtil.removeClass(this._container, 'searching');
+        this._results.innerHTML = '';
+        if (err || !resp) {
+            this.fire('error', {error: err});
+        } else {
+            var features = [];
+            if (resp.results && resp.results.features) {
+                features = resp.results.features;
+            }
+            if (features.length === 1) {
+                this.fire('autoselect', { feature: features[0] });
+                this.fire('found', {results: resp.results});
+                this._chooseResult(features[0]);
+                this._closeIfOpen();
+            } else if (features.length > 1) {
+                this.fire('found', {results: resp.results});
+                this._displayResults(features);
+            } else {
+                this.fire('notfound');
+                this._displayResults(features);
+            }
+        }
+    },
+
+    _updateAutocomplete: function(err, resp) {
+        this._results.innerHTML = '';
+        if (err || !resp) {
+            this.fire('error', {error: err});
+        } else {
+            var features = [];
+            if (resp.results && resp.results.features) {
+                features = resp.results.features;
+            }
+            if (features.length) {
+                this.fire('found', {results: resp.results});
+            } else {
+                this.fire('notfound');
+            }
+            this._displayResults(features);
+        }
+    },
+
+    _displayResults: function(features) {
+        for (var i = 0, l = Math.min(features.length, 5); i < l; i++) {
+            var feature = features[i];
+            var name = feature.place_name;
+            if (!name.length) continue;
+
+            var r = L.DomUtil.create('a', '', this._results);
+            var text = ('innerText' in r) ? 'innerText' : 'textContent';
+            r[text] = name;
+            r.setAttribute('title', name);
+            r.href = '#';
+
+            (L.bind(function(feature) {
+                L.DomEvent.addListener(r, 'click', function(e) {
+                    this._chooseResult(feature);
+                    L.DomEvent.stop(e);
+                    this.fire('select', { feature: feature });
+                }, this);
+            }, this))(feature);
+        }
+        if (features.length > 5) {
+            var outof = L.DomUtil.create('span', '', this._results);
+            outof.innerHTML = 'Top 5 of ' + features.length + '  results';
+        }
+    },
+
+    _chooseResult: function(result) {
+        if (result.bbox) {
+            this._map.fitBounds(util.lbounds(result.bbox));
+        } else if (result.center) {
+            this._map.setView([result.center[1], result.center[0]], (this._map.getZoom() === undefined) ?
+                this.options.pointZoom :
+                Math.max(this._map.getZoom(), this.options.pointZoom));
+        }
+    },
+
+    _geocode: function(e) {
+        L.DomEvent.preventDefault(e);
+        if (this._input.value === '') return this._updateSubmit();
+        L.DomUtil.addClass(this._container, 'searching');
+        this.geocoder.query(L.Util.extend({
+            query: this._input.value,
+            proximity: this.options.proximity ? this._map.getCenter() : false
+        }, this.options.queryOptions), this._updateSubmit);
+    },
+
+    _autocomplete: function() {
+        if (!this.options.autocomplete) return;
+        if (this._input.value === '') return this._updateAutocomplete();
+        this.geocoder.query(L.Util.extend({
+            query: this._input.value,
+            proximity: this.options.proximity ? this._map.getCenter() : false
+        }, this.options.queryOptions), this._updateAutocomplete);
+    }
+});
+
+module.exports.GeocoderControl = GeocoderControl;
+
+module.exports.geocoderControl = function(_, options) {
+    return new GeocoderControl(_, options);
+};
+
+},{"./geocoder":11,"./util":30}],13:[function(require,module,exports){
+'use strict';
+
+function utfDecode(c) {
+    if (c >= 93) c--;
+    if (c >= 35) c--;
+    return c - 32;
+}
+
+module.exports = function(data) {
+    return function(x, y) {
+        if (!data) return;
+        var idx = utfDecode(data.grid[y].charCodeAt(x)),
+            key = data.keys[idx];
+        return data.data[key];
+    };
+};
+
+},{}],14:[function(require,module,exports){
+'use strict';
+
+var util = require('./util'),
+    Mustache = require('mustache');
+
+var GridControl = L.Control.extend({
+
+    options: {
+        pinnable: true,
+        follow: false,
+        sanitizer: require('sanitize-caja'),
+        touchTeaser: true,
+        location: true
+    },
+
+    _currentContent: '',
+
+    // pinned means that this control is on a feature and the user has likely
+    // clicked. pinned will not become false unless the user clicks off
+    // of the feature onto another or clicks x
+    _pinned: false,
+
+    initialize: function(_, options) {
+        L.Util.setOptions(this, options);
+        util.strict_instance(_, L.Class, 'L.mapbox.gridLayer');
+        this._layer = _;
+    },
+
+    setTemplate: function(template) {
+        util.strict(template, 'string');
+        this.options.template = template;
+        return this;
+    },
+
+    _template: function(format, data) {
+        if (!data) return;
+        var template = this.options.template || this._layer.getTileJSON().template;
+        if (template) {
+            var d = {};
+            d['__' + format + '__'] = true;
+            return this.options.sanitizer(
+                Mustache.to_html(template, L.extend(d, data)));
+        }
+    },
+
+    // change the content of the tooltip HTML if it has changed, otherwise
+    // noop
+    _show: function(content, o) {
+        if (content === this._currentContent) return;
+
+        this._currentContent = content;
+
+        if (this.options.follow) {
+            this._popup.setContent(content)
+                .setLatLng(o.latLng);
+            if (this._map._popup !== this._popup) this._popup.openOn(this._map);
+        } else {
+            this._container.style.display = 'block';
+            this._contentWrapper.innerHTML = content;
+        }
+    },
+
+    hide: function() {
+        this._pinned = false;
+        this._currentContent = '';
+
+        this._map.closePopup();
+        this._container.style.display = 'none';
+        this._contentWrapper.innerHTML = '';
+
+        L.DomUtil.removeClass(this._container, 'closable');
+
+        return this;
+    },
+
+    _mouseover: function(o) {
+        if (o.data) {
+            L.DomUtil.addClass(this._map._container, 'map-clickable');
+        } else {
+            L.DomUtil.removeClass(this._map._container, 'map-clickable');
+        }
+
+        if (this._pinned) return;
+
+        var content = this._template('teaser', o.data);
+        if (content) {
+            this._show(content, o);
+        } else {
+            this.hide();
+        }
+    },
+
+    _mousemove: function(o) {
+        if (this._pinned) return;
+        if (!this.options.follow) return;
+
+        this._popup.setLatLng(o.latLng);
+    },
+
+    _navigateTo: function(url) {
+        window.top.location.href = url;
+    },
+
+    _click: function(o) {
+
+        var location_formatted = this._template('location', o.data);
+        if (this.options.location && location_formatted &&
+            location_formatted.search(/^https?:/) === 0) {
+            return this._navigateTo(this._template('location', o.data));
+        }
+
+        if (!this.options.pinnable) return;
+
+        var content = this._template('full', o.data);
+
+        if (!content && this.options.touchTeaser && L.Browser.touch) {
+            content = this._template('teaser', o.data);
+        }
+
+        if (content) {
+            L.DomUtil.addClass(this._container, 'closable');
+            this._pinned = true;
+            this._show(content, o);
+        } else if (this._pinned) {
+            L.DomUtil.removeClass(this._container, 'closable');
+            this._pinned = false;
+            this.hide();
+        }
+    },
+
+    _onPopupClose: function() {
+        this._currentContent = null;
+        this._pinned = false;
+    },
+
+    _createClosebutton: function(container, fn) {
+        var link = L.DomUtil.create('a', 'close', container);
+
+        link.innerHTML = 'close';
+        link.href = '#';
+        link.title = 'close';
+
+        L.DomEvent
+            .on(link, 'click', L.DomEvent.stopPropagation)
+            .on(link, 'mousedown', L.DomEvent.stopPropagation)
+            .on(link, 'dblclick', L.DomEvent.stopPropagation)
+            .on(link, 'click', L.DomEvent.preventDefault)
+            .on(link, 'click', fn, this);
+
+        return link;
+    },
+
+    onAdd: function(map) {
+        this._map = map;
+
+        var className = 'leaflet-control-grid map-tooltip',
+            container = L.DomUtil.create('div', className),
+            contentWrapper = L.DomUtil.create('div', 'map-tooltip-content');
+
+        // hide the container element initially
+        container.style.display = 'none';
+        this._createClosebutton(container, this.hide);
+        container.appendChild(contentWrapper);
+
+        this._contentWrapper = contentWrapper;
+        this._popup = new L.Popup({ autoPan: false, closeOnClick: false });
+
+        map.on('popupclose', this._onPopupClose, this);
+
+        L.DomEvent
+            .disableClickPropagation(container)
+            // allow people to scroll tooltips with mousewheel
+            .addListener(container, 'mousewheel', L.DomEvent.stopPropagation);
+
+        this._layer
+            .on('mouseover', this._mouseover, this)
+            .on('mousemove', this._mousemove, this)
+            .on('click', this._click, this);
+
+        return container;
+    },
+
+    onRemove: function (map) {
+
+        map.off('popupclose', this._onPopupClose, this);
+
+        this._layer
+            .off('mouseover', this._mouseover, this)
+            .off('mousemove', this._mousemove, this)
+            .off('click', this._click, this);
+    }
+});
+
+module.exports.GridControl = GridControl;
+
+module.exports.gridControl = function(_, options) {
+    return new GridControl(_, options);
+};
+
+},{"./util":30,"mustache":31,"sanitize-caja":32}],15:[function(require,module,exports){
+'use strict';
+
+var util = require('./util'),
+    request = require('./request'),
+    grid = require('./grid');
+
+// forked from danzel/L.UTFGrid
+var GridLayer = L.Class.extend({
+    includes: [L.Mixin.Events, require('./load_tilejson')],
+
+    options: {
+        template: function() { return ''; }
+    },
+
+    _mouseOn: null,
+    _tilejson: {},
+    _cache: {},
+
+    initialize: function(_, options) {
+        L.Util.setOptions(this, options);
+        this._loadTileJSON(_);
+    },
+
+    _setTileJSON: function(json) {
+        util.strict(json, 'object');
+
+        L.extend(this.options, {
+            grids: json.grids,
+            minZoom: json.minzoom,
+            maxZoom: json.maxzoom,
+            bounds: json.bounds && util.lbounds(json.bounds)
+        });
+
+        this._tilejson = json;
+        this._cache = {};
+        this._update();
+
+        return this;
+    },
+
+    getTileJSON: function() {
+        return this._tilejson;
+    },
+
+    active: function() {
+        return !!(this._map && this.options.grids && this.options.grids.length);
+    },
+
+    addTo: function (map) {
+        map.addLayer(this);
+        return this;
+    },
+
+    onAdd: function(map) {
+        this._map = map;
+        this._update();
+
+        this._map
+            .on('click', this._click, this)
+            .on('mousemove', this._move, this)
+            .on('moveend', this._update, this);
+    },
+
+    onRemove: function() {
+        this._map
+            .off('click', this._click, this)
+            .off('mousemove', this._move, this)
+            .off('moveend', this._update, this);
+    },
+
+    getData: function(latlng, callback) {
+        if (!this.active()) return;
+
+        var map = this._map,
+            point = map.project(latlng.wrap()),
+            tileSize = 256,
+            resolution = 4,
+            x = Math.floor(point.x / tileSize),
+            y = Math.floor(point.y / tileSize),
+            max = map.options.crs.scale(map.getZoom()) / tileSize;
+
+        x = (x + max) % max;
+        y = (y + max) % max;
+
+        this._getTile(map.getZoom(), x, y, function(grid) {
+            var gridX = Math.floor((point.x - (x * tileSize)) / resolution),
+                gridY = Math.floor((point.y - (y * tileSize)) / resolution);
+
+            callback(grid(gridX, gridY));
+        });
+
+        return this;
+    },
+
+    _click: function(e) {
+        this.getData(e.latlng, L.bind(function(data) {
+            this.fire('click', {
+                latLng: e.latlng,
+                data: data
+            });
+        }, this));
+    },
+
+    _move: function(e) {
+        this.getData(e.latlng, L.bind(function(data) {
+            if (data !== this._mouseOn) {
+                if (this._mouseOn) {
+                    this.fire('mouseout', {
+                        latLng: e.latlng,
+                        data: this._mouseOn
+                    });
+                }
+
+                this.fire('mouseover', {
+                    latLng: e.latlng,
+                    data: data
+                });
+
+                this._mouseOn = data;
+            } else {
+                this.fire('mousemove', {
+                    latLng: e.latlng,
+                    data: data
+                });
+            }
+        }, this));
+    },
+
+    _getTileURL: function(tilePoint) {
+        var urls = this.options.grids,
+            index = (tilePoint.x + tilePoint.y) % urls.length,
+            url = urls[index];
+
+        return L.Util.template(url, tilePoint);
+    },
+
+    // Load up all required json grid files
+    _update: function() {
+        if (!this.active()) return;
+
+        var bounds = this._map.getPixelBounds(),
+            z = this._map.getZoom(),
+            tileSize = 256;
+
+        if (z > this.options.maxZoom || z < this.options.minZoom) return;
+
+        var tileBounds = L.bounds(
+                bounds.min.divideBy(tileSize)._floor(),
+                bounds.max.divideBy(tileSize)._floor()),
+            max = this._map.options.crs.scale(z) / tileSize;
+
+        for (var x = tileBounds.min.x; x <= tileBounds.max.x; x++) {
+            for (var y = tileBounds.min.y; y <= tileBounds.max.y; y++) {
+                // x wrapped
+                this._getTile(z, ((x % max) + max) % max, ((y % max) + max) % max);
+            }
+        }
+    },
+
+    _getTile: function(z, x, y, callback) {
+        var key = z + '_' + x + '_' + y,
+            tilePoint = L.point(x, y);
+
+        tilePoint.z = z;
+
+        if (!this._tileShouldBeLoaded(tilePoint)) {
+            return;
+        }
+
+        if (key in this._cache) {
+            if (!callback) return;
+
+            if (typeof this._cache[key] === 'function') {
+                callback(this._cache[key]); // Already loaded
+            } else {
+                this._cache[key].push(callback); // Pending
+            }
+
+            return;
+        }
+
+        this._cache[key] = [];
+
+        if (callback) {
+            this._cache[key].push(callback);
+        }
+
+        request(this._getTileURL(tilePoint), L.bind(function(err, json) {
+            var callbacks = this._cache[key];
+            this._cache[key] = grid(json);
+            for (var i = 0; i < callbacks.length; ++i) {
+                callbacks[i](this._cache[key]);
+            }
+        }, this));
+    },
+
+    _tileShouldBeLoaded: function(tilePoint) {
+        if (tilePoint.z > this.options.maxZoom || tilePoint.z < this.options.minZoom) {
+            return false;
+        }
+
+        if (this.options.bounds) {
+            var tileSize = 256,
+                nwPoint = tilePoint.multiplyBy(tileSize),
+                sePoint = nwPoint.add(new L.Point(tileSize, tileSize)),
+                nw = this._map.unproject(nwPoint),
+                se = this._map.unproject(sePoint),
+                bounds = new L.LatLngBounds([nw, se]);
+
+            if (!this.options.bounds.intersects(bounds)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+});
+
+module.exports.GridLayer = GridLayer;
+
+module.exports.gridLayer = function(_, options) {
+    return new GridLayer(_, options);
+};
+
+},{"./grid":13,"./load_tilejson":20,"./request":25,"./util":30}],16:[function(require,module,exports){
+'use strict';
+
+var leaflet = require('./leaflet');
+
+require('./mapbox');
+
+module.exports = leaflet;
+
+},{"./leaflet":18,"./mapbox":22}],17:[function(require,module,exports){
+'use strict';
+
+var InfoControl = L.Control.extend({
+    options: {
+        position: 'bottomright',
+        sanitizer: require('sanitize-caja')
+    },
+
+    initialize: function(options) {
+        L.setOptions(this, options);
+        this._info = {};
+        console.warn('infoControl has been deprecated and will be removed in mapbox.js v3.0.0. Use the default attribution control instead, which is now responsive.');
+    },
+
+    onAdd: function(map) {
+        this._container = L.DomUtil.create('div', 'mapbox-control-info mapbox-small');
+        this._content = L.DomUtil.create('div', 'map-info-container', this._container);
+
+        var link = L.DomUtil.create('a', 'mapbox-info-toggle mapbox-icon mapbox-icon-info', this._container);
+        link.href = '#';
+
+        L.DomEvent.addListener(link, 'click', this._showInfo, this);
+        L.DomEvent.disableClickPropagation(this._container);
+
+        for (var i in map._layers) {
+            if (map._layers[i].getAttribution) {
+                this.addInfo(map._layers[i].getAttribution());
+            }
+        }
+
+        map
+            .on('layeradd', this._onLayerAdd, this)
+            .on('layerremove', this._onLayerRemove, this);
+
+        this._update();
+        return this._container;
+    },
+
+    onRemove: function(map) {
+        map
+            .off('layeradd', this._onLayerAdd, this)
+            .off('layerremove', this._onLayerRemove, this);
+    },
+
+    addInfo: function(text) {
+        if (!text) return this;
+        if (!this._info[text]) this._info[text] = 0;
+        this._info[text] = true;
+        return this._update();
+    },
+
+    removeInfo: function (text) {
+        if (!text) return this;
+        if (this._info[text]) this._info[text] = false;
+        return this._update();
+    },
+
+    _showInfo: function(e) {
+        L.DomEvent.preventDefault(e);
+        if (this._active === true) return this._hidecontent();
+
+        L.DomUtil.addClass(this._container, 'active');
+        this._active = true;
+        this._update();
+    },
+
+    _hidecontent: function() {
+        this._content.innerHTML = '';
+        this._active = false;
+        L.DomUtil.removeClass(this._container, 'active');
+        return;
+    },
+
+    _update: function() {
+        if (!this._map) { return this; }
+        this._content.innerHTML = '';
+        var hide = 'none';
+        var info = [];
+
+        for (var i in this._info) {
+            if (this._info.hasOwnProperty(i) && this._info[i]) {
+                info.push(this.options.sanitizer(i));
+                hide = 'block';
+            }
+        }
+
+        this._content.innerHTML += info.join(' | ');
+
+        // If there are no results in _info then hide this.
+        this._container.style.display = hide;
+        return this;
+    },
+
+    _onLayerAdd: function(e) {
+        if (e.layer.getAttribution && e.layer.getAttribution()) {
+            this.addInfo(e.layer.getAttribution());
+        } else if ('on' in e.layer && e.layer.getAttribution) {
+            e.layer.on('ready', L.bind(function() {
+                this.addInfo(e.layer.getAttribution());
+            }, this));
+        }
+    },
+
+    _onLayerRemove: function (e) {
+        if (e.layer.getAttribution) {
+            this.removeInfo(e.layer.getAttribution());
+        }
+    }
+});
+
+module.exports.InfoControl = InfoControl;
+
+module.exports.infoControl = function(options) {
+    return new InfoControl(options);
+};
+
+},{"sanitize-caja":32}],18:[function(require,module,exports){
+module.exports = window.L = require('leaflet/dist/leaflet-src');
+
+},{"leaflet/dist/leaflet-src":4}],19:[function(require,module,exports){
+'use strict';
+
+var LegendControl = L.Control.extend({
+
+    options: {
+        position: 'bottomright',
+        sanitizer: require('sanitize-caja')
+    },
+
+    initialize: function(options) {
+        L.setOptions(this, options);
+        this._legends = {};
+    },
+
+    onAdd: function() {
+        this._container = L.DomUtil.create('div', 'map-legends wax-legends');
+        L.DomEvent.disableClickPropagation(this._container);
+
+        this._update();
+
+        return this._container;
+    },
+
+    addLegend: function(text) {
+        if (!text) { return this; }
+
+        if (!this._legends[text]) {
+            this._legends[text] = 0;
+        }
+
+        this._legends[text]++;
+        return this._update();
+    },
+
+    removeLegend: function(text) {
+        if (!text) { return this; }
+        if (this._legends[text]) this._legends[text]--;
+        return this._update();
+    },
+
+    _update: function() {
+        if (!this._map) { return this; }
+
+        this._container.innerHTML = '';
+        var hide = 'none';
+
+        for (var i in this._legends) {
+            if (this._legends.hasOwnProperty(i) && this._legends[i]) {
+                var div = L.DomUtil.create('div', 'map-legend wax-legend', this._container);
+                div.innerHTML = this.options.sanitizer(i);
+                hide = 'block';
+            }
+        }
+
+        // hide the control entirely unless there is at least one legend;
+        // otherwise there will be a small grey blemish on the map.
+        this._container.style.display = hide;
+
+        return this;
+    }
+});
+
+module.exports.LegendControl = LegendControl;
+
+module.exports.legendControl = function(options) {
+    return new LegendControl(options);
+};
+
+},{"sanitize-caja":32}],20:[function(require,module,exports){
+'use strict';
+
+var request = require('./request'),
+    format_url = require('./format_url'),
+    util = require('./util');
+
+module.exports = {
+    _loadTileJSON: function(_) {
+        if (typeof _ === 'string') {
+            _ = format_url.tileJSON(_, this.options && this.options.accessToken);
+            request(_, L.bind(function(err, json) {
+                if (err) {
+                    util.log('could not load TileJSON at ' + _);
+                    this.fire('error', {error: err});
+                } else if (json) {
+                    this._setTileJSON(json);
+                    this.fire('ready');
+                }
+            }, this));
+        } else if (_ && typeof _ === 'object') {
+            this._setTileJSON(_);
+        }
+    }
+};
+
+},{"./format_url":10,"./request":25,"./util":30}],21:[function(require,module,exports){
+'use strict';
+
+var tileLayer = require('./tile_layer').tileLayer,
+    featureLayer = require('./feature_layer').featureLayer,
+    gridLayer = require('./grid_layer').gridLayer,
+    gridControl = require('./grid_control').gridControl,
+    infoControl = require('./info_control').infoControl,
+    shareControl = require('./share_control').shareControl,
+    legendControl = require('./legend_control').legendControl,
+    mapboxLogoControl = require('./mapbox_logo').mapboxLogoControl,
+    feedback = require('./feedback');
+
+function withAccessToken(options, accessToken) {
+    if (!accessToken || options.accessToken)
+        return options;
+    return L.extend({accessToken: accessToken}, options);
+}
+
+var LMap = L.Map.extend({
+    includes: [require('./load_tilejson')],
+
+    options: {
+        tileLayer: {},
+        featureLayer: {},
+        gridLayer: {},
+        legendControl: {},
+        gridControl: {},
+        infoControl: false,
+        shareControl: false,
+        sanitizer: require('sanitize-caja')
+    },
+
+    _tilejson: {},
+
+    initialize: function(element, _, options) {
+
+        L.Map.prototype.initialize.call(this, element,
+            L.extend({}, L.Map.prototype.options, options));
+
+        // Disable the default 'Leaflet' text
+        if (this.attributionControl) {
+            this.attributionControl.setPrefix('');
+
+            var compact = this.options.attributionControl.compact;
+            // Set a compact display if map container width is < 640 or
+            // compact is set to `true` in attributionControl options.
+            if (compact || (compact !== false && this._container.offsetWidth <= 640)) {
+                L.DomUtil.addClass(this.attributionControl._container, 'leaflet-compact-attribution');
+            }
+
+            if (compact === undefined) {
+                this.on('resize', function() {
+                    if (this._container.offsetWidth > 640) {
+                        L.DomUtil.removeClass(this.attributionControl._container, 'leaflet-compact-attribution');
+                    } else {
+                        L.DomUtil.addClass(this.attributionControl._container, 'leaflet-compact-attribution');
+                    }
+                });
+            }
+        }
+
+        if (this.options.tileLayer) {
+            this.tileLayer = tileLayer(undefined,
+                withAccessToken(this.options.tileLayer, this.options.accessToken));
+            this.addLayer(this.tileLayer);
+        }
+
+        if (this.options.featureLayer) {
+            this.featureLayer = featureLayer(undefined,
+                withAccessToken(this.options.featureLayer, this.options.accessToken));
+            this.addLayer(this.featureLayer);
+        }
+
+        if (this.options.gridLayer) {
+            this.gridLayer = gridLayer(undefined,
+                withAccessToken(this.options.gridLayer, this.options.accessToken));
+            this.addLayer(this.gridLayer);
+        }
+
+        if (this.options.gridLayer && this.options.gridControl) {
+            this.gridControl = gridControl(this.gridLayer, this.options.gridControl);
+            this.addControl(this.gridControl);
+        }
+
+        if (this.options.infoControl) {
+            this.infoControl = infoControl(this.options.infoControl);
+            this.addControl(this.infoControl);
+        }
+
+        if (this.options.legendControl) {
+            this.legendControl = legendControl(this.options.legendControl);
+            this.addControl(this.legendControl);
+        }
+
+        if (this.options.shareControl) {
+            this.shareControl = shareControl(undefined,
+                withAccessToken(this.options.shareControl, this.options.accessToken));
+            this.addControl(this.shareControl);
+        }
+
+        this._mapboxLogoControl = mapboxLogoControl(this.options.mapboxLogoControl);
+        this.addControl(this._mapboxLogoControl);
+
+        this._loadTileJSON(_);
+
+        this.on('layeradd', this._onLayerAdd, this)
+            .on('layerremove', this._onLayerRemove, this)
+            .on('moveend', this._updateMapFeedbackLink, this);
+
+        this.whenReady(function () {
+            feedback.on('change', this._updateMapFeedbackLink, this);
+        });
+
+        this.on('unload', function () {
+            feedback.off('change', this._updateMapFeedbackLink, this);
+        });
+    },
+
+    // use a javascript object of tilejson data to configure this layer
+    _setTileJSON: function(_) {
+        this._tilejson = _;
+        this._initialize(_);
+        return this;
+    },
+
+    getTileJSON: function() {
+        return this._tilejson;
+    },
+
+    _initialize: function(json) {
+        if (this.tileLayer) {
+            this.tileLayer._setTileJSON(json);
+            this._updateLayer(this.tileLayer);
+        }
+
+        if (this.featureLayer && !this.featureLayer.getGeoJSON() && json.data && json.data[0]) {
+            this.featureLayer.loadURL(json.data[0]);
+        }
+
+        if (this.gridLayer) {
+            this.gridLayer._setTileJSON(json);
+            this._updateLayer(this.gridLayer);
+        }
+
+        if (this.infoControl && json.attribution) {
+            this.infoControl.addInfo(this.options.sanitizer(json.attribution));
+            this._updateMapFeedbackLink();
+        }
+
+        if (this.legendControl && json.legend) {
+            this.legendControl.addLegend(json.legend);
+        }
+
+        if (this.shareControl) {
+            this.shareControl._setTileJSON(json);
+        }
+
+        this._mapboxLogoControl._setTileJSON(json);
+
+        if (!this._loaded && json.center) {
+            var zoom = this.getZoom() !== undefined ? this.getZoom() : json.center[2],
+                center = L.latLng(json.center[1], json.center[0]);
+
+            this.setView(center, zoom);
+        }
+    },
+
+    _updateMapFeedbackLink: function() {
+        if (!this._controlContainer.getElementsByClassName) return;
+        var link = this._controlContainer.getElementsByClassName('mapbox-improve-map');
+        if (link.length && this._loaded) {
+            var center = this.getCenter().wrap();
+            var tilejson = this._tilejson || {};
+            var id = tilejson.id || '';
+
+            var hash = '#' + id + '/' +
+                center.lng.toFixed(3) + '/' +
+                center.lat.toFixed(3) + '/' +
+                this.getZoom();
+
+            for (var key in feedback.data) {
+                hash += '/' + key + '=' + feedback.data[key];
+            }
+
+            for (var i = 0; i < link.length; i++) {
+                link[i].hash = hash;
+            }
+        }
+    },
+
+    _onLayerAdd: function(e) {
+        if ('on' in e.layer) {
+            e.layer.on('ready', this._onLayerReady, this);
+        }
+        window.setTimeout(L.bind(this._updateMapFeedbackLink, this), 0); // Update after attribution control resets the HTML.
+    },
+
+    _onLayerRemove: function(e) {
+        if ('on' in e.layer) {
+            e.layer.off('ready', this._onLayerReady, this);
+        }
+        window.setTimeout(L.bind(this._updateMapFeedbackLink, this), 0); // Update after attribution control resets the HTML.
+    },
+
+    _onLayerReady: function(e) {
+        this._updateLayer(e.target);
+    },
+
+    _updateLayer: function(layer) {
+        if (!layer.options) return;
+
+        if (this.infoControl && this._loaded) {
+            this.infoControl.addInfo(layer.options.infoControl);
+        }
+
+        if (this.attributionControl && this._loaded && layer.getAttribution) {
+            this.attributionControl.addAttribution(layer.getAttribution());
+        }
+
+        if (!(L.stamp(layer) in this._zoomBoundLayers) &&
+                (layer.options.maxZoom || layer.options.minZoom)) {
+            this._zoomBoundLayers[L.stamp(layer)] = layer;
+        }
+
+        this._updateMapFeedbackLink();
+        this._updateZoomLevels();
+    }
+});
+
+module.exports.Map = LMap;
+
+module.exports.map = function(element, _, options) {
+    return new LMap(element, _, options);
+};
+
+},{"./feature_layer":8,"./feedback":9,"./grid_control":14,"./grid_layer":15,"./info_control":17,"./legend_control":19,"./load_tilejson":20,"./mapbox_logo":23,"./share_control":26,"./tile_layer":29,"sanitize-caja":32}],22:[function(require,module,exports){
+'use strict';
+
+var geocoderControl = require('./geocoder_control'),
+    gridControl = require('./grid_control'),
+    featureLayer = require('./feature_layer'),
+    legendControl = require('./legend_control'),
+    shareControl = require('./share_control'),
+    tileLayer = require('./tile_layer'),
+    infoControl = require('./info_control'),
+    map = require('./map'),
+    gridLayer = require('./grid_layer'),
+    styleLayer = require('./style_layer');
+
+L.mapbox = module.exports = {
+    VERSION: require('../package.json').version,
+    geocoder: require('./geocoder'),
+    marker: require('./marker'),
+    simplestyle: require('./simplestyle'),
+    tileLayer: tileLayer.tileLayer,
+    TileLayer: tileLayer.TileLayer,
+    styleLayer: styleLayer.styleLayer,
+    StyleLayer: styleLayer.StyleLayer,
+    infoControl: infoControl.infoControl,
+    InfoControl: infoControl.InfoControl,
+    shareControl: shareControl.shareControl,
+    ShareControl: shareControl.ShareControl,
+    legendControl: legendControl.legendControl,
+    LegendControl: legendControl.LegendControl,
+    geocoderControl: geocoderControl.geocoderControl,
+    GeocoderControl: geocoderControl.GeocoderControl,
+    gridControl: gridControl.gridControl,
+    GridControl: gridControl.GridControl,
+    gridLayer: gridLayer.gridLayer,
+    GridLayer: gridLayer.GridLayer,
+    featureLayer: featureLayer.featureLayer,
+    FeatureLayer: featureLayer.FeatureLayer,
+    map: map.map,
+    Map: map.Map,
+    config: require('./config'),
+    sanitize: require('sanitize-caja'),
+    template: require('mustache').to_html,
+    feedback: require('./feedback')
+};
+
+
+// Hardcode image path, because Leaflet's autodetection
+// fails, because mapbox.js is not named leaflet.js
+window.L.Icon.Default.imagePath =
+    // Detect bad-news protocols like file:// and hardcode
+    // to https if they're detected.
+    ((document.location.protocol === 'https:' ||
+    document.location.protocol === 'http:') ? '' : 'https:') +
+    '//api.tiles.mapbox.com/mapbox.js/' + 'v' +
+    require('../package.json').version + '/images';
+
+},{"../package.json":6,"./config":7,"./feature_layer":8,"./feedback":9,"./geocoder":11,"./geocoder_control":12,"./grid_control":14,"./grid_layer":15,"./info_control":17,"./legend_control":19,"./map":21,"./marker":24,"./share_control":26,"./simplestyle":27,"./style_layer":28,"./tile_layer":29,"mustache":31,"sanitize-caja":32}],23:[function(require,module,exports){
+'use strict';
+
+var MapboxLogoControl = L.Control.extend({
+
+    options: {
+        position: 'bottomleft'
+    },
+
+    initialize: function(options) {
+        L.setOptions(this, options);
+    },
+
+    onAdd: function() {
+        this._container = L.DomUtil.create('div', 'mapbox-logo');
+        return this._container;
+    },
+
+    _setTileJSON: function(json) {
+        // Check if account referenced by the accessToken
+        // is asscociated with the Mapbox Logo
+        // as determined by mapbox-maps.
+        if (json.mapbox_logo) {
+            L.DomUtil.addClass(this._container, 'mapbox-logo-true');
+        }
+    }
+});
+
+module.exports.MapboxLogoControl = MapboxLogoControl;
+
+module.exports.mapboxLogoControl = function(options) {
+    return new MapboxLogoControl(options);
+};
+
+},{}],24:[function(require,module,exports){
+'use strict';
+
+var format_url = require('./format_url'),
+    util = require('./util'),
+    sanitize = require('sanitize-caja');
+
+// mapbox-related markers functionality
+// provide an icon from mapbox's simple-style spec and hosted markers
+// service
+function icon(fp, options) {
+    fp = fp || {};
+
+    var sizes = {
+            small: [20, 50],
+            medium: [30, 70],
+            large: [35, 90]
+        },
+        size = fp['marker-size'] || 'medium',
+        symbol = ('marker-symbol' in fp && fp['marker-symbol'] !== '') ? '-' + fp['marker-symbol'] : '',
+        color = (fp['marker-color'] || '7e7e7e').replace('#', '');
+
+    return L.icon({
+        iconUrl: format_url('/v4/marker/' +
+            'pin-' + size.charAt(0) + symbol + '+' + color +
+            // detect and use retina markers, which are x2 resolution
+            (L.Browser.retina ? '@2x' : '') + '.png', options && options.accessToken),
+        iconSize: sizes[size],
+        iconAnchor: [sizes[size][0] / 2, sizes[size][1] / 2],
+        popupAnchor: [0, -sizes[size][1] / 2]
+    });
+}
+
+// a factory that provides markers for Leaflet from Mapbox's
+// [simple-style specification](https://github.com/mapbox/simplestyle-spec)
+// and [Markers API](http://mapbox.com/developers/api/#markers).
+function style(f, latlon, options) {
+    return L.marker(latlon, {
+        icon: icon(f.properties, options),
+        title: util.strip_tags(
+            sanitize((f.properties && f.properties.title) || ''))
+    });
+}
+
+// Sanitize and format properties of a GeoJSON Feature object in order
+// to form the HTML string used as the argument for `L.createPopup`
+function createPopup(f, sanitizer) {
+    if (!f || !f.properties) return '';
+    var popup = '';
+
+    if (f.properties.title) {
+        popup += '<div class="marker-title">' + f.properties.title + '</div>';
+    }
+
+    if (f.properties.description) {
+        popup += '<div class="marker-description">' + f.properties.description + '</div>';
+    }
+
+    return (sanitizer || sanitize)(popup);
+}
+
+module.exports = {
+    icon: icon,
+    style: style,
+    createPopup: createPopup
+};
+
+},{"./format_url":10,"./util":30,"sanitize-caja":32}],25:[function(require,module,exports){
+'use strict';
+
+var corslite = require('corslite'),
+    strict = require('./util').strict,
+    config = require('./config');
+
+var protocol = /^(https?:)?(?=\/\/(.|api)\.tiles\.mapbox\.com\/)/;
+
+module.exports = function(url, callback) {
+    strict(url, 'string');
+    strict(callback, 'function');
+
+    url = url.replace(protocol, function(match, protocol) {
+        if (!('withCredentials' in new window.XMLHttpRequest())) {
+            // XDomainRequest in use; doesn't support cross-protocol requests
+            return document.location.protocol;
+        } else if (protocol === 'https:' || document.location.protocol === 'https:' || config.FORCE_HTTPS) {
+            return 'https:';
+        } else {
+            return 'http:';
+        }
+    });
+
+    function onload(err, resp) {
+        if (!err && resp) {
+            resp = JSON.parse(resp.responseText);
+        }
+        callback(err, resp);
+    }
+
+    return corslite(url, onload);
+};
+
+},{"./config":7,"./util":30,"corslite":3}],26:[function(require,module,exports){
+'use strict';
+
+var format_url = require('./format_url');
+
+var ShareControl = L.Control.extend({
+    includes: [require('./load_tilejson')],
+
+    options: {
+        position: 'topleft',
+        url: ''
+    },
+
+    initialize: function(_, options) {
+        L.setOptions(this, options);
+        this._loadTileJSON(_);
+    },
+
+    _setTileJSON: function(json) {
+        this._tilejson = json;
+    },
+
+    onAdd: function(map) {
+        this._map = map;
+
+        var container = L.DomUtil.create('div', 'leaflet-control-mapbox-share leaflet-bar');
+        var link = L.DomUtil.create('a', 'mapbox-share mapbox-icon mapbox-icon-share', container);
+        link.href = '#';
+
+        this._modal = L.DomUtil.create('div', 'mapbox-modal', this._map._container);
+        this._mask = L.DomUtil.create('div', 'mapbox-modal-mask', this._modal);
+        this._content = L.DomUtil.create('div', 'mapbox-modal-content', this._modal);
+
+        L.DomEvent.addListener(link, 'click', this._shareClick, this);
+        L.DomEvent.disableClickPropagation(container);
+
+        this._map.on('mousedown', this._clickOut, this);
+
+        return container;
+    },
+
+    _clickOut: function(e) {
+        if (this._sharing) {
+            L.DomEvent.preventDefault(e);
+            L.DomUtil.removeClass(this._modal, 'active');
+            this._content.innerHTML = '';
+            this._sharing = null;
+            return;
+        }
+    },
+
+    _shareClick: function(e) {
+        L.DomEvent.stop(e);
+        if (this._sharing) return this._clickOut(e);
+
+        var tilejson = this._tilejson || this._map._tilejson || {},
+            url = encodeURIComponent(this.options.url || tilejson.webpage || window.location),
+            name = encodeURIComponent(tilejson.name),
+            image = format_url('/v4/' + tilejson.id + '/' + this._map.getCenter().lng + ',' + this._map.getCenter().lat + ',' + this._map.getZoom() + '/600x600.png', this.options.accessToken),
+            embed = format_url('/v4/' + tilejson.id + '.html', this.options.accessToken),
+            twitterURL = '//twitter.com/intent/tweet?status=' + name + ' ' + url,
+            facebookURL = '//www.facebook.com/sharer.php?u=' + url + '&t=' + name,
+            pinterestURL = '//www.pinterest.com/pin/create/button/?url=' + url + '&media=' + image + '&description=' + name,
+            embedValue = '<iframe width="100%" height="500px" frameBorder="0" src="' + embed + '"></iframe>',
+            embedLabel = 'Copy and paste this <strong>HTML code</strong> into documents to embed this map on web pages.';
+
+        function createShareButton(buttonClass, href, socialMediaName) {
+            var elem = document.createElement('a');
+            elem.setAttribute('class', buttonClass);
+            elem.setAttribute('href', href);
+            elem.setAttribute('target', '_blank');
+            socialMediaName = document.createTextNode(socialMediaName);
+            elem.appendChild(socialMediaName);
+
+            return elem;
+        }
+
+        L.DomUtil.addClass(this._modal, 'active');
+
+        this._sharing = L.DomUtil.create('div', 'mapbox-modal-body', this._content);
+
+        var twitterButton = createShareButton('mapbox-button mapbox-button-icon mapbox-icon-twitter', twitterURL, 'Twitter');
+        var facebookButton = createShareButton('mapbox-button mapbox-button-icon mapbox-icon-facebook', facebookURL, 'Facebook');
+        var pinterestButton = createShareButton('mapbox-button mapbox-button-icon mapbox-icon-pinterest', pinterestURL, 'Pinterest');
+
+        var shareHeader = document.createElement('h3');
+        var shareText = document.createTextNode('Share this map');
+        shareHeader.appendChild(shareText);
+
+        var shareButtons = document.createElement('div');
+        shareButtons.setAttribute('class', 'mapbox-share-buttons');
+        shareButtons.appendChild(facebookButton);
+        shareButtons.appendChild(twitterButton);
+        shareButtons.appendChild(pinterestButton);
+
+        this._sharing.appendChild(shareHeader);
+        this._sharing.appendChild(shareButtons);
+
+        var input = L.DomUtil.create('input', 'mapbox-embed', this._sharing);
+        input.type = 'text';
+        input.value = embedValue;
+
+        var label = L.DomUtil.create('label', 'mapbox-embed-description', this._sharing);
+        label.innerHTML = embedLabel;
+
+        var close = L.DomUtil.create('a', 'leaflet-popup-close-button', this._sharing);
+        close.href = '#';
+
+        L.DomEvent.disableClickPropagation(this._sharing);
+        L.DomEvent.addListener(close, 'click', this._clickOut, this);
+        L.DomEvent.addListener(input, 'click', function(e) {
+            e.target.focus();
+            e.target.select();
+        });
+    }
+});
+
+module.exports.ShareControl = ShareControl;
+
+module.exports.shareControl = function(_, options) {
+    return new ShareControl(_, options);
+};
+
+},{"./format_url":10,"./load_tilejson":20}],27:[function(require,module,exports){
+'use strict';
+
+// an implementation of the simplestyle spec for polygon and linestring features
+// https://github.com/mapbox/simplestyle-spec
+var defaults = {
+    stroke: '#555555',
+    'stroke-width': 2,
+    'stroke-opacity': 1,
+    fill: '#555555',
+    'fill-opacity': 0.5
+};
+
+var mapping = [
+    ['stroke', 'color'],
+    ['stroke-width', 'weight'],
+    ['stroke-opacity', 'opacity'],
+    ['fill', 'fillColor'],
+    ['fill-opacity', 'fillOpacity']
+];
+
+function fallback(a, b) {
+    var c = {};
+    for (var k in b) {
+        if (a[k] === undefined) c[k] = b[k];
+        else c[k] = a[k];
+    }
+    return c;
+}
+
+function remap(a) {
+    var d = {};
+    for (var i = 0; i < mapping.length; i++) {
+        d[mapping[i][1]] = a[mapping[i][0]];
+    }
+    return d;
+}
+
+function style(feature) {
+    return remap(fallback(feature.properties || {}, defaults));
+}
+
+module.exports = {
+    style: style,
+    defaults: defaults
+};
+
+},{}],28:[function(require,module,exports){
+'use strict';
+
+var util = require('./util');
+var format_url = require('./format_url');
+var request = require('./request');
+
+var StyleLayer = L.TileLayer.extend({
+
+    options: {
+        sanitizer: require('sanitize-caja')
+    },
+
+    initialize: function(_, options) {
+        L.TileLayer.prototype.initialize.call(this, undefined, options);
+
+        this.options.tiles = this._formatTileURL(_);
+        this.options.tileSize = 512;
+        this.options.zoomOffset = -1;
+        this.options.tms = false;
+
+        this._getAttribution(_);
+    },
+
+    _getAttribution: function(_) {
+        var styleURL = format_url.style(_, this.options && this.options.accessToken);
+        request(styleURL, L.bind(function(err, style) {
+            if (err) {
+                util.log('could not load Mapbox style at ' + styleURL);
+                this.fire('error', {error: err});
+            }
+            var sources = [];
+            for (var id in style.sources) {
+                var source = style.sources[id].url.split('mapbox://')[1];
+                sources.push(source);
+            }
+            request(format_url.tileJSON(sources.join(), this.options.accessToken), L.bind(function(err, json) {
+                if (err) {
+                    util.log('could not load TileJSON at ' + _);
+                    this.fire('error', {error: err});
+                } else if (json) {
+                    util.strict(json, 'object');
+
+                    this.options.attribution = this.options.sanitizer(json.attribution);
+
+                    this._tilejson = json;
+                    this.fire('ready');
+                }
+            }, this));
+        }, this));
+    },
+
+    // disable the setUrl function, which is not available on mapbox tilelayers
+    setUrl: null,
+
+    _formatTileURL: function(style) {
+        var retina = L.Browser.retina ? '@2x' : '';
+        if (typeof style === 'string') {
+            if (style.indexOf('mapbox://styles/') === -1) {
+                util.log('Incorrectly formatted Mapbox style at ' + style);
+                this.fire('error');
+            }
+            var ownerIDStyle = style.split('mapbox://styles/')[1];
+            return format_url('/styles/v1/' + ownerIDStyle + '/tiles/{z}/{x}/{y}' + retina, this.options.accessToken);
+        } else if (typeof style === 'object') {
+            return format_url('/styles/v1/' + style.owner + '/' + style.id + '/tiles/{z}/{x}/{y}' + retina, this.options.accessToken);
+        }
+    },
+
+    // this is an exception to mapbox.js naming rules because it's called
+    // by `L.map`
+    getTileUrl: function(tilePoint) {
+        var templated = L.Util.template(this.options.tiles, tilePoint);
+        return templated;
+    }
+});
+
+module.exports.StyleLayer = StyleLayer;
+
+module.exports.styleLayer = function(_, options) {
+    return new StyleLayer(_, options);
+};
+
+},{"./format_url":10,"./request":25,"./util":30,"sanitize-caja":32}],29:[function(require,module,exports){
+'use strict';
+
+var util = require('./util');
+var formatPattern = /\.((?:png|jpg)\d*)(?=$|\?)/;
+
+var TileLayer = L.TileLayer.extend({
+    includes: [require('./load_tilejson')],
+
+    options: {
+        sanitizer: require('sanitize-caja')
+    },
+
+    // http://mapbox.com/developers/api/#image_quality
+    formats: [
+        'png', 'jpg',
+        // PNG
+        'png32', 'png64', 'png128', 'png256',
+        // JPG
+        'jpg70', 'jpg80', 'jpg90'],
+
+    scalePrefix: '@2x.',
+
+    initialize: function(_, options) {
+        L.TileLayer.prototype.initialize.call(this, undefined, options);
+
+        this._tilejson = {};
+
+        if (options && options.format) {
+            util.strict_oneof(options.format, this.formats);
+        }
+
+        this._loadTileJSON(_);
+    },
+
+    setFormat: function(_) {
+        util.strict(_, 'string');
+        this.options.format = _;
+        this.redraw();
+        return this;
+    },
+
+    // disable the setUrl function, which is not available on mapbox tilelayers
+    setUrl: null,
+
+    _setTileJSON: function(json) {
+        util.strict(json, 'object');
+
+        this.options.format = this.options.format ||
+            json.tiles[0].match(formatPattern)[1];
+
+        L.extend(this.options, {
+            tiles: json.tiles,
+            attribution: this.options.sanitizer(json.attribution),
+            minZoom: json.minzoom || 0,
+            maxZoom: json.maxzoom || 18,
+            tms: json.scheme === 'tms',
+            bounds: json.bounds && util.lbounds(json.bounds)
+        });
+
+        this._tilejson = json;
+        this.redraw();
+        return this;
+    },
+
+    getTileJSON: function() {
+        return this._tilejson;
+    },
+
+    // this is an exception to mapbox.js naming rules because it's called
+    // by `L.map`
+    getTileUrl: function(tilePoint) {
+        var tiles = this.options.tiles,
+            index = Math.floor(Math.abs(tilePoint.x + tilePoint.y) % tiles.length),
+            url = tiles[index];
+
+        var templated = L.Util.template(url, tilePoint);
+        if (!templated) {
+            return templated;
+        } else {
+            return templated.replace(formatPattern,
+                (L.Browser.retina ? this.scalePrefix : '.') + this.options.format);
+        }
+    },
+
+    // TileJSON.TileLayers are added to the map immediately, so that they get
+    // the desired z-index, but do not update until the TileJSON has been loaded.
+    _update: function() {
+        if (this.options.tiles) {
+            L.TileLayer.prototype._update.call(this);
+        }
+    }
+});
+
+module.exports.TileLayer = TileLayer;
+
+module.exports.tileLayer = function(_, options) {
+    return new TileLayer(_, options);
+};
+
+},{"./load_tilejson":20,"./util":30,"sanitize-caja":32}],30:[function(require,module,exports){
+'use strict';
+
+function contains(item, list) {
+    if (!list || !list.length) return false;
+    for (var i = 0; i < list.length; i++) {
+        if (list[i] === item) return true;
+    }
+    return false;
+}
+
+module.exports = {
+    idUrl: function(_, t) {
+        if (_.indexOf('/') === -1) t.loadID(_);
+        else t.loadURL(_);
+    },
+    log: function(_) {
+        if (typeof console === 'object' &&
+            typeof console.error === 'function') {
+            console.error(_);
+        }
+    },
+    strict: function(_, type) {
+        if (typeof _ !== type) {
+            throw new Error('Invalid argument: ' + type + ' expected');
+        }
+    },
+    strict_instance: function(_, klass, name) {
+        if (!(_ instanceof klass)) {
+            throw new Error('Invalid argument: ' + name + ' expected');
+        }
+    },
+    strict_oneof: function(_, values) {
+        if (!contains(_, values)) {
+            throw new Error('Invalid argument: ' + _ + ' given, valid values are ' +
+                values.join(', '));
+        }
+    },
+    strip_tags: function(_) {
+        return _.replace(/<[^<]+>/g, '');
+    },
+    lbounds: function(_) {
+        // leaflet-compatible bounds, since leaflet does not do geojson
+        return new L.LatLngBounds([[_[1], _[0]], [_[3], _[2]]]);
+    }
+};
+
+},{}],31:[function(require,module,exports){
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
  */
 
-/*global define: false*/
+/*global define: false Mustache: true*/
 
-(function (root, factory) {
-  if (typeof exports === "object" && exports) {
+(function defineMustache (global, factory) {
+  if (typeof exports === 'object' && exports && typeof exports.nodeName !== 'string') {
     factory(exports); // CommonJS
+  } else if (typeof define === 'function' && define.amd) {
+    define(['exports'], factory); // AMD
   } else {
-    var mustache = {};
-    factory(mustache);
-    if (typeof define === "function" && define.amd) {
-      define(mustache); // AMD
-    } else {
-      root.Mustache = mustache; // <script>
-    }
+    global.Mustache = {};
+    factory(global.Mustache); // script, wsh, asp
   }
-}(this, function (mustache) {
+}(this, function mustacheFactory (mustache) {
 
-  var whiteRe = /\s*/;
-  var spaceRe = /\s+/;
-  var nonSpaceRe = /\S/;
-  var eqRe = /\s*=/;
-  var curlyRe = /\s*\}/;
-  var tagRe = /#|\^|\/|>|\{|&|=|!/;
-
-  // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
-  // See https://github.com/janl/mustache.js/issues/189
-  var RegExp_test = RegExp.prototype.test;
-  function testRegExp(re, string) {
-    return RegExp_test.call(re, string);
-  }
-
-  function isWhitespace(string) {
-    return !testRegExp(nonSpaceRe, string);
-  }
-
-  var Object_toString = Object.prototype.toString;
-  var isArray = Array.isArray || function (object) {
-    return Object_toString.call(object) === '[object Array]';
+  var objectToString = Object.prototype.toString;
+  var isArray = Array.isArray || function isArrayPolyfill (object) {
+    return objectToString.call(object) === '[object Array]';
   };
 
-  function isFunction(object) {
+  function isFunction (object) {
     return typeof object === 'function';
   }
 
-  function escapeRegExp(string) {
-    return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+  /**
+   * More correct typeof string handling array
+   * which normally returns typeof 'object'
+   */
+  function typeStr (obj) {
+    return isArray(obj) ? 'array' : typeof obj;
+  }
+
+  function escapeRegExp (string) {
+    return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+  }
+
+  /**
+   * Null safe way of checking whether or not an object,
+   * including its prototype, has a given property
+   */
+  function hasProperty (obj, propName) {
+    return obj != null && typeof obj === 'object' && (propName in obj);
+  }
+
+  // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
+  // See https://github.com/janl/mustache.js/issues/189
+  var regExpTest = RegExp.prototype.test;
+  function testRegExp (re, string) {
+    return regExpTest.call(re, string);
+  }
+
+  var nonSpaceRe = /\S/;
+  function isWhitespace (string) {
+    return !testRegExp(nonSpaceRe, string);
   }
 
   var entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;',
-    "/": '&#x2F;'
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
   };
 
-  function escapeHtml(string) {
-    return String(string).replace(/[&<>"'\/]/g, function (s) {
+  function escapeHtml (string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
       return entityMap[s];
     });
   }
 
-  function Scanner(string) {
-    this.string = string;
-    this.tail = string;
-    this.pos = 0;
-  }
+  var whiteRe = /\s*/;
+  var spaceRe = /\s+/;
+  var equalsRe = /\s*=/;
+  var curlyRe = /\s*\}/;
+  var tagRe = /#|\^|\/|>|\{|&|=|!/;
 
   /**
-   * Returns `true` if the tail is empty (end of string).
+   * Breaks up the given `template` string into a tree of tokens. If the `tags`
+   * argument is given here it must be an array with two string values: the
+   * opening and closing tags used in the template (e.g. [ "<%", "%>" ]). Of
+   * course, the default is to use mustaches (i.e. mustache.tags).
+   *
+   * A token is an array with at least 4 elements. The first element is the
+   * mustache symbol that was used inside the tag, e.g. "#" or "&". If the tag
+   * did not contain a symbol (i.e. {{myValue}}) this element is "name". For
+   * all text that appears outside a symbol this element is "text".
+   *
+   * The second element of a token is its "value". For mustache tags this is
+   * whatever else was inside the tag besides the opening symbol. For text tokens
+   * this is the text itself.
+   *
+   * The third and fourth elements of the token are the start and end indices,
+   * respectively, of the token in the original template.
+   *
+   * Tokens that are the root node of a subtree contain two more elements: 1) an
+   * array of tokens in the subtree and 2) the index in the original template at
+   * which the closing tag for that section begins.
    */
-  Scanner.prototype.eos = function () {
-    return this.tail === "";
-  };
-
-  /**
-   * Tries to match the given regular expression at the current position.
-   * Returns the matched text if it can match, the empty string otherwise.
-   */
-  Scanner.prototype.scan = function (re) {
-    var match = this.tail.match(re);
-
-    if (match && match.index === 0) {
-      var string = match[0];
-      this.tail = this.tail.substring(string.length);
-      this.pos += string.length;
-      return string;
-    }
-
-    return "";
-  };
-
-  /**
-   * Skips all text until the given regular expression can be matched. Returns
-   * the skipped string, which is the entire tail if no match can be made.
-   */
-  Scanner.prototype.scanUntil = function (re) {
-    var index = this.tail.search(re), match;
-
-    switch (index) {
-    case -1:
-      match = this.tail;
-      this.tail = "";
-      break;
-    case 0:
-      match = "";
-      break;
-    default:
-      match = this.tail.substring(0, index);
-      this.tail = this.tail.substring(index);
-    }
-
-    this.pos += match.length;
-
-    return match;
-  };
-
-  function Context(view, parent) {
-    this.view = view == null ? {} : view;
-    this.parent = parent;
-    this._cache = { '.': this.view };
-  }
-
-  Context.make = function (view) {
-    return (view instanceof Context) ? view : new Context(view);
-  };
-
-  Context.prototype.push = function (view) {
-    return new Context(view, this);
-  };
-
-  Context.prototype.lookup = function (name) {
-    var value;
-    if (name in this._cache) {
-      value = this._cache[name];
-    } else {
-      var context = this;
-
-      while (context) {
-        if (name.indexOf('.') > 0) {
-          value = context.view;
-
-          var names = name.split('.'), i = 0;
-          while (value != null && i < names.length) {
-            value = value[names[i++]];
-          }
-        } else {
-          value = context.view[name];
-        }
-
-        if (value != null) break;
-
-        context = context.parent;
-      }
-
-      this._cache[name] = value;
-    }
-
-    if (isFunction(value)) {
-      value = value.call(this.view);
-    }
-
-    return value;
-  };
-
-  function Writer() {
-    this.clearCache();
-  }
-
-  Writer.prototype.clearCache = function () {
-    this._cache = {};
-    this._partialCache = {};
-  };
-
-  Writer.prototype.compile = function (template, tags) {
-    var fn = this._cache[template];
-
-    if (!fn) {
-      var tokens = mustache.parse(template, tags);
-      fn = this._cache[template] = this.compileTokens(tokens, template);
-    }
-
-    return fn;
-  };
-
-  Writer.prototype.compilePartial = function (name, template, tags) {
-    var fn = this.compile(template, tags);
-    this._partialCache[name] = fn;
-    return fn;
-  };
-
-  Writer.prototype.getPartial = function (name) {
-    if (!(name in this._partialCache) && this._loadPartial) {
-      this.compilePartial(name, this._loadPartial(name));
-    }
-
-    return this._partialCache[name];
-  };
-
-  Writer.prototype.compileTokens = function (tokens, template) {
-    var self = this;
-    return function (view, partials) {
-      if (partials) {
-        if (isFunction(partials)) {
-          self._loadPartial = partials;
-        } else {
-          for (var name in partials) {
-            self.compilePartial(name, partials[name]);
-          }
-        }
-      }
-
-      return renderTokens(tokens, self, Context.make(view), template);
-    };
-  };
-
-  Writer.prototype.render = function (template, view, partials) {
-    return this.compile(template)(view, partials);
-  };
-
-  /**
-   * Low-level function that renders the given `tokens` using the given `writer`
-   * and `context`. The `template` string is only needed for templates that use
-   * higher-order sections to extract the portion of the original template that
-   * was contained in that section.
-   */
-  function renderTokens(tokens, writer, context, template) {
-    var buffer = '';
-
-    // This function is used to render an artbitrary template
-    // in the current context by higher-order functions.
-    function subRender(template) {
-      return writer.render(template, context);
-    }
-
-    var token, tokenValue, value;
-    for (var i = 0, len = tokens.length; i < len; ++i) {
-      token = tokens[i];
-      tokenValue = token[1];
-
-      switch (token[0]) {
-      case '#':
-        value = context.lookup(tokenValue);
-
-        if (typeof value === 'object' || typeof value === 'string') {
-          if (isArray(value)) {
-            for (var j = 0, jlen = value.length; j < jlen; ++j) {
-              buffer += renderTokens(token[4], writer, context.push(value[j]), template);
-            }
-          } else if (value) {
-            buffer += renderTokens(token[4], writer, context.push(value), template);
-          }
-        } else if (isFunction(value)) {
-          var text = template == null ? null : template.slice(token[3], token[5]);
-          value = value.call(context.view, text, subRender);
-          if (value != null) buffer += value;
-        } else if (value) {
-          buffer += renderTokens(token[4], writer, context, template);
-        }
-
-        break;
-      case '^':
-        value = context.lookup(tokenValue);
-
-        // Use JavaScript's definition of falsy. Include empty arrays.
-        // See https://github.com/janl/mustache.js/issues/186
-        if (!value || (isArray(value) && value.length === 0)) {
-          buffer += renderTokens(token[4], writer, context, template);
-        }
-
-        break;
-      case '>':
-        value = writer.getPartial(tokenValue);
-        if (isFunction(value)) buffer += value(context);
-        break;
-      case '&':
-        value = context.lookup(tokenValue);
-        if (value != null) buffer += value;
-        break;
-      case 'name':
-        value = context.lookup(tokenValue);
-        if (value != null) buffer += mustache.escape(value);
-        break;
-      case 'text':
-        buffer += tokenValue;
-        break;
-      }
-    }
-
-    return buffer;
-  }
-
-  /**
-   * Forms the given array of `tokens` into a nested tree structure where
-   * tokens that represent a section have two additional items: 1) an array of
-   * all tokens that appear in that section and 2) the index in the original
-   * template that represents the end of that section.
-   */
-  function nestTokens(tokens) {
-    var tree = [];
-    var collector = tree;
-    var sections = [];
-
-    var token;
-    for (var i = 0, len = tokens.length; i < len; ++i) {
-      token = tokens[i];
-      switch (token[0]) {
-      case '#':
-      case '^':
-        sections.push(token);
-        collector.push(token);
-        collector = token[4] = [];
-        break;
-      case '/':
-        var section = sections.pop();
-        section[5] = token[2];
-        collector = sections.length > 0 ? sections[sections.length - 1][4] : tree;
-        break;
-      default:
-        collector.push(token);
-      }
-    }
-
-    return tree;
-  }
-
-  /**
-   * Combines the values of consecutive text tokens in the given `tokens` array
-   * to a single token.
-   */
-  function squashTokens(tokens) {
-    var squashedTokens = [];
-
-    var token, lastToken;
-    for (var i = 0, len = tokens.length; i < len; ++i) {
-      token = tokens[i];
-      if (token) {
-        if (token[0] === 'text' && lastToken && lastToken[0] === 'text') {
-          lastToken[1] += token[1];
-          lastToken[3] = token[3];
-        } else {
-          lastToken = token;
-          squashedTokens.push(token);
-        }
-      }
-    }
-
-    return squashedTokens;
-  }
-
-  function escapeTags(tags) {
-    return [
-      new RegExp(escapeRegExp(tags[0]) + "\\s*"),
-      new RegExp("\\s*" + escapeRegExp(tags[1]))
-    ];
-  }
-
-  /**
-   * Breaks up the given `template` string into a tree of token objects. If
-   * `tags` is given here it must be an array with two string values: the
-   * opening and closing tags used in the template (e.g. ["<%", "%>"]). Of
-   * course, the default is to use mustaches (i.e. Mustache.tags).
-   */
-  function parseTemplate(template, tags) {
-    template = template || '';
-    tags = tags || mustache.tags;
-
-    if (typeof tags === 'string') tags = tags.split(spaceRe);
-    if (tags.length !== 2) throw new Error('Invalid tags: ' + tags.join(', '));
-
-    var tagRes = escapeTags(tags);
-    var scanner = new Scanner(template);
+  function parseTemplate (template, tags) {
+    if (!template)
+      return [];
 
     var sections = [];     // Stack to hold section tokens
     var tokens = [];       // Buffer to hold the tokens
@@ -9684,11 +11764,10 @@ L.Map.include({
 
     // Strips all whitespace tokens array for the current line
     // if there was a {{#tag}} on it and otherwise only space.
-    function stripSpace() {
+    function stripSpace () {
       if (hasTag && !nonSpace) {
-        while (spaces.length) {
+        while (spaces.length)
           delete tokens[spaces.pop()];
-        }
       } else {
         spaces = [];
       }
@@ -9697,14 +11776,32 @@ L.Map.include({
       nonSpace = false;
     }
 
+    var openingTagRe, closingTagRe, closingCurlyRe;
+    function compileTags (tagsToCompile) {
+      if (typeof tagsToCompile === 'string')
+        tagsToCompile = tagsToCompile.split(spaceRe, 2);
+
+      if (!isArray(tagsToCompile) || tagsToCompile.length !== 2)
+        throw new Error('Invalid tags: ' + tagsToCompile);
+
+      openingTagRe = new RegExp(escapeRegExp(tagsToCompile[0]) + '\\s*');
+      closingTagRe = new RegExp('\\s*' + escapeRegExp(tagsToCompile[1]));
+      closingCurlyRe = new RegExp('\\s*' + escapeRegExp('}' + tagsToCompile[1]));
+    }
+
+    compileTags(tags || mustache.tags);
+
+    var scanner = new Scanner(template);
+
     var start, type, value, chr, token, openSection;
     while (!scanner.eos()) {
       start = scanner.pos;
 
       // Match any text between tags.
-      value = scanner.scanUntil(tagRes[0]);
+      value = scanner.scanUntil(openingTagRe);
+
       if (value) {
-        for (var i = 0, len = value.length; i < len; ++i) {
+        for (var i = 0, valueLength = value.length; i < valueLength; ++i) {
           chr = value.charAt(i);
 
           if (isWhitespace(chr)) {
@@ -9713,16 +11810,19 @@ L.Map.include({
             nonSpace = true;
           }
 
-          tokens.push(['text', chr, start, start + 1]);
+          tokens.push([ 'text', chr, start, start + 1 ]);
           start += 1;
 
           // Check for whitespace on the current line.
-          if (chr == '\n') stripSpace();
+          if (chr === '\n')
+            stripSpace();
         }
       }
 
       // Match the opening tag.
-      if (!scanner.scan(tagRes[0])) break;
+      if (!scanner.scan(openingTagRe))
+        break;
+
       hasTag = true;
 
       // Get the tag type.
@@ -9731,22 +11831,23 @@ L.Map.include({
 
       // Get the tag value.
       if (type === '=') {
-        value = scanner.scanUntil(eqRe);
-        scanner.scan(eqRe);
-        scanner.scanUntil(tagRes[1]);
+        value = scanner.scanUntil(equalsRe);
+        scanner.scan(equalsRe);
+        scanner.scanUntil(closingTagRe);
       } else if (type === '{') {
-        value = scanner.scanUntil(new RegExp('\\s*' + escapeRegExp('}' + tags[1])));
+        value = scanner.scanUntil(closingCurlyRe);
         scanner.scan(curlyRe);
-        scanner.scanUntil(tagRes[1]);
+        scanner.scanUntil(closingTagRe);
         type = '&';
       } else {
-        value = scanner.scanUntil(tagRes[1]);
+        value = scanner.scanUntil(closingTagRe);
       }
 
       // Match the closing tag.
-      if (!scanner.scan(tagRes[1])) throw new Error('Unclosed tag at ' + scanner.pos);
+      if (!scanner.scan(closingTagRe))
+        throw new Error('Unclosed tag at ' + scanner.pos);
 
-      token = [type, value, start, scanner.pos];
+      token = [ type, value, start, scanner.pos ];
       tokens.push(token);
 
       if (type === '#' || type === '^') {
@@ -9754,91 +11855,409 @@ L.Map.include({
       } else if (type === '/') {
         // Check section nesting.
         openSection = sections.pop();
-        if (!openSection) {
+
+        if (!openSection)
           throw new Error('Unopened section "' + value + '" at ' + start);
-        }
-        if (openSection[1] !== value) {
+
+        if (openSection[1] !== value)
           throw new Error('Unclosed section "' + openSection[1] + '" at ' + start);
-        }
       } else if (type === 'name' || type === '{' || type === '&') {
         nonSpace = true;
       } else if (type === '=') {
         // Set the tags for the next time around.
-        tags = value.split(spaceRe);
-        if (tags.length !== 2) {
-          throw new Error('Invalid tags at ' + start + ': ' + tags.join(', '));
-        }
-        tagRes = escapeTags(tags);
+        compileTags(value);
       }
     }
 
     // Make sure there are no open sections when we're done.
     openSection = sections.pop();
-    if (openSection) {
+
+    if (openSection)
       throw new Error('Unclosed section "' + openSection[1] + '" at ' + scanner.pos);
-    }
 
     return nestTokens(squashTokens(tokens));
   }
 
-  mustache.name = "mustache.js";
-  mustache.version = "0.7.3";
-  mustache.tags = ["{{", "}}"];
+  /**
+   * Combines the values of consecutive text tokens in the given `tokens` array
+   * to a single token.
+   */
+  function squashTokens (tokens) {
+    var squashedTokens = [];
 
-  mustache.Scanner = Scanner;
-  mustache.Context = Context;
-  mustache.Writer = Writer;
+    var token, lastToken;
+    for (var i = 0, numTokens = tokens.length; i < numTokens; ++i) {
+      token = tokens[i];
 
-  mustache.parse = parseTemplate;
+      if (token) {
+        if (token[0] === 'text' && lastToken && lastToken[0] === 'text') {
+          lastToken[1] += token[1];
+          lastToken[3] = token[3];
+        } else {
+          squashedTokens.push(token);
+          lastToken = token;
+        }
+      }
+    }
 
-  // Export the escaping function so that the user may override it.
-  // See https://github.com/janl/mustache.js/issues/244
-  mustache.escape = escapeHtml;
+    return squashedTokens;
+  }
 
-  // All Mustache.* functions use this writer.
+  /**
+   * Forms the given array of `tokens` into a nested tree structure where
+   * tokens that represent a section have two additional items: 1) an array of
+   * all tokens that appear in that section and 2) the index in the original
+   * template that represents the end of that section.
+   */
+  function nestTokens (tokens) {
+    var nestedTokens = [];
+    var collector = nestedTokens;
+    var sections = [];
+
+    var token, section;
+    for (var i = 0, numTokens = tokens.length; i < numTokens; ++i) {
+      token = tokens[i];
+
+      switch (token[0]) {
+        case '#':
+        case '^':
+          collector.push(token);
+          sections.push(token);
+          collector = token[4] = [];
+          break;
+        case '/':
+          section = sections.pop();
+          section[5] = token[2];
+          collector = sections.length > 0 ? sections[sections.length - 1][4] : nestedTokens;
+          break;
+        default:
+          collector.push(token);
+      }
+    }
+
+    return nestedTokens;
+  }
+
+  /**
+   * A simple string scanner that is used by the template parser to find
+   * tokens in template strings.
+   */
+  function Scanner (string) {
+    this.string = string;
+    this.tail = string;
+    this.pos = 0;
+  }
+
+  /**
+   * Returns `true` if the tail is empty (end of string).
+   */
+  Scanner.prototype.eos = function eos () {
+    return this.tail === '';
+  };
+
+  /**
+   * Tries to match the given regular expression at the current position.
+   * Returns the matched text if it can match, the empty string otherwise.
+   */
+  Scanner.prototype.scan = function scan (re) {
+    var match = this.tail.match(re);
+
+    if (!match || match.index !== 0)
+      return '';
+
+    var string = match[0];
+
+    this.tail = this.tail.substring(string.length);
+    this.pos += string.length;
+
+    return string;
+  };
+
+  /**
+   * Skips all text until the given regular expression can be matched. Returns
+   * the skipped string, which is the entire tail if no match can be made.
+   */
+  Scanner.prototype.scanUntil = function scanUntil (re) {
+    var index = this.tail.search(re), match;
+
+    switch (index) {
+      case -1:
+        match = this.tail;
+        this.tail = '';
+        break;
+      case 0:
+        match = '';
+        break;
+      default:
+        match = this.tail.substring(0, index);
+        this.tail = this.tail.substring(index);
+    }
+
+    this.pos += match.length;
+
+    return match;
+  };
+
+  /**
+   * Represents a rendering context by wrapping a view object and
+   * maintaining a reference to the parent context.
+   */
+  function Context (view, parentContext) {
+    this.view = view;
+    this.cache = { '.': this.view };
+    this.parent = parentContext;
+  }
+
+  /**
+   * Creates a new context using the given view with this context
+   * as the parent.
+   */
+  Context.prototype.push = function push (view) {
+    return new Context(view, this);
+  };
+
+  /**
+   * Returns the value of the given name in this context, traversing
+   * up the context hierarchy if the value is absent in this context's view.
+   */
+  Context.prototype.lookup = function lookup (name) {
+    var cache = this.cache;
+
+    var value;
+    if (cache.hasOwnProperty(name)) {
+      value = cache[name];
+    } else {
+      var context = this, names, index, lookupHit = false;
+
+      while (context) {
+        if (name.indexOf('.') > 0) {
+          value = context.view;
+          names = name.split('.');
+          index = 0;
+
+          /**
+           * Using the dot notion path in `name`, we descend through the
+           * nested objects.
+           *
+           * To be certain that the lookup has been successful, we have to
+           * check if the last object in the path actually has the property
+           * we are looking for. We store the result in `lookupHit`.
+           *
+           * This is specially necessary for when the value has been set to
+           * `undefined` and we want to avoid looking up parent contexts.
+           **/
+          while (value != null && index < names.length) {
+            if (index === names.length - 1)
+              lookupHit = hasProperty(value, names[index]);
+
+            value = value[names[index++]];
+          }
+        } else {
+          value = context.view[name];
+          lookupHit = hasProperty(context.view, name);
+        }
+
+        if (lookupHit)
+          break;
+
+        context = context.parent;
+      }
+
+      cache[name] = value;
+    }
+
+    if (isFunction(value))
+      value = value.call(this.view);
+
+    return value;
+  };
+
+  /**
+   * A Writer knows how to take a stream of tokens and render them to a
+   * string, given a context. It also maintains a cache of templates to
+   * avoid the need to parse the same template twice.
+   */
+  function Writer () {
+    this.cache = {};
+  }
+
+  /**
+   * Clears all cached templates in this writer.
+   */
+  Writer.prototype.clearCache = function clearCache () {
+    this.cache = {};
+  };
+
+  /**
+   * Parses and caches the given `template` and returns the array of tokens
+   * that is generated from the parse.
+   */
+  Writer.prototype.parse = function parse (template, tags) {
+    var cache = this.cache;
+    var tokens = cache[template];
+
+    if (tokens == null)
+      tokens = cache[template] = parseTemplate(template, tags);
+
+    return tokens;
+  };
+
+  /**
+   * High-level method that is used to render the given `template` with
+   * the given `view`.
+   *
+   * The optional `partials` argument may be an object that contains the
+   * names and templates of partials that are used in the template. It may
+   * also be a function that is used to load partial templates on the fly
+   * that takes a single argument: the name of the partial.
+   */
+  Writer.prototype.render = function render (template, view, partials) {
+    var tokens = this.parse(template);
+    var context = (view instanceof Context) ? view : new Context(view);
+    return this.renderTokens(tokens, context, partials, template);
+  };
+
+  /**
+   * Low-level method that renders the given array of `tokens` using
+   * the given `context` and `partials`.
+   *
+   * Note: The `originalTemplate` is only ever used to extract the portion
+   * of the original template that was contained in a higher-order section.
+   * If the template doesn't use higher-order sections, this argument may
+   * be omitted.
+   */
+  Writer.prototype.renderTokens = function renderTokens (tokens, context, partials, originalTemplate) {
+    var buffer = '';
+
+    var token, symbol, value;
+    for (var i = 0, numTokens = tokens.length; i < numTokens; ++i) {
+      value = undefined;
+      token = tokens[i];
+      symbol = token[0];
+
+      if (symbol === '#') value = this.renderSection(token, context, partials, originalTemplate);
+      else if (symbol === '^') value = this.renderInverted(token, context, partials, originalTemplate);
+      else if (symbol === '>') value = this.renderPartial(token, context, partials, originalTemplate);
+      else if (symbol === '&') value = this.unescapedValue(token, context);
+      else if (symbol === 'name') value = this.escapedValue(token, context);
+      else if (symbol === 'text') value = this.rawValue(token);
+
+      if (value !== undefined)
+        buffer += value;
+    }
+
+    return buffer;
+  };
+
+  Writer.prototype.renderSection = function renderSection (token, context, partials, originalTemplate) {
+    var self = this;
+    var buffer = '';
+    var value = context.lookup(token[1]);
+
+    // This function is used to render an arbitrary template
+    // in the current context by higher-order sections.
+    function subRender (template) {
+      return self.render(template, context, partials);
+    }
+
+    if (!value) return;
+
+    if (isArray(value)) {
+      for (var j = 0, valueLength = value.length; j < valueLength; ++j) {
+        buffer += this.renderTokens(token[4], context.push(value[j]), partials, originalTemplate);
+      }
+    } else if (typeof value === 'object' || typeof value === 'string' || typeof value === 'number') {
+      buffer += this.renderTokens(token[4], context.push(value), partials, originalTemplate);
+    } else if (isFunction(value)) {
+      if (typeof originalTemplate !== 'string')
+        throw new Error('Cannot use higher-order sections without the original template');
+
+      // Extract the portion of the original template that the section contains.
+      value = value.call(context.view, originalTemplate.slice(token[3], token[5]), subRender);
+
+      if (value != null)
+        buffer += value;
+    } else {
+      buffer += this.renderTokens(token[4], context, partials, originalTemplate);
+    }
+    return buffer;
+  };
+
+  Writer.prototype.renderInverted = function renderInverted (token, context, partials, originalTemplate) {
+    var value = context.lookup(token[1]);
+
+    // Use JavaScript's definition of falsy. Include empty arrays.
+    // See https://github.com/janl/mustache.js/issues/186
+    if (!value || (isArray(value) && value.length === 0))
+      return this.renderTokens(token[4], context, partials, originalTemplate);
+  };
+
+  Writer.prototype.renderPartial = function renderPartial (token, context, partials) {
+    if (!partials) return;
+
+    var value = isFunction(partials) ? partials(token[1]) : partials[token[1]];
+    if (value != null)
+      return this.renderTokens(this.parse(value), context, partials, value);
+  };
+
+  Writer.prototype.unescapedValue = function unescapedValue (token, context) {
+    var value = context.lookup(token[1]);
+    if (value != null)
+      return value;
+  };
+
+  Writer.prototype.escapedValue = function escapedValue (token, context) {
+    var value = context.lookup(token[1]);
+    if (value != null)
+      return mustache.escape(value);
+  };
+
+  Writer.prototype.rawValue = function rawValue (token) {
+    return token[1];
+  };
+
+  mustache.name = 'mustache.js';
+  mustache.version = '2.2.1';
+  mustache.tags = [ '{{', '}}' ];
+
+  // All high-level mustache.* functions use this writer.
   var defaultWriter = new Writer();
 
   /**
-   * Clears all cached templates and partials in the default writer.
+   * Clears all cached templates in the default writer.
    */
-  mustache.clearCache = function () {
+  mustache.clearCache = function clearCache () {
     return defaultWriter.clearCache();
   };
 
   /**
-   * Compiles the given `template` to a reusable function using the default
-   * writer.
+   * Parses and caches the given template in the default writer and returns the
+   * array of tokens it contains. Doing this ahead of time avoids the need to
+   * parse templates on the fly as they are rendered.
    */
-  mustache.compile = function (template, tags) {
-    return defaultWriter.compile(template, tags);
-  };
-
-  /**
-   * Compiles the partial with the given `name` and `template` to a reusable
-   * function using the default writer.
-   */
-  mustache.compilePartial = function (name, template, tags) {
-    return defaultWriter.compilePartial(name, template, tags);
-  };
-
-  /**
-   * Compiles the given array of tokens (the output of a parse) to a reusable
-   * function using the default writer.
-   */
-  mustache.compileTokens = function (tokens, template) {
-    return defaultWriter.compileTokens(tokens, template);
+  mustache.parse = function parse (template, tags) {
+    return defaultWriter.parse(template, tags);
   };
 
   /**
    * Renders the `template` with the given `view` and `partials` using the
    * default writer.
    */
-  mustache.render = function (template, view, partials) {
+  mustache.render = function render (template, view, partials) {
+    if (typeof template !== 'string') {
+      throw new TypeError('Invalid template! Template should be a "string" ' +
+                          'but "' + typeStr(template) + '" was given as the first ' +
+                          'argument for mustache#render(template, view, partials)');
+    }
+
     return defaultWriter.render(template, view, partials);
   };
 
-  // This is here for backwards compatibility with 0.4.x.
-  mustache.to_html = function (template, view, partials, send) {
+  // This is here for backwards compatibility with 0.4.x.,
+  /*eslint-disable */ // eslint wants camel cased function name
+  mustache.to_html = function to_html (template, view, partials, send) {
+    /*eslint-enable*/
+
     var result = mustache.render(template, view, partials);
 
     if (isFunction(send)) {
@@ -9848,9 +12267,18 @@ L.Map.include({
     }
   };
 
+  // Export the escaping function so that the user may override it.
+  // See https://github.com/janl/mustache.js/issues/244
+  mustache.escape = escapeHtml;
+
+  // Export these mainly for testing, but also for advanced usage.
+  mustache.Scanner = Scanner;
+  mustache.Context = Context;
+  mustache.Writer = Writer;
+
 }));
 
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js":[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var html_sanitize = require('./sanitizer-bundle.js');
 
 module.exports = function(_) {
@@ -9870,7 +12298,7 @@ function cleanUrl(url) {
 
 function cleanId(id) { return id; }
 
-},{"./sanitizer-bundle.js":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/sanitizer-bundle.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/sanitizer-bundle.js":[function(require,module,exports){
+},{"./sanitizer-bundle.js":33}],33:[function(require,module,exports){
 
 // Copyright (C) 2010 Google Inc.
 //
@@ -10951,6 +13379,7 @@ html4.eflags = {
   'VIRTUALIZED': 256
 };
 html4[ 'eflags' ] = html4.eflags;
+// these are bitmasks of the eflags above.
 html4.ELEMENTS = {
   'a': 0,
   'abbr': 0,
@@ -11011,7 +13440,7 @@ html4.ELEMENTS = {
   'hr': 2,
   'html': 305,
   'i': 0,
-  'iframe': 4,
+  'iframe': 16,
   'img': 2,
   'input': 2,
   'ins': 0,
@@ -12318,1849 +14747,4 @@ if (typeof module !== 'undefined') {
     module.exports = html_sanitize;
 }
 
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/package.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
-  "author": {
-    "name": "Mapbox"
-  },
-  "name": "mapbox.js",
-  "description": "mapbox javascript api",
-  "version": "2.1.2",
-  "homepage": "http://mapbox.com/",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/mapbox/mapbox.js.git"
-  },
-  "main": "src/index.js",
-  "dependencies": {
-    "leaflet": "0.7.3",
-    "mustache": "0.7.3",
-    "corslite": "0.0.6",
-    "sanitize-caja": "0.1.2"
-  },
-  "scripts": {
-    "test": "jshint src/*.js && mocha-phantomjs test/index.html"
-  },
-  "devDependencies": {
-    "leaflet-hash": "0.2.1",
-    "leaflet-fullscreen": "0.0.0",
-    "uglify-js": "2.4.8",
-    "mocha": "1.17.1",
-    "expect.js": "0.3.1",
-    "sinon": "1.10.2",
-    "mocha-phantomjs": "3.1.6",
-    "happen": "0.1.3",
-    "browserify": "3.23.1",
-    "jshint": "2.4.4",
-    "clean-css": "~2.0.7",
-    "minimist": "0.0.5",
-    "marked": "~0.3.0"
-  },
-  "optionalDependencies": {},
-  "engines": {
-    "node": "*"
-  },
-  "gitHead": "ec8bbd0ba581a2493299ba6b8a81a7564d8b717c",
-  "bugs": {
-    "url": "https://github.com/mapbox/mapbox.js/issues"
-  },
-  "_id": "mapbox.js@2.1.2",
-  "_shasum": "12e07216617aa34c2a619ebeed9109ff84c069d8",
-  "_from": "mapbox.js@*",
-  "_npmVersion": "1.4.16",
-  "_npmUser": {
-    "name": "jfirebaugh",
-    "email": "john.firebaugh@gmail.com"
-  },
-  "maintainers": [
-    {
-      "name": "tmcw",
-      "email": "macwright@gmail.com"
-    },
-    {
-      "name": "tristen",
-      "email": "tristen.brown@gmail.com"
-    },
-    {
-      "name": "ansis",
-      "email": "ansis.brammanis@gmail.com"
-    },
-    {
-      "name": "yhahn",
-      "email": "young@developmentseed.org"
-    },
-    {
-      "name": "willwhite",
-      "email": "will@mapbox.com"
-    },
-    {
-      "name": "jfirebaugh",
-      "email": "john.firebaugh@gmail.com"
-    },
-    {
-      "name": "heyitsgarrett",
-      "email": "heyitsgarrett@gmail.com"
-    },
-    {
-      "name": "mourner",
-      "email": "agafonkin@gmail.com"
-    },
-    {
-      "name": "mapbox",
-      "email": "accounts@mapbox.com"
-    }
-  ],
-  "dist": {
-    "shasum": "12e07216617aa34c2a619ebeed9109ff84c069d8",
-    "tarball": "http://registry.npmjs.org/mapbox.js/-/mapbox.js-2.1.2.tgz"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/mapbox.js/-/mapbox.js-2.1.2.tgz"
-}
-
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/config.js":[function(require,module,exports){
-'use strict';
-
-module.exports = {
-    HTTP_URL: 'http://a.tiles.mapbox.com/v4',
-    HTTPS_URL: 'https://a.tiles.mapbox.com/v4',
-    FORCE_HTTPS: false,
-    REQUIRE_ACCESS_TOKEN: true
-};
-
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/feature_layer.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util'),
-    urlhelper = require('./url'),
-    request = require('./request'),
-    marker = require('./marker'),
-    simplestyle = require('./simplestyle');
-
-// # featureLayer
-//
-// A layer of features, loaded from Mapbox or else. Adds the ability
-// to reset features, filter them, and load them from a GeoJSON URL.
-var FeatureLayer = L.FeatureGroup.extend({
-    options: {
-        filter: function() { return true; },
-        sanitizer: require('sanitize-caja'),
-        style: simplestyle.style,
-        popupOptions: { closeButton: false }
-    },
-
-    initialize: function(_, options) {
-        L.setOptions(this, options);
-
-        this._layers = {};
-
-        if (typeof _ === 'string') {
-            util.idUrl(_, this);
-        // javascript object of TileJSON data
-        } else if (_ && typeof _ === 'object') {
-            this.setGeoJSON(_);
-        }
-    },
-
-    setGeoJSON: function(_) {
-        this._geojson = _;
-        this.clearLayers();
-        this._initialize(_);
-        return this;
-    },
-
-    getGeoJSON: function() {
-        return this._geojson;
-    },
-
-    loadURL: function(url) {
-        if (this._request && 'abort' in this._request) this._request.abort();
-        this._request = request(url, L.bind(function(err, json) {
-            this._request = null;
-            if (err && err.type !== 'abort') {
-                util.log('could not load features at ' + url);
-                this.fire('error', {error: err});
-            } else if (json) {
-                this.setGeoJSON(json);
-                this.fire('ready');
-            }
-        }, this));
-        return this;
-    },
-
-    loadID: function(id) {
-        return this.loadURL(urlhelper('/' + id + '/features.json', this.options.accessToken));
-    },
-
-    setFilter: function(_) {
-        this.options.filter = _;
-        if (this._geojson) {
-            this.clearLayers();
-            this._initialize(this._geojson);
-        }
-        return this;
-    },
-
-    getFilter: function() {
-        return this.options.filter;
-    },
-
-    _initialize: function(json) {
-        var features = L.Util.isArray(json) ? json : json.features,
-            i, len;
-
-        if (features) {
-            for (i = 0, len = features.length; i < len; i++) {
-                // Only add this if geometry or geometries are set and not null
-                if (features[i].geometries || features[i].geometry || features[i].features) {
-                    this._initialize(features[i]);
-                }
-            }
-        } else if (this.options.filter(json)) {
-
-            var opts = {accessToken: this.options.accessToken},
-                layer = L.GeoJSON.geometryToLayer(json, function(feature, latlon) {
-                    return marker.style(feature, latlon, opts);
-                }),
-                popupHtml = marker.createPopup(json, this.options.sanitizer);
-
-            if ('setStyle' in layer) {
-                layer.setStyle(simplestyle.style(json));
-            }
-
-            layer.feature = json;
-
-            if (popupHtml) {
-                layer.bindPopup(popupHtml, this.options.popupOptions);
-            }
-
-            this.addLayer(layer);
-        }
-    }
-});
-
-module.exports.FeatureLayer = FeatureLayer;
-
-module.exports.featureLayer = function(_, options) {
-    return new FeatureLayer(_, options);
-};
-
-},{"./marker":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/marker.js","./request":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/request.js","./simplestyle":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/simplestyle.js","./url":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js","sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/geocoder.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util'),
-    urlhelper = require('./url'),
-    request = require('./request');
-
-// Low-level geocoding interface - wraps specific API calls and their
-// return values.
-module.exports = function(url, options) {
-
-    var geocoder = {};
-
-    util.strict(url, 'string');
-
-    if (url.indexOf('/') === -1) {
-        url = urlhelper('/geocode/' + url + '/{query}.json', options && options.accessToken);
-    }
-
-    geocoder.getURL = function() {
-        return url;
-    };
-
-    geocoder.queryURL = function(_) {
-        if (typeof _ !== 'string') {
-            var parts = [];
-            for (var i = 0; i < _.length; i++) {
-                parts[i] = encodeURIComponent(_[i]);
-            }
-            return L.Util.template(geocoder.getURL(), {
-                query: parts.join(';')
-            });
-        } else {
-            return L.Util.template(geocoder.getURL(), {
-                query: encodeURIComponent(_)
-            });
-        }
-    };
-
-    geocoder.query = function(_, callback) {
-        util.strict(callback, 'function');
-        request(geocoder.queryURL(_), function(err, json) {
-            if (json && (json.length || json.features)) {
-                var res = {
-                    results: json
-                };
-                if (json.features && json.features.length) {
-                    res.latlng = [
-                        json.features[0].center[1],
-                        json.features[0].center[0]];
-
-                    if (json.features[0].bbox) {
-                        res.bounds = json.features[0].bbox;
-                        res.lbounds = util.lbounds(res.bounds);
-                    }
-                }
-                callback(null, res);
-            } else callback(err || true);
-        });
-
-        return geocoder;
-    };
-
-    // a reverse geocode:
-    //
-    //  geocoder.reverseQuery([80, 20])
-    geocoder.reverseQuery = function(_, callback) {
-        var q = '';
-
-        // sort through different ways people represent lat and lon pairs
-        function normalize(x) {
-            if (x.lat !== undefined && x.lng !== undefined) {
-                return x.lng + ',' + x.lat;
-            } else if (x.lat !== undefined && x.lon !== undefined) {
-                return x.lon + ',' + x.lat;
-            } else {
-                return x[0] + ',' + x[1];
-            }
-        }
-
-        if (_.length && _[0].length) {
-            for (var i = 0, pts = []; i < _.length; i++) {
-                pts.push(normalize(_[i]));
-            }
-            q = pts.join(';');
-        } else {
-            q = normalize(_);
-        }
-
-        request(geocoder.queryURL(q), function(err, json) {
-            callback(err, json);
-        });
-
-        return geocoder;
-    };
-
-    return geocoder;
-};
-
-},{"./request":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/request.js","./url":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/geocoder_control.js":[function(require,module,exports){
-'use strict';
-
-var geocoder = require('./geocoder'),
-    util = require('./util');
-
-var GeocoderControl = L.Control.extend({
-    includes: L.Mixin.Events,
-
-    options: {
-        position: 'topleft',
-        pointZoom: 16,
-        keepOpen: false,
-        autocomplete: false
-    },
-
-    initialize: function(_, options) {
-        L.Util.setOptions(this, options);
-        this.setURL(_);
-        this._updateSubmit = L.bind(this._updateSubmit, this);
-        this._updateAutocomplete = L.bind(this._updateAutocomplete, this);
-        this._chooseResult = L.bind(this._chooseResult, this);
-    },
-
-    setURL: function(_) {
-        this.geocoder = geocoder(_, {accessToken: this.options.accessToken});
-        return this;
-    },
-
-    getURL: function() {
-        return this.geocoder.getURL();
-    },
-
-    setID: function(_) {
-        return this.setURL(_);
-    },
-
-    setTileJSON: function(_) {
-        return this.setURL(_.geocoder);
-    },
-
-    _toggle: function(e) {
-        if (e) L.DomEvent.stop(e);
-        if (L.DomUtil.hasClass(this._container, 'active')) {
-            L.DomUtil.removeClass(this._container, 'active');
-            this._results.innerHTML = '';
-            this._input.blur();
-        } else {
-            L.DomUtil.addClass(this._container, 'active');
-            this._input.focus();
-            this._input.select();
-        }
-    },
-
-    _closeIfOpen: function(e) {
-        if (L.DomUtil.hasClass(this._container, 'active') &&
-            !this.options.keepOpen) {
-            L.DomUtil.removeClass(this._container, 'active');
-            this._results.innerHTML = '';
-            this._input.blur();
-        }
-    },
-
-    onAdd: function(map) {
-
-        var container = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder leaflet-bar leaflet-control'),
-            link = L.DomUtil.create('a', 'leaflet-control-mapbox-geocoder-toggle mapbox-icon mapbox-icon-geocoder', container),
-            results = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder-results', container),
-            wrap = L.DomUtil.create('div', 'leaflet-control-mapbox-geocoder-wrap', container),
-            form = L.DomUtil.create('form', 'leaflet-control-mapbox-geocoder-form', wrap),
-            input  = L.DomUtil.create('input', '', form);
-
-        link.href = '#';
-        link.innerHTML = '&nbsp;';
-
-        input.type = 'text';
-        input.setAttribute('placeholder', 'Search');
-
-        L.DomEvent.addListener(form, 'submit', this._geocode, this);
-        L.DomEvent.addListener(input, 'keyup', this._autocomplete, this);
-        L.DomEvent.disableClickPropagation(container);
-
-        this._map = map;
-        this._results = results;
-        this._input = input;
-        this._form = form;
-
-        if (this.options.keepOpen) {
-            L.DomUtil.addClass(container, 'active');
-        } else {
-            this._map.on('click', this._closeIfOpen, this);
-            L.DomEvent.addListener(link, 'click', this._toggle, this);
-        }
-
-        return container;
-    },
-
-    _updateSubmit: function(err, resp) {
-        L.DomUtil.removeClass(this._container, 'searching');
-        this._results.innerHTML = '';
-        if (err || !resp) {
-            this.fire('error', {error: err});
-        } else {
-            var features = [];
-            if (resp.results && resp.results.features) {
-                features = resp.results.features;
-            }
-            if (features.length === 1) {
-                this.fire('autoselect', { feature: features[0] });
-                this.fire('found', {results: resp.results});
-                this._chooseResult(features[0]);
-                this._closeIfOpen();
-            } else if (features.length > 1) {
-                this.fire('found', {results: resp.results});
-                this._displayResults(features);
-            } else {
-                this._displayResults(features);
-            }
-        }
-    },
-
-    _updateAutocomplete: function(err, resp) {
-        this._results.innerHTML = '';
-        if (err || !resp) {
-            this.fire('error', {error: err});
-        } else {
-            var features = [];
-            if (resp.results && resp.results.features) {
-                features = resp.results.features;
-            }
-            this._displayResults(features);
-        }
-    },
-
-    _displayResults: function(features) {
-        for (var i = 0, l = Math.min(features.length, 5); i < l; i++) {
-            var feature = features[i];
-            var name = feature.place_name;
-            if (!name.length) continue;
-
-            var r = L.DomUtil.create('a', '', this._results);
-            var text = ('innerText' in r) ? 'innerText' : 'textContent';
-            r[text] = name;
-            r.href = '#';
-
-            (L.bind(function(feature) {
-                L.DomEvent.addListener(r, 'click', function(e) {
-                    this._chooseResult(feature);
-                    L.DomEvent.stop(e);
-                    this.fire('select', { feature: feature });
-                }, this);
-            }, this))(feature);
-        }
-        if (features.length > 5) {
-            var outof = L.DomUtil.create('span', '', this._results);
-            outof.innerHTML = 'Top 5 of ' + features.length + '  results';
-        }
-    },
-
-    _chooseResult: function(result) {
-        if (result.bbox) {
-            this._map.fitBounds(util.lbounds(result.bbox));
-        } else if (result.center) {
-            this._map.setView([result.center[1], result.center[0]], (this._map.getZoom() === undefined) ?
-                this.options.pointZoom :
-                Math.max(this._map.getZoom(), this.options.pointZoom));
-        }
-    },
-
-    _geocode: function(e) {
-        L.DomEvent.preventDefault(e);
-        if (this._input.value === '') return this._updateSubmit();
-        L.DomUtil.addClass(this._container, 'searching');
-        this.geocoder.query(this._input.value, this._updateSubmit);
-    },
-
-    _autocomplete: function(e) {
-        if (!this.options.autocomplete) return;
-        if (this._input.value === '') return this._updateAutocomplete();
-        this.geocoder.query(this._input.value, this._updateAutocomplete);
-    }
-});
-
-module.exports.GeocoderControl = GeocoderControl;
-
-module.exports.geocoderControl = function(_, options) {
-    return new GeocoderControl(_, options);
-};
-
-},{"./geocoder":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/geocoder.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid.js":[function(require,module,exports){
-'use strict';
-
-function utfDecode(c) {
-    if (c >= 93) c--;
-    if (c >= 35) c--;
-    return c - 32;
-}
-
-module.exports = function(data) {
-    return function(x, y) {
-        if (!data) return;
-        var idx = utfDecode(data.grid[y].charCodeAt(x)),
-            key = data.keys[idx];
-        return data.data[key];
-    };
-};
-
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_control.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util'),
-    Mustache = require('mustache');
-
-var GridControl = L.Control.extend({
-
-    options: {
-        pinnable: true,
-        follow: false,
-        sanitizer: require('sanitize-caja'),
-        touchTeaser: true,
-        location: true
-    },
-
-    _currentContent: '',
-
-    // pinned means that this control is on a feature and the user has likely
-    // clicked. pinned will not become false unless the user clicks off
-    // of the feature onto another or clicks x
-    _pinned: false,
-
-    initialize: function(_, options) {
-        L.Util.setOptions(this, options);
-        util.strict_instance(_, L.Class, 'L.mapbox.gridLayer');
-        this._layer = _;
-    },
-
-    setTemplate: function(template) {
-        util.strict(template, 'string');
-        this.options.template = template;
-        return this;
-    },
-
-    _template: function(format, data) {
-        if (!data) return;
-        var template = this.options.template || this._layer.getTileJSON().template;
-        if (template) {
-            var d = {};
-            d['__' + format + '__'] = true;
-            return this.options.sanitizer(
-                Mustache.to_html(template, L.extend(d, data)));
-        }
-    },
-
-    // change the content of the tooltip HTML if it has changed, otherwise
-    // noop
-    _show: function(content, o) {
-        if (content === this._currentContent) return;
-
-        this._currentContent = content;
-
-        if (this.options.follow) {
-            this._popup.setContent(content)
-                .setLatLng(o.latLng);
-            if (this._map._popup !== this._popup) this._popup.openOn(this._map);
-        } else {
-            this._container.style.display = 'block';
-            this._contentWrapper.innerHTML = content;
-        }
-    },
-
-    hide: function() {
-        this._pinned = false;
-        this._currentContent = '';
-
-        this._map.closePopup();
-        this._container.style.display = 'none';
-        this._contentWrapper.innerHTML = '';
-
-        L.DomUtil.removeClass(this._container, 'closable');
-
-        return this;
-    },
-
-    _mouseover: function(o) {
-        if (o.data) {
-            L.DomUtil.addClass(this._map._container, 'map-clickable');
-        } else {
-            L.DomUtil.removeClass(this._map._container, 'map-clickable');
-        }
-
-        if (this._pinned) return;
-
-        var content = this._template('teaser', o.data);
-        if (content) {
-            this._show(content, o);
-        } else {
-            this.hide();
-        }
-    },
-
-    _mousemove: function(o) {
-        if (this._pinned) return;
-        if (!this.options.follow) return;
-
-        this._popup.setLatLng(o.latLng);
-    },
-
-    _navigateTo: function(url) {
-        window.top.location.href = url;
-    },
-
-    _click: function(o) {
-
-        var location_formatted = this._template('location', o.data);
-        if (this.options.location && location_formatted &&
-            location_formatted.search(/^https?:/) === 0) {
-            return this._navigateTo(this._template('location', o.data));
-        }
-
-        if (!this.options.pinnable) return;
-
-        var content = this._template('full', o.data);
-
-        if (!content && this.options.touchTeaser && L.Browser.touch) {
-            content = this._template('teaser', o.data);
-        }
-
-        if (content) {
-            L.DomUtil.addClass(this._container, 'closable');
-            this._pinned = true;
-            this._show(content, o);
-        } else if (this._pinned) {
-            L.DomUtil.removeClass(this._container, 'closable');
-            this._pinned = false;
-            this.hide();
-        }
-    },
-
-    _onPopupClose: function() {
-        this._currentContent = null;
-        this._pinned = false;
-    },
-
-    _createClosebutton: function(container, fn) {
-        var link = L.DomUtil.create('a', 'close', container);
-
-        link.innerHTML = 'close';
-        link.href = '#';
-        link.title = 'close';
-
-        L.DomEvent
-            .on(link, 'click', L.DomEvent.stopPropagation)
-            .on(link, 'mousedown', L.DomEvent.stopPropagation)
-            .on(link, 'dblclick', L.DomEvent.stopPropagation)
-            .on(link, 'click', L.DomEvent.preventDefault)
-            .on(link, 'click', fn, this);
-
-        return link;
-    },
-
-    onAdd: function(map) {
-        this._map = map;
-
-        var className = 'leaflet-control-grid map-tooltip',
-            container = L.DomUtil.create('div', className),
-            contentWrapper = L.DomUtil.create('div', 'map-tooltip-content');
-
-        // hide the container element initially
-        container.style.display = 'none';
-        this._createClosebutton(container, this.hide);
-        container.appendChild(contentWrapper);
-
-        this._contentWrapper = contentWrapper;
-        this._popup = new L.Popup({ autoPan: false, closeOnClick: false });
-
-        map.on('popupclose', this._onPopupClose, this);
-
-        L.DomEvent
-            .disableClickPropagation(container)
-            // allow people to scroll tooltips with mousewheel
-            .addListener(container, 'mousewheel', L.DomEvent.stopPropagation);
-
-        this._layer
-            .on('mouseover', this._mouseover, this)
-            .on('mousemove', this._mousemove, this)
-            .on('click', this._click, this);
-
-        return container;
-    },
-
-    onRemove: function (map) {
-
-        map.off('popupclose', this._onPopupClose, this);
-
-        this._layer
-            .off('mouseover', this._mouseover, this)
-            .off('mousemove', this._mousemove, this)
-            .off('click', this._click, this);
-    }
-});
-
-module.exports.GridControl = GridControl;
-
-module.exports.gridControl = function(_, options) {
-    return new GridControl(_, options);
-};
-
-},{"./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js","mustache":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/mustache/mustache.js","sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_layer.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util'),
-    request = require('./request'),
-    grid = require('./grid');
-
-// forked from danzel/L.UTFGrid
-var GridLayer = L.Class.extend({
-    includes: [L.Mixin.Events, require('./load_tilejson')],
-
-    options: {
-        template: function() { return ''; }
-    },
-
-    _mouseOn: null,
-    _tilejson: {},
-    _cache: {},
-
-    initialize: function(_, options) {
-        L.Util.setOptions(this, options);
-        this._loadTileJSON(_);
-    },
-
-    _setTileJSON: function(json) {
-        util.strict(json, 'object');
-
-        L.extend(this.options, {
-            grids: json.grids,
-            minZoom: json.minzoom,
-            maxZoom: json.maxzoom,
-            bounds: json.bounds && util.lbounds(json.bounds)
-        });
-
-        this._tilejson = json;
-        this._cache = {};
-        this._update();
-
-        return this;
-    },
-
-    getTileJSON: function() {
-        return this._tilejson;
-    },
-
-    active: function() {
-        return !!(this._map && this.options.grids && this.options.grids.length);
-    },
-
-    addTo: function (map) {
-        map.addLayer(this);
-        return this;
-    },
-
-    onAdd: function(map) {
-        this._map = map;
-        this._update();
-
-        this._map
-            .on('click', this._click, this)
-            .on('mousemove', this._move, this)
-            .on('moveend', this._update, this);
-    },
-
-    onRemove: function() {
-        this._map
-            .off('click', this._click, this)
-            .off('mousemove', this._move, this)
-            .off('moveend', this._update, this);
-    },
-
-    getData: function(latlng, callback) {
-        if (!this.active()) return;
-
-        var map = this._map,
-            point = map.project(latlng.wrap()),
-            tileSize = 256,
-            resolution = 4,
-            x = Math.floor(point.x / tileSize),
-            y = Math.floor(point.y / tileSize),
-            max = map.options.crs.scale(map.getZoom()) / tileSize;
-
-        x = (x + max) % max;
-        y = (y + max) % max;
-
-        this._getTile(map.getZoom(), x, y, function(grid) {
-            var gridX = Math.floor((point.x - (x * tileSize)) / resolution),
-                gridY = Math.floor((point.y - (y * tileSize)) / resolution);
-
-            callback(grid(gridX, gridY));
-        });
-
-        return this;
-    },
-
-    _click: function(e) {
-        this.getData(e.latlng, L.bind(function(data) {
-            this.fire('click', {
-                latLng: e.latlng,
-                data: data
-            });
-        }, this));
-    },
-
-    _move: function(e) {
-        this.getData(e.latlng, L.bind(function(data) {
-            if (data !== this._mouseOn) {
-                if (this._mouseOn) {
-                    this.fire('mouseout', {
-                        latLng: e.latlng,
-                        data: this._mouseOn
-                    });
-                }
-
-                this.fire('mouseover', {
-                    latLng: e.latlng,
-                    data: data
-                });
-
-                this._mouseOn = data;
-            } else {
-                this.fire('mousemove', {
-                    latLng: e.latlng,
-                    data: data
-                });
-            }
-        }, this));
-    },
-
-    _getTileURL: function(tilePoint) {
-        var urls = this.options.grids,
-            index = (tilePoint.x + tilePoint.y) % urls.length,
-            url = urls[index];
-
-        return L.Util.template(url, tilePoint);
-    },
-
-    // Load up all required json grid files
-    _update: function() {
-        if (!this.active()) return;
-
-        var bounds = this._map.getPixelBounds(),
-            z = this._map.getZoom(),
-            tileSize = 256;
-
-        if (z > this.options.maxZoom || z < this.options.minZoom) return;
-
-        var tileBounds = L.bounds(
-                bounds.min.divideBy(tileSize)._floor(),
-                bounds.max.divideBy(tileSize)._floor()),
-            max = this._map.options.crs.scale(z) / tileSize;
-
-        for (var x = tileBounds.min.x; x <= tileBounds.max.x; x++) {
-            for (var y = tileBounds.min.y; y <= tileBounds.max.y; y++) {
-                // x wrapped
-                this._getTile(z, ((x % max) + max) % max, ((y % max) + max) % max);
-            }
-        }
-    },
-
-    _getTile: function(z, x, y, callback) {
-        var key = z + '_' + x + '_' + y,
-            tilePoint = L.point(x, y);
-
-        tilePoint.z = z;
-
-        if (!this._tileShouldBeLoaded(tilePoint)) {
-            return;
-        }
-
-        if (key in this._cache) {
-            if (!callback) return;
-
-            if (typeof this._cache[key] === 'function') {
-                callback(this._cache[key]); // Already loaded
-            } else {
-                this._cache[key].push(callback); // Pending
-            }
-
-            return;
-        }
-
-        this._cache[key] = [];
-
-        if (callback) {
-            this._cache[key].push(callback);
-        }
-
-        request(this._getTileURL(tilePoint), L.bind(function(err, json) {
-            var callbacks = this._cache[key];
-            this._cache[key] = grid(json);
-            for (var i = 0; i < callbacks.length; ++i) {
-                callbacks[i](this._cache[key]);
-            }
-        }, this));
-    },
-
-    _tileShouldBeLoaded: function(tilePoint) {
-        if (tilePoint.z > this.options.maxZoom || tilePoint.z < this.options.minZoom) {
-            return false;
-        }
-
-        if (this.options.bounds) {
-            var tileSize = 256,
-                nwPoint = tilePoint.multiplyBy(tileSize),
-                sePoint = nwPoint.add(new L.Point(tileSize, tileSize)),
-                nw = this._map.unproject(nwPoint),
-                se = this._map.unproject(sePoint),
-                bounds = new L.LatLngBounds([nw, se]);
-
-            if (!this.options.bounds.intersects(bounds)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-});
-
-module.exports.GridLayer = GridLayer;
-
-module.exports.gridLayer = function(_, options) {
-    return new GridLayer(_, options);
-};
-
-},{"./grid":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid.js","./load_tilejson":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/load_tilejson.js","./request":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/request.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/index.js":[function(require,module,exports){
-require('./leaflet');
-require('./mapbox');
-
-},{"./leaflet":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/leaflet.js","./mapbox":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/mapbox.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/info_control.js":[function(require,module,exports){
-'use strict';
-
-var InfoControl = L.Control.extend({
-    options: {
-        position: 'bottomright',
-        sanitizer: require('sanitize-caja')
-    },
-
-    initialize: function(options) {
-        L.setOptions(this, options);
-        this._info = {};
-    },
-
-    onAdd: function(map) {
-        this._container = L.DomUtil.create('div', 'mapbox-control-info mapbox-small');
-        this._content = L.DomUtil.create('div', 'map-info-container', this._container);
-
-        var link = L.DomUtil.create('a', 'mapbox-info-toggle mapbox-icon mapbox-icon-info', this._container);
-        link.href = '#';
-
-        L.DomEvent.addListener(link, 'click', this._showInfo, this);
-        L.DomEvent.disableClickPropagation(this._container);
-
-        for (var i in map._layers) {
-            if (map._layers[i].getAttribution) {
-                this.addInfo(map._layers[i].getAttribution());
-            }
-        }
-
-        map
-            .on('layeradd', this._onLayerAdd, this)
-            .on('layerremove', this._onLayerRemove, this);
-
-        this._update();
-        return this._container;
-    },
-
-    onRemove: function(map) {
-        map
-            .off('layeradd', this._onLayerAdd, this)
-            .off('layerremove', this._onLayerRemove, this);
-    },
-
-    addInfo: function(text) {
-        if (!text) return this;
-        if (!this._info[text]) this._info[text] = 0;
-        this._info[text] = true;
-        return this._update();
-    },
-
-    removeInfo: function (text) {
-        if (!text) return this;
-        if (this._info[text]) this._info[text] = false;
-        return this._update();
-    },
-
-    _showInfo: function(e) {
-        L.DomEvent.preventDefault(e);
-        if (this._active === true) return this._hidecontent();
-
-        L.DomUtil.addClass(this._container, 'active');
-        this._active = true;
-        this._update();
-    },
-
-    _hidecontent: function() {
-        this._content.innerHTML = '';
-        this._active = false;
-        L.DomUtil.removeClass(this._container, 'active');
-        return;
-    },
-
-    _update: function() {
-        if (!this._map) { return this; }
-        this._content.innerHTML = '';
-        var hide = 'none';
-        var info = [];
-
-        for (var i in this._info) {
-            if (this._info.hasOwnProperty(i) && this._info[i]) {
-                info.push(this.options.sanitizer(i));
-                hide = 'block';
-            }
-        }
-
-        this._content.innerHTML += info.join(' | ');
-
-        // If there are no results in _info then hide this.
-        this._container.style.display = hide;
-        return this;
-    },
-
-    _onLayerAdd: function(e) {
-        if (e.layer.getAttribution && e.layer.getAttribution()) {
-            this.addInfo(e.layer.getAttribution());
-        } else if ('on' in e.layer && e.layer.getAttribution) {
-            e.layer.on('ready', L.bind(function() {
-                this.addInfo(e.layer.getAttribution());
-            }, this));
-        }
-    },
-
-    _onLayerRemove: function (e) {
-        if (e.layer.getAttribution) {
-            this.removeInfo(e.layer.getAttribution());
-        }
-    }
-});
-
-module.exports.InfoControl = InfoControl;
-
-module.exports.infoControl = function(options) {
-    return new InfoControl(options);
-};
-
-},{"sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/leaflet.js":[function(require,module,exports){
-window.L = require('leaflet/dist/leaflet-src');
-
-},{"leaflet/dist/leaflet-src":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/leaflet/dist/leaflet-src.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/legend_control.js":[function(require,module,exports){
-'use strict';
-
-var LegendControl = L.Control.extend({
-
-    options: {
-        position: 'bottomright',
-        sanitizer: require('sanitize-caja')
-    },
-
-    initialize: function(options) {
-        L.setOptions(this, options);
-        this._legends = {};
-    },
-
-    onAdd: function(map) {
-        this._container = L.DomUtil.create('div', 'map-legends wax-legends');
-        L.DomEvent.disableClickPropagation(this._container);
-
-        this._update();
-
-        return this._container;
-    },
-
-    addLegend: function(text) {
-        if (!text) { return this; }
-
-        if (!this._legends[text]) {
-            this._legends[text] = 0;
-        }
-
-        this._legends[text]++;
-        return this._update();
-    },
-
-    removeLegend: function(text) {
-        if (!text) { return this; }
-        if (this._legends[text]) this._legends[text]--;
-        return this._update();
-    },
-
-    _update: function() {
-        if (!this._map) { return this; }
-
-        this._container.innerHTML = '';
-        var hide = 'none';
-
-        for (var i in this._legends) {
-            if (this._legends.hasOwnProperty(i) && this._legends[i]) {
-                var div = L.DomUtil.create('div', 'map-legend wax-legend', this._container);
-                div.innerHTML = this.options.sanitizer(i);
-                hide = 'block';
-            }
-        }
-
-        // hide the control entirely unless there is at least one legend;
-        // otherwise there will be a small grey blemish on the map.
-        this._container.style.display = hide;
-
-        return this;
-    }
-});
-
-module.exports.LegendControl = LegendControl;
-
-module.exports.legendControl = function(options) {
-    return new LegendControl(options);
-};
-
-},{"sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/load_tilejson.js":[function(require,module,exports){
-'use strict';
-
-var request = require('./request'),
-    url = require('./url'),
-    util = require('./util');
-
-module.exports = {
-    _loadTileJSON: function(_) {
-        if (typeof _ === 'string') {
-            _ = url.tileJSON(_, this.options && this.options.accessToken);
-            request(_, L.bind(function(err, json) {
-                if (err) {
-                    util.log('could not load TileJSON at ' + _);
-                    this.fire('error', {error: err});
-                } else if (json) {
-                    this._setTileJSON(json);
-                    this.fire('ready');
-                }
-            }, this));
-        } else if (_ && typeof _ === 'object') {
-            this._setTileJSON(_);
-        }
-    }
-};
-
-},{"./request":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/request.js","./url":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/map.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util'),
-    tileLayer = require('./tile_layer').tileLayer,
-    featureLayer = require('./feature_layer').featureLayer,
-    gridLayer = require('./grid_layer').gridLayer,
-    gridControl = require('./grid_control').gridControl,
-    infoControl = require('./info_control').infoControl,
-    shareControl = require('./share_control').shareControl,
-    legendControl = require('./legend_control').legendControl;
-
-function withAccessToken(options, accessToken) {
-    if (!accessToken || options.accessToken)
-        return options;
-    return L.extend({accessToken: accessToken}, options);
-}
-
-var LMap = L.Map.extend({
-    includes: [require('./load_tilejson')],
-
-    options: {
-        tileLayer: {},
-        featureLayer: {},
-        gridLayer: {},
-        legendControl: {},
-        gridControl: {},
-        infoControl: false,
-        shareControl: false
-    },
-
-    _tilejson: {},
-
-    initialize: function(element, _, options) {
-
-        L.Map.prototype.initialize.call(this, element,
-            L.extend({}, L.Map.prototype.options, options));
-
-        // disable the default 'Leaflet' text
-        if (this.attributionControl) this.attributionControl.setPrefix('');
-
-        if (this.options.tileLayer) {
-            this.tileLayer = tileLayer(undefined,
-                withAccessToken(this.options.tileLayer, this.options.accessToken));
-            this.addLayer(this.tileLayer);
-        }
-
-        if (this.options.featureLayer) {
-            this.featureLayer = featureLayer(undefined,
-                withAccessToken(this.options.featureLayer, this.options.accessToken));
-            this.addLayer(this.featureLayer);
-        }
-
-        if (this.options.gridLayer) {
-            this.gridLayer = gridLayer(undefined,
-                withAccessToken(this.options.gridLayer, this.options.accessToken));
-            this.addLayer(this.gridLayer);
-        }
-
-        if (this.options.gridLayer && this.options.gridControl) {
-            this.gridControl = gridControl(this.gridLayer, this.options.gridControl);
-            this.addControl(this.gridControl);
-        }
-
-        if (this.options.infoControl) {
-            this.infoControl = infoControl(this.options.infoControl);
-            this.addControl(this.infoControl);
-        }
-
-        if (this.options.legendControl) {
-            this.legendControl = legendControl(this.options.legendControl);
-            this.addControl(this.legendControl);
-        }
-
-        if (this.options.shareControl) {
-            this.shareControl = shareControl(undefined,
-                withAccessToken(this.options.shareControl, this.options.accessToken));
-            this.addControl(this.shareControl);
-        }
-
-        this._loadTileJSON(_);
-    },
-
-    // Update certain properties on 'ready' event
-    addLayer: function(layer) {
-        if ('on' in layer) { layer.on('ready', L.bind(function() { this._updateLayer(layer); }, this)); }
-        return L.Map.prototype.addLayer.call(this, layer);
-    },
-
-    // use a javascript object of tilejson data to configure this layer
-    _setTileJSON: function(_) {
-        this._tilejson = _;
-        this._initialize(_);
-        return this;
-    },
-
-    getTileJSON: function() {
-        return this._tilejson;
-    },
-
-    _initialize: function(json) {
-        if (this.tileLayer) {
-            this.tileLayer._setTileJSON(json);
-            this._updateLayer(this.tileLayer);
-        }
-
-        if (this.featureLayer && !this.featureLayer.getGeoJSON() && json.data && json.data[0]) {
-            this.featureLayer.loadURL(json.data[0]);
-        }
-
-        if (this.gridLayer) {
-            this.gridLayer._setTileJSON(json);
-            this._updateLayer(this.gridLayer);
-        }
-
-        if (this.infoControl && json.attribution) {
-            this.infoControl.addInfo(json.attribution);
-        }
-
-        if (this.legendControl && json.legend) {
-            this.legendControl.addLegend(json.legend);
-        }
-
-        if (this.shareControl) {
-            this.shareControl._setTileJSON(json);
-        }
-
-        if (!this._loaded && json.center) {
-            var zoom = this.getZoom() !== undefined ? this.getZoom() : json.center[2],
-                center = L.latLng(json.center[1], json.center[0]);
-
-            this.setView(center, zoom);
-        }
-    },
-
-    _editLink: function() {
-        if (!this._controlContainer.getElementsByClassName) return;
-        var link = this._controlContainer.getElementsByClassName('mapbox-improve-map');
-        if (link.length && this._loaded) {
-            var center = this.getCenter().wrap();
-            var tilejson = this._tilejson || {};
-            var id = tilejson.id || '';
-
-            for (var i = 0; i < link.length; i++) {
-                link[i].href = link[i].href.split('#')[0] + '#' + id + '/' +
-                    center.lng.toFixed(3) + '/' +
-                    center.lat.toFixed(3) + '/' +
-                    this.getZoom();
-            }
-        }
-    },
-
-    _updateLayer: function(layer) {
-        if (!layer.options) return;
-
-        if (this.infoControl && this._loaded) {
-            this.infoControl.addInfo(layer.options.infoControl);
-        }
-
-        if (this.attributionControl && this._loaded && layer.getAttribution) {
-            this.attributionControl.addAttribution(layer.getAttribution());
-        }
-
-        this.on('moveend', this._editLink, this);
-
-        if (!(L.stamp(layer) in this._zoomBoundLayers) &&
-                (layer.options.maxZoom || layer.options.minZoom)) {
-            this._zoomBoundLayers[L.stamp(layer)] = layer;
-        }
-
-        this._editLink();
-        this._updateZoomLevels();
-    }
-});
-
-module.exports.Map = LMap;
-
-module.exports.map = function(element, _, options) {
-    return new LMap(element, _, options);
-};
-
-},{"./feature_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/feature_layer.js","./grid_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_control.js","./grid_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_layer.js","./info_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/info_control.js","./legend_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/legend_control.js","./load_tilejson":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/load_tilejson.js","./share_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/share_control.js","./tile_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/tile_layer.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/mapbox.js":[function(require,module,exports){
-'use strict';
-
-var geocoderControl = require('./geocoder_control'),
-    gridControl = require('./grid_control'),
-    featureLayer = require('./feature_layer'),
-    legendControl = require('./legend_control'),
-    shareControl = require('./share_control'),
-    tileLayer = require('./tile_layer'),
-    infoControl = require('./info_control'),
-    map = require('./map'),
-    gridLayer = require('./grid_layer');
-
-L.mapbox = module.exports = {
-    VERSION: require('../package.json').version,
-    geocoder: require('./geocoder'),
-    marker: require('./marker'),
-    simplestyle: require('./simplestyle'),
-    tileLayer: tileLayer.tileLayer,
-    TileLayer: tileLayer.TileLayer,
-    infoControl: infoControl.infoControl,
-    InfoControl: infoControl.InfoControl,
-    shareControl: shareControl.shareControl,
-    ShareControl: shareControl.ShareControl,
-    legendControl: legendControl.legendControl,
-    LegendControl: legendControl.LegendControl,
-    geocoderControl: geocoderControl.geocoderControl,
-    GeocoderControl: geocoderControl.GeocoderControl,
-    gridControl: gridControl.gridControl,
-    GridControl: gridControl.GridControl,
-    gridLayer: gridLayer.gridLayer,
-    GridLayer: gridLayer.GridLayer,
-    featureLayer: featureLayer.featureLayer,
-    FeatureLayer: featureLayer.FeatureLayer,
-    map: map.map,
-    Map: map.Map,
-    config: require('./config'),
-    sanitize: require('sanitize-caja'),
-    template: require('mustache').to_html
-};
-
-
-// Hardcode image path, because Leaflet's autodetection
-// fails, because mapbox.js is not named leaflet.js
-window.L.Icon.Default.imagePath =
-    // Detect bad-news protocols like file:// and hardcode
-    // to https if they're detected.
-    ((document.location.protocol == 'https:' ||
-    document.location.protocol == 'http:') ? '' : 'https:') +
-    '//api.tiles.mapbox.com/mapbox.js/' + 'v' +
-    require('../package.json').version + '/images';
-
-},{"../package.json":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/package.json","./config":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/config.js","./feature_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/feature_layer.js","./geocoder":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/geocoder.js","./geocoder_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/geocoder_control.js","./grid_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_control.js","./grid_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/grid_layer.js","./info_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/info_control.js","./legend_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/legend_control.js","./map":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/map.js","./marker":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/marker.js","./share_control":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/share_control.js","./simplestyle":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/simplestyle.js","./tile_layer":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/tile_layer.js","mustache":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/mustache/mustache.js","sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/marker.js":[function(require,module,exports){
-'use strict';
-
-var url = require('./url'),
-    util = require('./util'),
-    sanitize = require('sanitize-caja');
-
-// mapbox-related markers functionality
-// provide an icon from mapbox's simple-style spec and hosted markers
-// service
-function icon(fp, options) {
-    fp = fp || {};
-
-    var sizes = {
-            small: [20, 50],
-            medium: [30, 70],
-            large: [35, 90]
-        },
-        size = fp['marker-size'] || 'medium',
-        symbol = ('marker-symbol' in fp && fp['marker-symbol'] !== '') ? '-' + fp['marker-symbol'] : '',
-        color = (fp['marker-color'] || '7e7e7e').replace('#', '');
-
-    return L.icon({
-        iconUrl: url('/marker/' +
-            'pin-' + size.charAt(0) + symbol + '+' + color +
-            // detect and use retina markers, which are x2 resolution
-            (L.Browser.retina ? '@2x' : '') + '.png', options && options.accessToken),
-        iconSize: sizes[size],
-        iconAnchor: [sizes[size][0] / 2, sizes[size][1] / 2],
-        popupAnchor: [0, -sizes[size][1] / 2]
-    });
-}
-
-// a factory that provides markers for Leaflet from Mapbox's
-// [simple-style specification](https://github.com/mapbox/simplestyle-spec)
-// and [Markers API](http://mapbox.com/developers/api/#markers).
-function style(f, latlon, options) {
-    return L.marker(latlon, {
-        icon: icon(f.properties, options),
-        title: util.strip_tags(
-            sanitize((f.properties && f.properties.title) || ''))
-    });
-}
-
-// Sanitize and format properties of a GeoJSON Feature object in order
-// to form the HTML string used as the argument for `L.createPopup`
-function createPopup(f, sanitizer) {
-    if (!f || !f.properties) return '';
-    var popup = '';
-
-    if (f.properties.title) {
-        popup += '<div class="marker-title">' + f.properties.title + '</div>';
-    }
-
-    if (f.properties.description) {
-        popup += '<div class="marker-description">' + f.properties.description + '</div>';
-    }
-
-    return (sanitizer || sanitize)(popup);
-}
-
-module.exports = {
-    icon: icon,
-    style: style,
-    createPopup: createPopup
-};
-
-},{"./url":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js","sanitize-caja":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/sanitize-caja/index.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/request.js":[function(require,module,exports){
-'use strict';
-
-var corslite = require('corslite'),
-    strict = require('./util').strict,
-    config = require('./config'),
-    protocol = /^(https?:)?(?=\/\/(.|api)\.tiles\.mapbox\.com\/)/;
-
-module.exports = function(url, callback) {
-    strict(url, 'string');
-    strict(callback, 'function');
-
-    url = url.replace(protocol, function(match, protocol) {
-        if (!('withCredentials' in new window.XMLHttpRequest())) {
-            // XDomainRequest in use; doesn't support cross-protocol requests
-            return document.location.protocol;
-        } else if ('https:' === protocol || 'https:' === document.location.protocol || config.FORCE_HTTPS) {
-            return 'https:';
-        } else {
-            return 'http:';
-        }
-    });
-
-    return corslite(url, onload);
-    function onload(err, resp) {
-        if (!err && resp) {
-            resp = JSON.parse(resp.responseText);
-        }
-        callback(err, resp);
-    }
-};
-
-},{"./config":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/config.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js","corslite":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/node_modules/corslite/corslite.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/share_control.js":[function(require,module,exports){
-'use strict';
-
-var urlhelper = require('./url');
-
-var ShareControl = L.Control.extend({
-    includes: [require('./load_tilejson')],
-
-    options: {
-        position: 'topleft',
-        url: ''
-    },
-
-    initialize: function(_, options) {
-        L.setOptions(this, options);
-        this._loadTileJSON(_);
-    },
-
-    _setTileJSON: function(json) {
-        this._tilejson = json;
-    },
-
-    onAdd: function(map) {
-        this._map = map;
-
-        var container = L.DomUtil.create('div', 'leaflet-control-mapbox-share leaflet-bar');
-        var link = L.DomUtil.create('a', 'mapbox-share mapbox-icon mapbox-icon-share', container);
-        link.href = '#';
-
-        this._modal = L.DomUtil.create('div', 'mapbox-modal', this._map._container);
-        this._mask = L.DomUtil.create('div', 'mapbox-modal-mask', this._modal);
-        this._content = L.DomUtil.create('div', 'mapbox-modal-content', this._modal);
-
-        L.DomEvent.addListener(link, 'click', this._shareClick, this);
-        L.DomEvent.disableClickPropagation(container);
-
-        this._map.on('mousedown', this._clickOut, this);
-
-        return container;
-    },
-
-    _clickOut: function(e) {
-        if (this._sharing) {
-            L.DomEvent.preventDefault(e);
-            L.DomUtil.removeClass(this._modal, 'active');
-            this._content.innerHTML = '';
-            this._sharing = null;
-            return;
-        }
-    },
-
-    _shareClick: function(e) {
-        L.DomEvent.stop(e);
-        if (this._sharing) return this._clickOut(e);
-
-        var tilejson = this._tilejson || this._map._tilejson || {},
-            url = encodeURIComponent(this.options.url || tilejson.webpage || window.location),
-            name = encodeURIComponent(tilejson.name),
-            image = urlhelper('/' + tilejson.id + '/' + this._map.getCenter().lng + ',' + this._map.getCenter().lat + ',' + this._map.getZoom() + '/600x600.png', this.options.accessToken),
-            embed = urlhelper('/' + tilejson.id + '.html', this.options.accessToken),
-            twitter = '//twitter.com/intent/tweet?status=' + name + ' ' + url,
-            facebook = '//www.facebook.com/sharer.php?u=' + url + '&t=' + encodeURIComponent(tilejson.name),
-            pinterest = '//www.pinterest.com/pin/create/button/?url=' + url + '&media=' + image + '&description=' + tilejson.name,
-            share = ("<h3>Share this map</h3>" +
-                    "<div class='mapbox-share-buttons'><a class='mapbox-button mapbox-button-icon mapbox-icon-facebook' target='_blank' href='{{facebook}}'>Facebook</a>" +
-                    "<a class='mapbox-button mapbox-button-icon mapbox-icon-twitter' target='_blank' href='{{twitter}}'>Twitter</a>" +
-                    "<a class='mapbox-button mapbox-button-icon mapbox-icon-pinterest' target='_blank' href='{{pinterest}}'>Pinterest</a></div>")
-                    .replace('{{twitter}}', twitter)
-                    .replace('{{facebook}}', facebook)
-                    .replace('{{pinterest}}', pinterest),
-            embedValue = '<iframe width="100%" height="500px" frameBorder="0" src="{{embed}}"></iframe>'.replace('{{embed}}', embed),
-            embedLabel = 'Copy and paste this <strong>HTML code</strong> into documents to embed this map on web pages.';
-
-        L.DomUtil.addClass(this._modal, 'active');
-
-        this._sharing = L.DomUtil.create('div', 'mapbox-modal-body', this._content);
-        this._sharing.innerHTML = share;
-
-        var input = L.DomUtil.create('input', 'mapbox-embed', this._sharing);
-        input.type = 'text';
-        input.value = embedValue;
-
-        var label = L.DomUtil.create('label', 'mapbox-embed-description', this._sharing);
-        label.innerHTML = embedLabel;
-
-        var close = L.DomUtil.create('a', 'leaflet-popup-close-button', this._sharing);
-        close.href = '#';
-
-        L.DomEvent.disableClickPropagation(this._sharing);
-        L.DomEvent.addListener(close, 'click', this._clickOut, this);
-        L.DomEvent.addListener(input, 'click', function(e) {
-            e.target.focus();
-            e.target.select();
-        });
-    }
-});
-
-module.exports.ShareControl = ShareControl;
-
-module.exports.shareControl = function(_, options) {
-    return new ShareControl(_, options);
-};
-
-},{"./load_tilejson":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/load_tilejson.js","./url":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/simplestyle.js":[function(require,module,exports){
-'use strict';
-
-// an implementation of the simplestyle spec for polygon and linestring features
-// https://github.com/mapbox/simplestyle-spec
-var defaults = {
-    stroke: '#555555',
-    'stroke-width': 2,
-    'stroke-opacity': 1,
-    fill: '#555555',
-    'fill-opacity': 0.5
-};
-
-var mapping = [
-    ['stroke', 'color'],
-    ['stroke-width', 'weight'],
-    ['stroke-opacity', 'opacity'],
-    ['fill', 'fillColor'],
-    ['fill-opacity', 'fillOpacity']
-];
-
-function fallback(a, b) {
-    var c = {};
-    for (var k in b) {
-        if (a[k] === undefined) c[k] = b[k];
-        else c[k] = a[k];
-    }
-    return c;
-}
-
-function remap(a) {
-    var d = {};
-    for (var i = 0; i < mapping.length; i++) {
-        d[mapping[i][1]] = a[mapping[i][0]];
-    }
-    return d;
-}
-
-function style(feature) {
-    return remap(fallback(feature.properties || {}, defaults));
-}
-
-module.exports = {
-    style: style,
-    defaults: defaults
-};
-
-},{}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/tile_layer.js":[function(require,module,exports){
-'use strict';
-
-var util = require('./util');
-
-var TileLayer = L.TileLayer.extend({
-    includes: [require('./load_tilejson')],
-
-    options: {
-        format: 'png'
-    },
-
-    // http://mapbox.com/developers/api/#image_quality
-    formats: [
-        'png',
-        // PNG
-        'png32', 'png64', 'png128', 'png256',
-        // JPG
-        'jpg70', 'jpg80', 'jpg90'],
-
-    scalePrefix: '@2x.',
-
-    initialize: function(_, options) {
-        L.TileLayer.prototype.initialize.call(this, undefined, options);
-
-        this._tilejson = {};
-
-        if (options && options.format) {
-            util.strict_oneof(options.format, this.formats);
-        }
-
-        this._loadTileJSON(_);
-    },
-
-    setFormat: function(_) {
-        util.strict(_, 'string');
-        this.options.format = _;
-        this.redraw();
-        return this;
-    },
-
-    // disable the setUrl function, which is not available on mapbox tilelayers
-    setUrl: null,
-
-    _setTileJSON: function(json) {
-        util.strict(json, 'object');
-
-        L.extend(this.options, {
-            tiles: json.tiles,
-            attribution: json.attribution,
-            minZoom: json.minzoom || 0,
-            maxZoom: json.maxzoom || 18,
-            tms: json.scheme === 'tms',
-            bounds: json.bounds && util.lbounds(json.bounds)
-        });
-
-        this._tilejson = json;
-        this.redraw();
-        return this;
-    },
-
-    getTileJSON: function() {
-        return this._tilejson;
-    },
-
-    // this is an exception to mapbox.js naming rules because it's called
-    // by `L.map`
-    getTileUrl: function(tilePoint) {
-        var tiles = this.options.tiles,
-            index = Math.floor(Math.abs(tilePoint.x + tilePoint.y) % tiles.length),
-            url = tiles[index];
-
-        var templated = L.Util.template(url, tilePoint);
-        if (!templated) {
-            return templated;
-        } else {
-            return templated.replace('.png',
-                (L.Browser.retina ? this.scalePrefix : '.') + this.options.format);
-        }
-    },
-
-    // TileJSON.TileLayers are added to the map immediately, so that they get
-    // the desired z-index, but do not update until the TileJSON has been loaded.
-    _update: function() {
-        if (this.options.tiles) {
-            L.TileLayer.prototype._update.call(this);
-        }
-    }
-});
-
-module.exports.TileLayer = TileLayer;
-
-module.exports.tileLayer = function(_, options) {
-    return new TileLayer(_, options);
-};
-
-},{"./load_tilejson":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/load_tilejson.js","./util":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/url.js":[function(require,module,exports){
-'use strict';
-
-var config = require('./config'),
-    version = require('../package.json').version;
-
-module.exports = function(path, accessToken) {
-    accessToken = accessToken || L.mapbox.accessToken;
-
-    if (!accessToken && config.REQUIRE_ACCESS_TOKEN) {
-        throw new Error('An API access token is required to use Mapbox.js. ' +
-            'See https://www.mapbox.com/mapbox.js/api/v' + version + '/api-access-tokens/');
-    }
-
-    var url = ('https:' === document.location.protocol || config.FORCE_HTTPS) ? config.HTTPS_URL : config.HTTP_URL;
-    url += path;
-    url += url.indexOf('?') !== -1 ? '&access_token=' : '?access_token=';
-
-    if (config.REQUIRE_ACCESS_TOKEN) {
-        if (accessToken[0] === 's') {
-            throw new Error('Use a public access token (pk.*) with Mapbox.js, not a secret access token (sk.*). ' +
-                'See https://www.mapbox.com/mapbox.js/api/v' + version + '/api-access-tokens/');
-        }
-
-        url += accessToken;
-    }
-
-    return url;
-};
-
-module.exports.tileJSON = function(urlOrMapID, accessToken) {
-    if (urlOrMapID.indexOf('/') !== -1)
-        return urlOrMapID;
-
-    var url = module.exports('/' + urlOrMapID + '.json', accessToken);
-
-    // TileJSON requests need a secure flag appended to their URLs so
-    // that the server knows to send SSL-ified resource references.
-    if (url.indexOf('https') === 0)
-        url += '&secure';
-
-    return url;
-};
-
-},{"../package.json":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/package.json","./config":"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/config.js"}],"/Users/w8r/Projects/w8r.github.com/node_modules/mapbox.js/src/util.js":[function(require,module,exports){
-'use strict';
-
-module.exports = {
-    idUrl: function(_, t) {
-        if (_.indexOf('/') == -1) t.loadID(_);
-        else t.loadURL(_);
-    },
-    log: function(_) {
-        if (typeof console === 'object' &&
-            typeof console.error === 'function') {
-            console.error(_);
-        }
-    },
-    strict: function(_, type) {
-        if (typeof _ !== type) {
-            throw new Error('Invalid argument: ' + type + ' expected');
-        }
-    },
-    strict_instance: function(_, klass, name) {
-        if (!(_ instanceof klass)) {
-            throw new Error('Invalid argument: ' + name + ' expected');
-        }
-    },
-    strict_oneof: function(_, values) {
-        if (!contains(_, values)) {
-            throw new Error('Invalid argument: ' + _ + ' given, valid values are ' +
-                values.join(', '));
-        }
-    },
-    strip_tags: function(_) {
-        return _.replace(/<[^<]+>/g, '');
-    },
-    lbounds: function(_) {
-        // leaflet-compatible bounds, since leaflet does not do geojson
-        return new L.LatLngBounds([[_[1], _[0]], [_[3], _[2]]]);
-    }
-};
-
-function contains(item, list) {
-    if (!list || !list.length) return false;
-    for (var i = 0; i < list.length; i++) {
-        if (list[i] == item) return true;
-    }
-    return false;
-}
-
-},{}]},{},["/Users/w8r/Projects/w8r.github.com/index.js"]);
+},{}]},{},[2]);

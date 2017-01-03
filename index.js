@@ -5,7 +5,7 @@ console.log(L, config)
 
 L.mapbox.accessToken = config.mapbox.APIToken;
 var map = global.map = L.mapbox.map('map', config.mapbox.mapId)
-    .setView([51.9215571, 4.5011478], 15),
+    .setView([48.8588111,2.3643813], 14),
     geocoder = L.mapbox.geocoder('mapbox.places-v1');
 
 map._controlCorners.topright.appendChild(document.querySelector('.block'));

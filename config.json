@@ -1,6 +1,6 @@
 {
-    "mapbox": {
-        "APIToken": "pk.eyJ1IjoidzhyIiwiYSI6IlF2Nlh6QVkifQ.D7BkmeoMI7GEkMDtg3durw",
-        "mapId": "mapbox.emerald"
-    }
+  "mapbox": {
+    "APIToken": "pk.eyJ1IjoidzhyIiwiYSI6IlF2Nlh6QVkifQ.D7BkmeoMI7GEkMDtg3durw",
+    "mapId": "mapbox.emerald"
+  }
 }

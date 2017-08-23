@@ -1,2 +1,1 @@
-w8r.github.com
-==============
+The [Bonne projection](http://en.wikipedia.org/wiki/Bonne_projection) is available as d3.geo.bonne in [d3-geo-projection](https://github.com/d3/d3-geo-projection). See also the [Werner projection](/mbostock/a7ae83252305ed4d54d4).

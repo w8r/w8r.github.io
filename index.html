@@ -1,18 +1,62 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Alexander Milevski</title>
-        <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css' rel='stylesheet' />
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    </head>
-    <body>
-        <div id="map"></div>
-        <div class="block">
-            <svg class="canvas" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="600" height="800" viewBox="100 -200 100 650">
-                <path class="wrench" d="M230.667,88l5,42l20,6.333l18-11l-6.333-43c0,0,36.667,11,39.667,37.333c0,0,3.999,23-10.334,34l-10.999,10 c0,0-14,10.667-10.667,34v204l-0.333,7.667c0,0,1,9-9,9.333h-19c0,0-10,1.667-11.667-12.333V185.999c0,0,1.333-12.333-8.333-18.333 l-12.333-10c0,0-21.333-16.334-7.333-45.667C207.001,111.999,212.001,98,230.667,88z"/>
-            </svg>
-        </div>
-    <script type="text/javascript" src="js/app.js?1"></script>
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/d3"></script>
+    <script src="https://unpkg.com/d3-geo-projection"></script>
+    <script src="https://unpkg.com/topojson"></script>
+    <style>
+
+    body {
+      background: #fcfcfa;
+      padding: 0;
+      margin: 0;
+    }
+
+    .stroke {
+      fill: none;
+      stroke: #000;
+      stroke-width: 3px;
+    }
+
+    .fill {
+      fill: #fff;
+    }
+
+    .graticule {
+      fill: none;
+      stroke: #777;
+      stroke-width: .5px;
+      stroke-opacity: .5;
+    }
+
+    .land {
+      fill: #222;
+    }
+
+    .boundary {
+      fill: none;
+      stroke: #fff;
+      stroke-width: .5px;
+    }
+
+    .fool {
+      background-image: url('bouffon.jpg');
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-size: contain;
+      display: block;
+      position: absolute;
+      top: 0;
+    }
+
+    .map {
+      position: relative;
+    }
+
+    </style>
+  </head>
+  <body>
+    <script src="index.js"></script>
+  </body>
 </html>

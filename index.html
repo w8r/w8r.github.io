@@ -1,18 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Alexander Milevski</title>
-        <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css' rel='stylesheet' />
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    </head>
-    <body>
-        <div id="map"></div>
-        <div class="block">
-            <svg class="canvas" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="600" height="800" viewBox="100 -200 100 650">
-                <path class="wrench" d="M230.667,88l5,42l20,6.333l18-11l-6.333-43c0,0,36.667,11,39.667,37.333c0,0,3.999,23-10.334,34l-10.999,10 c0,0-14,10.667-10.667,34v204l-0.333,7.667c0,0,1,9-9,9.333h-19c0,0-10,1.667-11.667-12.333V185.999c0,0,1.333-12.333-8.333-18.333 l-12.333-10c0,0-21.333-16.334-7.333-45.667C207.001,111.999,212.001,98,230.667,88z"/>
-            </svg>
-        </div>
-    <script type="text/javascript" src="js/app.js?1"></script>
-    </body>
+  <head>
+    <title>Alexander Milevski</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  </head>
+  <body>
+    <div class="container">
+      <svg id="logo" viewBox="0 0 300 300" width="300" height="300" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+        <g stroke="null" transform="rotate(45 145.87747192382812,152.53033447265625) ">
+         <path d="m121.667,-10l5,42l20,6.333l18,-11l-6.333,-43c0,0 36.667,11 39.667,37.333c0,0 3.999,23 -10.334,34l-10.999,10c0,0 -14,10.667 -10.667,34l0,204l-0.333,7.667c0,0 1,9 -9,9.333l-19,0c0,0 -10,1.667 -11.667,-12.333l0,-220.334c0,0 1.333,-12.333 -8.333,-18.333l-12.333,-10c0,0 -21.333,-16.334 -7.333,-45.667c-0.001,0 4.999,-13.999 23.665,-23.999z" id="svg_2" stroke="null"/>
+       </g>
+      </svg>
+      <h1>Alexander Milevski</h1>
+
+      <section class="info">
+        <span><span class="icon-mail-alt"></span><span class="mail-content">spam@w8r.name</span></span>
+        <span><span class="icon-location"></span>Paris, France</span>
+      </section>
+
+      <section class="bio">Engineer. Maps, visual art, crowdsourcing, image processing</section>
+
+
+      <section class="links">
+        <ul class="links--list">
+          <li class="links--item">
+            <a href="https://github.com/w8r" title="Github"><span class="icon-github"></span></a></li>
+          <!-- <li class="links--item">
+            <a href="mailto:{insert-email}" title="email"><span class="icon-mail-alt"></span></a></li> -->
+          <li class="links--item">
+            <a href="https://www.linkedin.com/in/alexandermilevski/" title="linked.in"><span class="icon-linkedin"></span></a></li>
+          <li class="links--item">
+            <a href="https://fb.me/alexander.milevski" title="facebook"><span class="icon-facebook"></span></a></li>
+          <li class="links--item">
+            <a href="https://twitter.com/w8r" title="twitter"><span class="icon-twitter"></span></a></li>
+          <li class="links--item">
+            <a href="https://instagram.com/mile8ski/" title="Instagram"><span class="icon-instagram"></span></a></li>
+        </ul>
+      </section>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+  </body>
 </html>

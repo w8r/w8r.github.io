@@ -1,2 +1,1 @@
-w8r.github.com
-==============
+[w8r.github.io](w8r.github.io)

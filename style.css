@@ -68,13 +68,14 @@ html, body {
 .icon-linkedin:before { content: '\f0e1'; } /* '' */
 .icon-github:before { content: '\f113'; } /* '' */
 .icon-instagram:before { content: '\f16d'; } /* '' */
+.icon-doc-text:before { content: '\f0f6'; } /* '' */
 
 
 .container {
   max-width: 740px;
   margin-right: auto;
   margin-left: auto;
-  padding-top: 5em;
+  padding-top: 3em;
 }
 
 h1 {
@@ -102,24 +103,32 @@ h1 {
   flex-direction: row;
   list-style: none;
   justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .links--item {
-  margin: 1em;
+  margin: 1em 0.5em;
   font-size: 1.2em;
 }
 
-.links--item a {
+.links--item:last-child {
+  margin-right: 0;
+}
+
+.links--item a,
+.info a {
   color: #222222;
 }
 
-.links--item a:hover {
+.links--item a:hover,
+.info a:hover {
   color: #ff2020;
 }
 
 @-webkit-keyframes screw {
   0% {
-    -webkit-transform: rotate(0deg);
+    -webkit-transform: rotate(30deg);
   }
   72% {
     -webkit-transform: rotate(150deg);
@@ -151,8 +160,8 @@ h1 {
     margin: auto;
     width: 5em;
     height: 5em;
-    top: 2em;
-    left: 40%;
+    top: 3em;
+    left: 36%;
   }
 
   .links--item {

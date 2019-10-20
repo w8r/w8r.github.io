@@ -175,13 +175,10 @@ h1 {
 }
 
 
-@media screen and (max-width: 600px) {
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) {
   #logo {
-    margin: auto;
-    width: 5em;
-    height: 5em;
-    top: 3em;
-    left: 36%;
     display: none;
   }
 
@@ -205,3 +202,11 @@ h1 {
   }
 }
 
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 370px) {
+  #map {
+    width: 67%;
+    left: 16%;
+  }
+}

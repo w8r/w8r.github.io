@@ -1,0 +1,31 @@
+{
+  "name": "w8r.github.io",
+  "version": "1.0.0",
+  "description": "[w8r.github.io](w8r.github.io)",
+  "main": "index.js",
+  "dependencies": {
+    "d3-geo": "^1.11.6",
+    "d3-geo-path": "0.0.0",
+    "d3-geo-projection": "^2.7.0",
+    "simplify-geojson": "^1.0.3",
+    "topojson-client": "^3.0.1"
+  },
+  "devDependencies": {
+    "rollup": "^1.25.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w8r/w8r.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/w8r/w8r.github.io/issues"
+  },
+  "homepage": "https://github.com/w8r/w8r.github.io#readme"
+}

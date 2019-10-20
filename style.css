@@ -1,8 +1,8 @@
 html, body {
   font-family: 'Fira Sans', sans-serif;
-  color: #202020;
+  color: #2E1C00;
+  background: #E2DDC7;
 }
-
 
 @font-face {
   font-family: 'fontello';
@@ -75,13 +75,13 @@ html, body {
   max-width: 740px;
   margin-right: auto;
   margin-left: auto;
-  padding-top: 3em;
 }
 
 h1 {
   text-align: center;
   font-size: 3em;
   margin-bottom: 0.25em;
+  color: #2E1C00;
 }
 
 .bio, .info {
@@ -93,7 +93,7 @@ h1 {
 }
 
 .info {
-  color: #707070;
+  color: #2E1C00;
   font-weight: 100;
   font-size: 0.8em;
 }
@@ -118,7 +118,7 @@ h1 {
 
 .links--item a,
 .info a {
-  color: #222222;
+  color: #2E1C00;
 }
 
 .links--item a:hover,
@@ -145,13 +145,33 @@ h1 {
 }
 
 #logo {
-  width: 10em;
-  height: 10em;
+  width: 4em;
+  height: 4em;
   transform-origin: 84% 15%;
   -webkit-animation: screw 1.5s linear alternate infinite;
   position: relative;
-  top: 13em;
-  left: -1em;
+  top: 8em;
+  left: 5em;
+}
+
+#map-container {
+  background-image: url('images/bouffon-min.jpg');
+  background-size: cover;
+  background-position: top center;
+  height: 450px;
+  margin-bottom: -50px;
+}
+
+#map {
+  width: 51%;
+  height: 60%;
+  top: 35.5%;
+  left: 24.25%;
+  position: relative;
+}
+
+#wrench {
+  fill: #2E1C00;
 }
 
 
@@ -162,9 +182,26 @@ h1 {
     height: 5em;
     top: 3em;
     left: 36%;
+    display: none;
+  }
+
+  #map-container {
+    background-size: cover;
+    background-position: top center;
+    height: 300px;
+    margin-bottom: 0px;
+  }
+
+  #map {
+    width: 57%;
+    height: 60%;
+    top: 31%;
+    left: 21%;
+    position: relative;
   }
 
   .links--item {
     font-size: 1.5em;
   }
 }
+

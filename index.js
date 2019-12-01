@@ -2158,10 +2158,8 @@
     return geometry(o);
   }
 
-  //console.log(d3);
-
   const mail = document.querySelector('.mail-content');
-  mail.innerHTML = mail.innerHTML.replace('spam', 'info');
+  mail.innerHTML = mail.innerHTML.replace('spam', 'alex');
 
   const canvas = document.getElementById('map');
 

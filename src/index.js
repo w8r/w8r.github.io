@@ -2,10 +2,8 @@ import { geoGraticule10, geoPath } from 'd3-geo';
 import { geoBonne } from 'd3-geo-projection';
 import * as topojson from 'topojson-client';
 
-//console.log(d3);
-
 const mail = document.querySelector('.mail-content');
-mail.innerHTML = mail.innerHTML.replace('spam', 'info');
+mail.innerHTML = mail.innerHTML.replace('spam', 'alex');
 
 const canvas = document.getElementById('map');
 

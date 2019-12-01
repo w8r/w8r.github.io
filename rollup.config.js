@@ -1,4 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve';
+import browsersync from 'rollup-plugin-browsersync';
 
 export default [{
   input: 'src/index.js',
@@ -7,6 +8,7 @@ export default [{
     format: 'iife',
   },
   plugins: [
-    resolve()
+    resolve(),
+    process.env.ROLLUP_WATCH ? browsersync() : null
   ]
 }];

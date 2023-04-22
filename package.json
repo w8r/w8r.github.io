@@ -4,16 +4,20 @@
   "description": "[w8r.github.io](w8r.github.io)",
   "main": "index.js",
   "dependencies": {
-    "d3-geo": "^1.11.6",
+    "d3-geo": "^3.1.0",
     "d3-geo-path": "0.0.0",
-    "d3-geo-projection": "^2.7.0",
-    "simplify-geojson": "^1.0.3",
-    "topojson-client": "^3.0.1"
+    "d3-geo-projection": "^4.0.0",
+    "simplify-geojson": "^1.0.5",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
+    "@types/d3-geo": "^3.0.3",
+    "@types/topojson-client": "^3.1.1",
     "rollup": "^1.25.0",
     "rollup-plugin-browsersync": "^1.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

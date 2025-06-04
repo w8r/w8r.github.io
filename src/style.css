@@ -1,17 +1,18 @@
-html, body {
-  font-family: 'Fira Sans', sans-serif;
-  color: #2E1C00;
-  background: #E2DDC7;
+html,
+body {
+  font-family: "Fira Sans", sans-serif;
+  color: #2e1c00;
+  background: #e2ddc7;
 }
 
 @font-face {
-  font-family: 'fontello';
-  src: url('font/fontello.eot?30844589');
-  src: url('font/fontello.eot?30844589#iefix') format('embedded-opentype'),
-       url('font/fontello.woff2?30844589') format('woff2'),
-       url('font/fontello.woff?30844589') format('woff'),
-       url('font/fontello.ttf?30844589') format('truetype'),
-       url('font/fontello.svg?30844589#fontello') format('svg');
+  font-family: "fontello";
+  src: url("/font/fontello.eot");
+  src: url("/font/fontello.eot#iefix") format("embedded-opentype"),
+    url("/font/fontello.woff2") format("woff2"),
+    url("/font/fontello.woff") format("woff"),
+    url("/font/fontello.ttf") format("truetype"),
+    url("/font/fontello.svg#fontello") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -26,7 +27,8 @@ html, body {
 }
 */
 
- [class^="icon-"]:before, [class*=" icon-"]:before {
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
   font-family: "fontello";
   font-style: normal;
   font-weight: normal;
@@ -35,7 +37,7 @@ html, body {
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
-  margin-right: .2em;
+  margin-right: 0.2em;
   text-align: center;
   /* opacity: .8; */
 
@@ -48,7 +50,7 @@ html, body {
 
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
-  margin-left: .2em;
+  margin-left: 0.2em;
 
   /* you can be more comfortable with increased icons size */
   /* font-size: 120%; */
@@ -61,15 +63,30 @@ html, body {
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-location:before { content: '\e800'; } /* '' */
-.icon-twitter:before { content: '\f099'; } /* '' */
-.icon-facebook:before { content: '\f09a'; } /* '' */
-.icon-mail-alt:before { content: '\f0e0'; } /* '' */
-.icon-linkedin:before { content: '\f0e1'; } /* '' */
-.icon-github:before { content: '\f113'; } /* '' */
-.icon-instagram:before { content: '\f16d'; } /* '' */
-.icon-doc-text:before { content: '\f0f6'; } /* '' */
-
+.icon-location:before {
+  content: "\e800";
+} /* '' */
+.icon-twitter:before {
+  content: "\f099";
+} /* '' */
+.icon-facebook:before {
+  content: "\f09a";
+} /* '' */
+.icon-mail-alt:before {
+  content: "\f0e0";
+} /* '' */
+.icon-linkedin:before {
+  content: "\f0e1";
+} /* '' */
+.icon-github:before {
+  content: "\f113";
+} /* '' */
+.icon-instagram:before {
+  content: "\f16d";
+} /* '' */
+.icon-doc-text:before {
+  content: "\f0f6";
+} /* '' */
 
 .container {
   max-width: 740px;
@@ -81,10 +98,11 @@ h1 {
   text-align: center;
   font-size: 3em;
   margin-bottom: 0.25em;
-  color: #2E1C00;
+  color: #2e1c00;
 }
 
-.bio, .info {
+.bio,
+.info {
   text-align: center;
 }
 
@@ -93,7 +111,7 @@ h1 {
 }
 
 .info {
-  color: #2E1C00;
+  color: #2e1c00;
   font-weight: 100;
   font-size: 0.8em;
 }
@@ -118,7 +136,7 @@ h1 {
 
 .links--item a,
 .info a {
-  color: #2E1C00;
+  color: #2e1c00;
 }
 
 .links--item a:hover,
@@ -155,7 +173,7 @@ h1 {
 }
 
 #map-container {
-  background-image: url('images/bouffon-min.jpg');
+  background-image: url("/images/bouffon-min.jpg");
   background-size: cover;
   background-position: top center;
   height: 450px;
@@ -171,13 +189,10 @@ h1 {
 }
 
 #wrench {
-  fill: #2E1C00;
+  fill: #2e1c00;
 }
 
-
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 568px) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
   #logo {
     display: none;
   }
@@ -202,9 +217,7 @@ and (max-device-width : 568px) {
   }
 }
 
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 370px) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 370px) {
   #map {
     width: 67%;
     left: 16%;

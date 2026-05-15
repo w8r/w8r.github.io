@@ -1,24 +1,24 @@
 ---
-title: Open Source Libraries
+title: More Libraries
 role: Creator & Maintainer
 period: 2014 - present
 tags:
   - Algorithms
   - Data Structures
-  - Computational Geometry
+  - Leaflet Plugins
   - npm
 link: https://github.com/w8r
-order: 3
-color: ["#4a1942", "#2d1326"]
+order: 9
+color: ["#2d5016", "#1a3009"]
 icon: "</>"
 ---
 
-Creator and maintainer of several widely-used JavaScript libraries focused on computational geometry and data structures.
+More JavaScript libraries for computational geometry, data structures, and Leaflet plugins.
 
-**avl** (119 stars) - Fast AVL tree implementation for Node and browser
+- [**GreinerHormann**](https://github.com/w8r/GreinerHormann) ![stars](https://img.shields.io/github/stars/w8r/GreinerHormann?style=flat-square&color=2E1C00&labelColor=E2DDC7&label=%E2%98%85) — Polygon clipping, boolean ops
 
-**bezier-intersect** (45 stars) - Bezier curve intersection algorithms
+- [**Leaflet.Path.Transform**](https://github.com/w8r/Leaflet.Path.Transform) ![stars](https://img.shields.io/github/stars/w8r/Leaflet.Path.Transform?style=flat-square&color=2E1C00&labelColor=E2DDC7&label=%E2%98%85) — Drag/rotate/resize for Leaflet
 
-**bresenham-zingl** (27 stars) - Efficient Bresenham rasterizers
+- [**splay-tree**](https://github.com/w8r/splay-tree) ![stars](https://img.shields.io/github/stars/w8r/splay-tree?style=flat-square&color=2E1C00&labelColor=E2DDC7&label=%E2%98%85) — Fast splay-tree data structure
 
-**esri-leaflet-legend** (25 stars) - Leaflet plugin for ESRI map legends
+- [**avl**](https://github.com/w8r/avl) ![stars](https://img.shields.io/github/stars/w8r/avl?style=flat-square&color=2E1C00&labelColor=E2DDC7&label=%E2%98%85) — Fast AVL tree for Node and browser

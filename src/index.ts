@@ -65,7 +65,7 @@ async function loadContent(): Promise<{
   for (const path in workFiles) {
     const raw = await workFiles[path]();
     const { attributes, body } = fm<Omit<WorkProject, "content" | "slug">>(
-      raw
+      raw,
     ) as FrontMatterResult<Omit<WorkProject, "content" | "slug">>;
     workProjects.push({
       ...attributes,
@@ -80,7 +80,9 @@ async function loadContent(): Promise<{
   for (const path in artFiles) {
     const raw = await artFiles[path]();
     const { attributes, body } = fm(raw);
-    const key = path.split("/").pop()!.replace(".md", "") as "about" | "exhibitions";
+    const key = path.split("/").pop()!.replace(".md", "") as
+      | "about"
+      | "exhibitions";
     artContent[key] = {
       ...(attributes as Record<string, string>),
       content: marked.parse(body) as string,
@@ -110,7 +112,7 @@ function renderWorkCards(projects: WorkProject[]): void {
         <span class="card__role">${project.role}</span>
       </div>
     </article>
-  `
+  `,
     )
     .join("");
 
@@ -118,7 +120,7 @@ function renderWorkCards(projects: WorkProject[]): void {
   grid.querySelectorAll(".card").forEach((card) => {
     card.addEventListener("click", () => {
       const project = projects.find(
-        (p) => p.slug === (card as HTMLElement).dataset.project
+        (p) => p.slug === (card as HTMLElement).dataset.project,
       );
       if (project) openModal(project);
     });
@@ -128,7 +130,8 @@ function renderWorkCards(projects: WorkProject[]): void {
 function renderArtSection(artContent: ArtContent): void {
   const artIntro = document.querySelector(".art__intro");
   const artList = document.querySelector(".art__list");
-  const artShopLink = document.querySelector<HTMLAnchorElement>(".art__shop-link");
+  const artShopLink =
+    document.querySelector<HTMLAnchorElement>(".art__shop-link");
 
   if (artIntro && artContent.about) {
     artIntro.innerHTML = artContent.about.content;
@@ -234,7 +237,9 @@ if (canvas) {
       canvas.height = height;
 
       const ctx = canvas.getContext("2d")!;
-      const projection = geoBonne().parallel(18).precision(0.5) as GeoProjection;
+      const projection = geoBonne()
+        .parallel(18)
+        .precision(0.5) as GeoProjection;
 
       projection.fitWidth(width, outline);
       canvas.style.height = "66%";
@@ -258,13 +263,13 @@ if (canvas) {
         ctx.stroke();
         ctx.beginPath();
         path(land);
-        ctx.fillStyle = "#2E1C00";
+        ctx.fillStyle = "#2e1c00";
         ctx.fill();
         ctx.restore();
         ctx.beginPath();
         path(outline);
         ctx.lineWidth = 8;
-        ctx.strokeStyle = "#2E1C00";
+        ctx.strokeStyle = "#2e1c00";
         ctx.stroke();
       }
 

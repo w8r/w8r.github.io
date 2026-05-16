@@ -2,6 +2,7 @@ const t=`---
 title: wittgenstein
 role: Creator
 period: 2019
+location: Paris, France
 tags:
   - Philosophy
   - Visualization
@@ -10,6 +11,7 @@ link: https://github.com/w8r/wittgenstein
 order: 7
 color: ["#5c3e0c", "#2e1c00"]
 icon: "§"
+image: /images/projects/wittgenstein.png
 ---
 
 Interactive reading experience for Ludwig Wittgenstein's Tractatus Logico-Philosophicus. Hierarchical navigation through the numbered propositions.

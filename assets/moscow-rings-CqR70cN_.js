@@ -2,6 +2,7 @@ const n=`---
 title: moscow-rings
 role: Creator
 period: 2017
+location: Paris, France
 tags:
   - Visualization
   - Maps
@@ -11,6 +12,7 @@ link: https://github.com/w8r/moscow-rings
 order: 8
 color: ["#d62b1f", "#8a1a14"]
 icon: "◎"
+image: /images/projects/mosrings.png
 ---
 
 Visualization of distances to Moscow's main transport rings. Interactive map showing how the city's circular road network shapes urban geography.

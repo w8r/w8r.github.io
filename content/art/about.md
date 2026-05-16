@@ -3,4 +3,4 @@ title: Art Practice
 shopLink: https://art.milevski.co
 ---
 
-Trained at Krasnopresnenskaya Art School and Moscow State Institute for Graphic Design. My practice spans drawing, painting, sculpture, and book art.
+I am a graphic artist working with various media: drawing, sculpture and illustration. My interest is people.

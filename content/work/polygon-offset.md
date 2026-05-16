@@ -2,6 +2,7 @@
 title: polygon-offset
 role: Creator & Maintainer
 period: 2015 - present
+location: The Hague, Netherlands
 tags:
   - Algorithms
   - Computational Geometry

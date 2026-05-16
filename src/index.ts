@@ -18,6 +18,7 @@ interface WorkProject {
   order: number;
   color: [string, string];
   icon: string;
+  image?: string;
   content: string;
   slug: string;
 }
@@ -80,13 +81,16 @@ async function loadContent(): Promise<{
   for (const path in artFiles) {
     const raw = await artFiles[path]();
     const { attributes, body } = fm(raw);
-    const key = path.split("/").pop()!.replace(".md", "") as
-      | "about"
-      | "exhibitions";
-    artContent[key] = {
+    const key = path.split("/").pop()!.replace(".md", "");
+    const parsed = {
       ...(attributes as Record<string, string>),
       content: marked.parse(body) as string,
-    } as ArtAbout | ArtExhibitions;
+    };
+    if (key === "about") {
+      artContent.about = parsed as ArtAbout;
+    } else if (key === "exhibitions") {
+      artContent.exhibitions = parsed as ArtExhibitions;
+    }
   }
 
   return { workProjects, artContent };
@@ -95,6 +99,13 @@ async function loadContent(): Promise<{
 // ==========================================================================
 // Render Functions
 // ==========================================================================
+function getCardDescription(content: string): string {
+  // Strip images and get first paragraph text
+  const withoutImages = content.replace(/<p><img[^>]*><\/p>/g, "");
+  const match = withoutImages.match(/<p>([^<]+)<\/p>/);
+  return match ? match[1] : "";
+}
+
 function renderWorkCards(projects: WorkProject[]): void {
   const grid = document.querySelector(".work__grid");
   if (!grid) return;
@@ -103,14 +114,15 @@ function renderWorkCards(projects: WorkProject[]): void {
     .map(
       (project) => `
     <article class="card" data-project="${project.slug}">
-      <div class="card__image" style="background: linear-gradient(135deg, ${project.color[0]} 0%, ${project.color[1]} 100%);">
-        <span class="card__icon">${project.icon}</span>
+      <div class="card__image" style="background: ${project.image ? `url('${project.image}') center/cover` : `linear-gradient(135deg, ${project.color[0]} 0%, ${project.color[1]} 100%)`};">
+        ${project.image ? "" : `<span class="card__icon">${project.icon}</span>`}
       </div>
       <div class="card__content">
         <h3 class="card__title">${project.title}</h3>
-        <p class="card__description">${project.content.split("</p>")[0].replace("<p>", "")}</p>
+        <p class="card__description">${getCardDescription(project.content)}</p>
         <span class="card__role">${project.role}</span>
       </div>
+      ${project.link ? `<a href="${project.link}" target="_blank" rel="noopener" class="card__link" title="Open project">↗</a>` : ""}
     </article>
   `,
     )
@@ -118,7 +130,9 @@ function renderWorkCards(projects: WorkProject[]): void {
 
   // Re-attach click handlers
   grid.querySelectorAll(".card").forEach((card) => {
-    card.addEventListener("click", () => {
+    card.addEventListener("click", (e) => {
+      // Don't open modal if clicking the external link
+      if ((e.target as HTMLElement).classList.contains("card__link")) return;
       const project = projects.find(
         (p) => p.slug === (card as HTMLElement).dataset.project,
       );
@@ -290,7 +304,6 @@ if (canvas) {
 // ==========================================================================
 // Initialize
 // ==========================================================================
-loadContent().then(({ workProjects, artContent }) => {
-  renderWorkCards(workProjects);
-  renderArtSection(artContent);
-});
+const { workProjects, artContent } = await loadContent();
+renderWorkCards(workProjects);
+renderArtSection(artContent);

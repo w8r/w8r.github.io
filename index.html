@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,7 +21,7 @@
       </button>
       <div class="nav__menu">
         <a href="#about" class="nav__link">About</a>
-        <a href="#work" class="nav__link">Work</a>
+        <a href="#work" class="nav__link">Projects</a>
         <a href="#art" class="nav__link">Art</a>
         <a href="#contact" class="nav__link">Contact</a>
       </div>
@@ -37,12 +37,21 @@
           <img src="/images/wrench-logo.svg" alt="" class="wrench" />
           <h1 class="hero__name">Alexander Milevski</h1>
         </div>
-        <p class="hero__tagline">Engineer: maps, visual art, crowdsourcing, image processing</p>
+        <p class="hero__tagline">
+          Engineer: maps, visual art, crowdsourcing, image processing
+        </p>
         <p class="hero__subtitle">Paris, France</p>
       </div>
       <a href="#about" class="hero__scroll" aria-label="Scroll down">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12l7 7 7-7"/>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
         </svg>
       </a>
     </header>
@@ -51,21 +60,32 @@
     <section id="about" class="section about">
       <div class="container">
         <p class="about__text">
-          Software engineer building complex web applications and libraries
-          at the intersection of creativity and technology. Lead R&D at
-          <a href="https://linkurious.com" target="_blank" rel="noopener">Linkurious</a>:
-          graph visualization, spatial algorithms, computational geometry.
+          Software engineer building complex web applications and libraries at
+          the intersection of creativity and technology. Lead R&D at
+          <a href="https://linkurious.com" target="_blank" rel="noopener"
+            >Linkurious</a
+          >: graph visualization, spatial algorithms, computational geometry.
         </p>
         <div class="about__links">
           <a href="/cv.pdf" class="about__link">
             <span class="icon-doc-text"></span>
             CV
           </a>
-          <a href="https://github.com/w8r" target="_blank" rel="noopener" class="about__link">
+          <a
+            href="https://github.com/w8r"
+            target="_blank"
+            rel="noopener"
+            class="about__link"
+          >
             <span class="icon-github"></span>
             Github
           </a>
-          <a href="https://linkedin.com/in/alexandermilevski" target="_blank" rel="noopener" class="about__link">
+          <a
+            href="https://linkedin.com/in/alexandermilevski"
+            target="_blank"
+            rel="noopener"
+            class="about__link"
+          >
             <span class="icon-linkedin"></span>
             linked.in
           </a>
@@ -76,7 +96,7 @@
     <!-- Work Section -->
     <section id="work" class="section work">
       <div class="container">
-        <h2 class="section__title">Work</h2>
+        <h2 class="section__title">Projects</h2>
         <div class="work__grid">
           <!-- Populated from content/work/*.md -->
         </div>
@@ -91,6 +111,41 @@
           <!-- Populated from content/art/about.md -->
         </div>
 
+        <div class="art__gallery">
+          <a
+            href="https://art.milevski.co/b/3EcH4"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art1.jpg" alt="A3 Drawing" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/L7vYB"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art2.jpg" alt="Gio" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/3Q2AZ"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art3.jpg" alt="Gio" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/pQfPd"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art4.jpg" alt="Ines A3" loading="lazy" />
+          </a>
+        </div>
+
         <div class="art__exhibitions">
           <h3 class="art__subtitle">Exhibitions</h3>
           <ul class="art__list">
@@ -98,8 +153,13 @@
           </ul>
         </div>
 
-        <a href="https://art.milevski.co" target="_blank" rel="noopener" class="btn btn--primary">
-          Art Shop
+        <a
+          href="https://art.milevski.co"
+          target="_blank"
+          rel="noopener"
+          class="btn btn--primary"
+        >
+          Art Shop &rarr;
         </a>
       </div>
     </section>
@@ -109,17 +169,36 @@
       <div class="container">
         <div class="footer__content">
           <div class="footer__info">
-            <p class="footer__location"><span class="icon-location"></span> Paris, France</p>
-            <a href="mailto:alex@milevski.co" class="footer__email"><span class="icon-mail-alt"></span> alex@milevski.co</a>
+            <p class="footer__location">
+              <span class="icon-location"></span> Paris, France
+            </p>
+            <a href="mailto:alex@milevski.co" class="footer__email"
+              ><span class="icon-mail-alt"></span> alex@milevski.co</a
+            >
           </div>
           <div class="footer__social">
-            <a href="https://github.com/w8r" target="_blank" rel="noopener" aria-label="GitHub">
+            <a
+              href="https://github.com/w8r"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+            >
               <span class="icon-github"></span>
             </a>
-            <a href="https://linkedin.com/in/alexandermilevski" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a
+              href="https://linkedin.com/in/alexandermilevski"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
               <span class="icon-linkedin"></span>
             </a>
-            <a href="https://instagram.com/mile8ski" target="_blank" rel="noopener" aria-label="Instagram">
+            <a
+              href="https://instagram.com/mile8ski"
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram"
+            >
               <span class="icon-instagram"></span>
             </a>
           </div>

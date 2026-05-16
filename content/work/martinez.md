@@ -2,6 +2,7 @@
 title: martinez
 role: Creator & Maintainer
 period: 2016 - present
+location: Rotterdam, Netherlands
 tags:
   - Algorithms
   - Computational Geometry
@@ -11,6 +12,7 @@ link: https://github.com/w8r/martinez
 order: 5
 color: ["#1f4fa8", "#112e66"]
 icon: "◇"
+image: /images/projects/martinez.png
 ---
 
 Martinez-Rueda polygon clipping algorithm implementation. Boolean operations on polygons: intersection, union, difference, xor. Handles multipolygons, holes, and complex geometries.

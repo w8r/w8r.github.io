@@ -304,6 +304,8 @@ if (canvas) {
 // ==========================================================================
 // Initialize
 // ==========================================================================
-const { workProjects, artContent } = await loadContent();
-renderWorkCards(workProjects);
-renderArtSection(artContent);
+(async () => {
+  const { workProjects, artContent } = await loadContent();
+  renderWorkCards(workProjects);
+  renderArtSection(artContent);
+})();

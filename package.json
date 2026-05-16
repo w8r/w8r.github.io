@@ -26,6 +26,7 @@
     "start": "vite dev",
     "cv": "npx tsx cv/build.ts",
     "prebuild": "npm run cv || true",
+    "prepublish": "npm run build",
     "publish": "gh-pages -t --nojekyll -d dist"
   },
   "repository": {

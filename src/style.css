@@ -1,225 +1,1078 @@
-html,
-body {
-  font-family: "Fira Sans", sans-serif;
-  color: #2e1c00;
-  background: #e2ddc7;
-}
+/* ==========================================================================
+   w8r Design System — Portfolio
+   Aesthetic: Bauhaus-leaning. Brown ink on cream paper, primaries as accents.
+   Typography: Fira Sans only. Headlines lean thin.
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   Fonts
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 100;
+  font-style: normal;
+  src: url("/font/FiraSans-Thin.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 300;
+  font-style: normal;
+  src: url("/font/FiraSans-Light.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/font/FiraSans-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 400;
+  font-style: italic;
+  src: url("/font/FiraSans-Italic.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/font/FiraSans-Medium.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 600;
+  font-style: normal;
+  src: url("/font/FiraSans-SemiBold.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/font/FiraSans-Bold.ttf") format("truetype");
+  font-display: swap;
+}
 @font-face {
   font-family: "fontello";
-  src: url("/font/fontello.eot");
-  src: url("/font/fontello.eot#iefix") format("embedded-opentype"),
+  font-weight: normal;
+  font-style: normal;
+  src:
     url("/font/fontello.woff2") format("woff2"),
     url("/font/fontello.woff") format("woff"),
-    url("/font/fontello.ttf") format("truetype"),
-    url("/font/fontello.svg#fontello") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
-/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
-/*
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  @font-face {
-    font-family: 'fontello';
-    src: url('font/fontello.svg?30844589#fontello') format('svg');
-  }
-}
-*/
-
-[class^="icon-"]:before,
-[class*=" icon-"]:before {
-  font-family: "fontello";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: 0.2em;
-  text-align: center;
-  /* opacity: .8; */
-
-  /* For safety - reset parent styles, that can break glyph codes*/
-  font-variant: normal;
-  text-transform: none;
-
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 1em;
-
-  /* Animation center compensation - margins should be symmetric */
-  /* remove if not needed */
-  margin-left: 0.2em;
-
-  /* you can be more comfortable with increased icons size */
-  /* font-size: 120%; */
-
-  /* Font smoothing. That was taken from TWBS */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  /* Uncomment for 3D effect */
-  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+    url("/font/fontello.ttf") format("truetype");
+  font-display: swap;
 }
 
-.icon-location:before {
-  content: "\e800";
-} /* '' */
-.icon-twitter:before {
-  content: "\f099";
-} /* '' */
-.icon-facebook:before {
-  content: "\f09a";
-} /* '' */
-.icon-mail-alt:before {
-  content: "\f0e0";
-} /* '' */
-.icon-linkedin:before {
-  content: "\f0e1";
-} /* '' */
-.icon-github:before {
-  content: "\f113";
-} /* '' */
-.icon-instagram:before {
-  content: "\f16d";
-} /* '' */
-.icon-doc-text:before {
-  content: "\f0f6";
-} /* '' */
+/* --------------------------------------------------------------------------
+   Design Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Core canvas */
+  --w8r-paper: #e2ddc7;
+  --w8r-ink: #2e1c00;
+  --w8r-hover: #ff2020;
+  --w8r-rule: #aaaaaa;
 
-.container {
-  max-width: 740px;
-  margin-right: auto;
-  margin-left: auto;
+  /* Ink scale */
+  --w8r-ink-900: #2e1c00;
+  --w8r-ink-700: #5c3e0c;
+  --w8r-ink-500: #8a6a2e;
+  --w8r-ink-300: #b79a5e;
+
+  /* Paper scale */
+  --w8r-paper-100: #f2eedd;
+  --w8r-paper-200: #e2ddc7;
+  --w8r-paper-300: #cfc9b0;
+
+  /* Bauhaus primaries */
+  --w8r-blue: #1f4fa8;
+  --w8r-blue-deep: #112e66;
+  --w8r-red: #d62b1f;
+  --w8r-yellow: #f5c518;
+
+  /* Type */
+  --font-sans: "Fira Sans", system-ui, -apple-system, sans-serif;
+  --font-icon: "fontello";
+
+  /* Type scale */
+  --fs-display: 4.5rem;
+  --fs-h1: 3rem;
+  --fs-h2: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-h4: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.8rem;
+  --fs-micro: 0.6875rem;
+
+  /* Spacing */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 2.5rem;
+  --sp-8: 4rem;
+
+  /* Hard offset shadows only — no blur */
+  --shadow-1: 0 1px 0 var(--w8r-ink);
+  --shadow-2: 3px 3px 0 var(--w8r-ink);
+  --shadow-3: 6px 6px 0 var(--w8r-ink);
+
+  /* Layout */
+  --container: 740px;
+  --container-wide: 900px;
+
+  /* Motion */
+  --ease-snap: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
 }
 
-h1 {
-  text-align: center;
-  font-size: 3em;
-  margin-bottom: 0.25em;
-  color: #2e1c00;
-}
-
-.bio,
-.info {
-  text-align: center;
-}
-
-.bio {
-  margin: 2.5em auto;
-}
-
-.info {
-  color: #2e1c00;
-  font-weight: 100;
-  font-size: 0.8em;
-}
-
-.links--list {
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-  justify-content: center;
+/* --------------------------------------------------------------------------
+   Reset & Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.links--item {
-  margin: 1em 0.5em;
-  font-size: 1.2em;
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
 }
 
-.links--item:last-child {
-  margin-right: 0;
+body {
+  font-family: var(--font-sans);
+  color: var(--w8r-ink);
+  background: var(--w8r-paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.links--item a,
-.info a {
-  color: #2e1c00;
+a {
+  color: var(--w8r-ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: color var(--dur-fast) var(--ease-snap);
 }
 
-.links--item a:hover,
-.info a:hover {
-  color: #ff2020;
+a:hover {
+  color: var(--w8r-hover);
 }
 
-@-webkit-keyframes screw {
-  0% {
-    -webkit-transform: rotate(30deg);
-  }
-  72% {
-    -webkit-transform: rotate(150deg);
-  }
-  80% {
-    -webkit-transform: rotate(170deg);
-  }
-  90% {
-    -webkit-transform: rotate(172deg);
-  }
-  100% {
-    -webkit-transform: rotate(180deg);
-  }
+/* --------------------------------------------------------------------------
+   Typography — Fira Sans only, headlines lean thin
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.1;
 }
 
-#logo {
-  width: 4em;
-  height: 4em;
-  transform-origin: 84% 15%;
-  -webkit-animation: screw 1.5s linear alternate infinite;
+h1 {
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+}
+
+.display {
+  font-size: var(--fs-display);
+  font-weight: 100;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   Icon Font (fontello)
+   -------------------------------------------------------------------------- */
+[class^="icon-"]::before,
+[class*=" icon-"]::before {
+  font-family: var(--font-icon);
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+  line-height: 1em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-location::before {
+  content: "\e800";
+}
+.icon-twitter::before {
+  content: "\f099";
+}
+.icon-facebook::before {
+  content: "\f09a";
+}
+.icon-mail-alt::before {
+  content: "\f0e0";
+}
+.icon-linkedin::before {
+  content: "\f0e1";
+}
+.icon-github::before {
+  content: "\f113";
+}
+.icon-instagram::before {
+  content: "\f16d";
+}
+.icon-doc-text::before {
+  content: "\f0f6";
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--sp-5);
+}
+
+.container--wide {
+  max-width: var(--container-wide);
+}
+
+.section {
+  padding: var(--sp-8) 0;
+}
+
+.section__title {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--sp-6);
   position: relative;
-  top: 8em;
-  left: 5em;
 }
 
-#map-container {
+.section__title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--w8r-ink);
+  margin-top: var(--sp-3);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation — flat Bauhaus style
+   -------------------------------------------------------------------------- */
+.nav {
+  position: fixed;
+  top: var(--sp-5);
+  right: var(--sp-5);
+  z-index: 1000;
+}
+
+.nav__toggle {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--w8r-ink);
+  background: var(--w8r-paper);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-2);
+  transition: all var(--dur-fast) var(--ease-snap);
+}
+
+.nav__toggle:hover {
+  background: var(--w8r-paper-100);
+}
+
+.nav__toggle:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--w8r-ink);
+}
+
+.nav__hamburger,
+.nav__hamburger::before,
+.nav__hamburger::after {
+  width: 18px;
+  height: 2px;
+  background: var(--w8r-ink);
+  transition: all var(--dur-base) var(--ease-snap);
+}
+
+.nav__hamburger {
+  position: relative;
+}
+
+.nav__hamburger::before,
+.nav__hamburger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav__hamburger::before {
+  top: -6px;
+}
+.nav__hamburger::after {
+  top: 6px;
+}
+
+.nav--open .nav__hamburger {
+  background: transparent;
+}
+.nav--open .nav__hamburger::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+.nav--open .nav__hamburger::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.nav__menu {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  background: var(--w8r-paper-100);
+  border: 1px solid var(--w8r-ink);
+  box-shadow: var(--shadow-2);
+  padding: var(--sp-2) 0;
+  min-width: 140px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all var(--dur-fast) var(--ease-snap);
+}
+
+.nav--open .nav__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav__link {
+  display: block;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  border-bottom: none;
+}
+
+.nav__link:hover {
+  background: var(--w8r-paper-300);
+  color: var(--w8r-ink);
+}
+
+/* --------------------------------------------------------------------------
+   Hero Section
+   -------------------------------------------------------------------------- */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: var(--sp-6);
+}
+
+.hero__map-container {
   background-image: url("/images/bouffon-min.jpg");
-  background-size: cover;
-  background-position: top center;
-  height: 450px;
-  margin-bottom: -50px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  max-width: 700px;
+  height: 55vh;
+  max-height: 520px;
+  position: relative;
+  margin-bottom: var(--sp-6);
 }
 
 #map {
   width: 51%;
   height: 60%;
-  top: 35.5%;
-  left: 24.25%;
+  position: absolute;
+  top: 30%;
+  left: 24.5%;
+}
+
+.hero__content {
+  text-align: center;
+}
+
+.hero__name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-2);
+}
+
+.hero__name {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.hero__tagline {
+  font-size: 1.25rem;
+  font-weight: 100;
+  margin-bottom: var(--sp-2);
+}
+
+.hero__subtitle {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w8r-ink-700);
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: var(--sp-6);
+  color: var(--w8r-ink-500);
+  border-bottom: none;
+  transition: color var(--dur-fast) var(--ease-snap);
+}
+
+.hero__scroll:hover {
+  color: var(--w8r-ink);
+}
+
+/* Wrench logo animation - ratcheting motion */
+.wrench {
+  width: 2.5em;
+  height: 2.5em;
+  /* Origin at jaw gap center (top-right of the rotated wrench) */
+  transform-origin: 74% 16%;
+  animation: screw 1.8s ease-in-out infinite;
+  margin-bottom: -1.5em;
+  margin-right: -0em;
+}
+
+@keyframes screw {
+  0% {
+    transform: rotate(120deg);
+  } /* Start: handle up */
+  8% {
+    transform: rotate(120deg);
+  } /* Grip pause */
+  55% {
+    transform: rotate(45deg);
+  } /* Handle down - tightening */
+  65% {
+    transform: rotate(47deg);
+  } /* Extra push */
+  72% {
+    transform: rotate(47deg);
+  } /* Hold at end */
+  100% {
+    transform: rotate(120deg);
+  } /* Release and return */
+}
+
+/* --------------------------------------------------------------------------
+   About Section
+   -------------------------------------------------------------------------- */
+.about {
+  background: var(--w8r-paper-300);
+}
+
+.about__text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+.about__links {
+  display: flex;
+  gap: var(--sp-5);
+  margin-top: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.about__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  border-bottom: none;
+}
+
+.about__link:hover {
+  color: var(--w8r-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Work Section — Cards with hard shadows
+   -------------------------------------------------------------------------- */
+.work__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-5);
+}
+
+.card {
+  position: relative;
+  background: var(--w8r-paper-100);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-snap);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card__image {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+.card__icon {
+  font-size: 2.5rem;
+  color: var(--w8r-paper);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.card__content {
+  padding: var(--sp-4);
+}
+
+.card__title {
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  margin-bottom: var(--sp-2);
+}
+
+.card__description {
+  font-size: var(--fs-small);
+  color: var(--w8r-ink-700);
+  line-height: 1.5;
+  margin-bottom: var(--sp-3);
+}
+
+.card__role {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--w8r-ink-500);
+}
+
+.card__link {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w8r-paper);
+  border-radius: 50%;
+  font-size: 1rem;
+  color: var(--w8r-ink);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover .card__link {
+  opacity: 1;
+}
+
+.card__link:hover {
+  transform: scale(1.1);
+  background: var(--w8r-ink);
+  color: var(--w8r-paper);
+}
+
+/* --------------------------------------------------------------------------
+   Lists — Bauhaus-leaning: geometric, monochrome, no ornamental glyphs
+   -------------------------------------------------------------------------- */
+ul,
+ol {
+  padding-left: 1.5em;
+  margin: 0 0 1em;
+}
+
+ul li,
+ol li {
+  margin: 0.25em 0;
+  line-height: 1.5;
+}
+
+/* Filled ink square — the default bullet */
+ul {
+  list-style: none;
+  padding-left: 1.5em;
+}
+
+ul > li {
+  position: relative;
+  padding-left: 0.25em;
+}
+
+ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.1em;
+  top: 0.55em;
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--w8r-ink);
+}
+
+/* Nested ul: hollow square */
+ul ul > li::before {
+  background: transparent;
+  border: 1px solid var(--w8r-ink);
+}
+
+/* Third level: smaller */
+ul ul ul > li::before {
+  width: 0.35em;
+  height: 0.35em;
+  top: 0.65em;
+}
+
+/* Ordered lists: tabular figures, ink colour */
+ol {
+  list-style: none;
+  padding-left: 2em;
+  counter-reset: w8r-li;
+}
+
+ol > li {
+  position: relative;
+  counter-increment: w8r-li;
+}
+
+ol > li::before {
+  content: counter(w8r-li) ".";
+  position: absolute;
+  left: -2em;
+  width: 1.6em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--w8r-ink);
+}
+
+/* Em-dash bullets — most on-brand with telegraphic voice */
+ul.list-dash > li::before {
+  content: "—";
+  background: transparent;
+  width: auto;
+  height: auto;
+  left: -1.4em;
+  top: 0;
+  font-weight: 300;
+  color: var(--w8r-ink-500);
+}
+
+/* Spaced list — for longer items / scanning */
+ul.list-spaced > li,
+ol.list-spaced > li {
+  margin: 0.75em 0;
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid var(--w8r-ink-300);
+}
+
+ul.list-spaced > li:last-child,
+ol.list-spaced > li:last-child {
+  border-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Art Section
+   -------------------------------------------------------------------------- */
+.art {
+  background: var(--w8r-paper-300);
+}
+
+.art__intro {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-bottom: var(--sp-6);
+}
+
+.art__gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+@media (max-width: 768px) {
+  .art__gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.art__item {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.art__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.art__item:hover img {
+  transform: scale(1.05);
+}
+
+.art__subtitle {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-3);
+}
+
+.art__list {
+  list-style: none;
+  margin-bottom: var(--sp-6);
+  padding-left: 0;
+}
+
+.art__list > li {
+  padding: var(--sp-2) 0;
+  padding-left: 1.5em;
+  font-size: var(--fs-body);
+  border-bottom: 1px solid var(--w8r-rule);
   position: relative;
 }
 
-#wrench {
-  fill: #2e1c00;
+.art__list > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--w8r-ink);
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
-  #logo {
-    display: none;
+.art__list > li:last-child {
+  border-bottom: none;
+}
+
+/* Bauhaus-style button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: 2px solid var(--w8r-ink);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-snap);
+  box-shadow: var(--shadow-2);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--w8r-ink);
+}
+
+.btn--primary {
+  background: var(--w8r-blue);
+  color: var(--w8r-paper);
+  border-color: var(--w8r-ink);
+}
+
+.btn--primary:hover {
+  background: var(--w8r-blue-deep);
+  color: var(--w8r-paper);
+}
+
+.btn--secondary {
+  background: var(--w8r-paper);
+  color: var(--w8r-ink);
+}
+
+.btn--secondary:hover {
+  color: var(--w8r-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.footer {
+  padding: var(--sp-5) 0;
+  border-top: 1px solid var(--w8r-rule);
+}
+
+.footer__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+
+.footer__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.footer__location {
+  font-size: var(--fs-small);
+  font-weight: 100;
+  color: var(--w8r-ink-700);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.footer__email {
+  font-weight: 500;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.footer__email:hover {
+  color: var(--w8r-hover);
+}
+
+.footer__social {
+  display: flex;
+  gap: var(--sp-4);
+}
+
+.footer__social a {
+  font-size: 1.2em;
+  color: var(--w8r-ink);
+  border-bottom: none;
+  transition: color var(--dur-fast) var(--ease-snap);
+}
+
+.footer__social a:hover {
+  color: var(--w8r-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Modal — flat Bauhaus style
+   -------------------------------------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--dur-base) var(--ease-snap);
+}
+
+.modal[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(46, 28, 0, 0.6);
+}
+
+.modal__content {
+  position: relative;
+  background: var(--w8r-paper-100);
+  max-width: 600px;
+  width: calc(100% - 32px);
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(16px);
+  transition: transform var(--dur-base) var(--ease-snap);
+}
+
+.modal[aria-hidden="false"] .modal__content {
+  transform: translateY(0);
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--w8r-ink);
+  transition: color var(--dur-fast) var(--ease-snap);
+}
+
+.modal__close:hover {
+  color: var(--w8r-hover);
+}
+
+.modal__body {
+  padding: var(--sp-6);
+}
+
+.modal__body h3 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--sp-4);
+}
+
+.modal__body p {
+  margin-bottom: var(--sp-4);
+  line-height: 1.7;
+}
+
+.modal__body .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0;
+}
+
+.modal__body .tag {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--w8r-paper-300);
+  border: 1px solid var(--w8r-ink-300);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal__body .link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-weight: 500;
+  margin-top: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--w8r-blue);
+  color: var(--w8r-paper);
+  border: 2px solid var(--w8r-ink);
+  box-shadow: var(--shadow-2);
+}
+
+.modal__body .link:hover {
+  background: var(--w8r-blue-deep);
+  color: var(--w8r-paper);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--sp-7) 0;
   }
 
-  #map-container {
-    background-size: cover;
-    background-position: top center;
-    height: 300px;
-    margin-bottom: 0px;
+  .hero {
+    padding: var(--sp-5);
+  }
+
+  .hero__map-container {
+    height: 50vh;
+    max-height: 400px;
+    width: 100%;
+    max-width: none;
   }
 
   #map {
-    width: 57%;
-    height: 60%;
-    top: 31%;
+    width: 55%;
+    top: 33%;
+    left: 22%;
+  }
+
+  .hero__name {
+    font-size: 2.25rem;
+  }
+
+  .work__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 15px;
+  }
+
+  .hero__map-container {
+    height: 45vh;
+    max-height: 320px;
+  }
+
+  #map {
+    width: 58%;
+    top: 33%;
     left: 21%;
-    position: relative;
   }
 
-  .links--item {
-    font-size: 1.5em;
+  .hero__name {
+    font-size: 2rem;
   }
-}
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 370px) {
-  #map {
-    width: 67%;
-    left: 16%;
+  .hero__tagline {
+    font-size: 1.1rem;
+  }
+
+  .about__links {
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .nav {
+    top: var(--sp-4);
+    right: var(--sp-4);
   }
 }

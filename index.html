@@ -1,112 +1,222 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>Alexander Milevski</title>
+    <meta charset="UTF-8" />
+    <title>Alexander Milevski - Engineer & Artist</title>
     <link rel="icon" href="/favicon.ico" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Fira+Sans"
-      rel="stylesheet"
-    />
     <meta
       name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+      content="width=device-width, initial-scale=1, maximum-scale=5"
     />
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-159303468-1"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "UA-159303468-1");
-    </script>
+    <meta
+      name="description"
+      content="Alexander Milevski. Engineer: maps, visual art, crowdsourcing, image processing. Paris."
+    />
   </head>
   <body>
-    <div class="container">
-      <div id="map-container">
-        <canvas id="map" />
+    <!-- Navigation -->
+    <nav class="nav">
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false">
+        <span class="nav__hamburger"></span>
+      </button>
+      <div class="nav__menu">
+        <a href="#about" class="nav__link">About</a>
+        <a href="#work" class="nav__link">Projects</a>
+        <a href="#art" class="nav__link">Art</a>
+        <a href="#contact" class="nav__link">Contact</a>
       </div>
-      <svg
-        id="logo"
-        viewBox="0 0 300 300"
-        width="300"
-        height="300"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:svg="http://www.w3.org/2000/svg"
-      >
-        <g
-          stroke="null"
-          transform="rotate(45 145.87747192382812,152.53033447265625) "
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="hero__map-container" id="map-container">
+        <canvas id="map"></canvas>
+      </div>
+      <div class="hero__content">
+        <div class="hero__name-row">
+          <img src="/images/wrench-logo.svg" alt="" class="wrench" />
+          <h1 class="hero__name">Alexander Milevski</h1>
+        </div>
+        <p class="hero__tagline">
+          Engineer: maps, visual art, crowdsourcing, image processing
+        </p>
+        <p class="hero__subtitle">Paris, France</p>
+      </div>
+      <a href="#about" class="hero__scroll" aria-label="Scroll down">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
         >
-          <path
-            d="m121.667,-10l5,42l20,6.333l18,-11l-6.333,-43c0,0 36.667,11 39.667,37.333c0,0 3.999,23 -10.334,34l-10.999,10c0,0 -14,10.667 -10.667,34l0,204l-0.333,7.667c0,0 1,9 -9,9.333l-19,0c0,0 -10,1.667 -11.667,-12.333l0,-220.334c0,0 1.333,-12.333 -8.333,-18.333l-12.333,-10c0,0 -21.333,-16.334 -7.333,-45.667c-0.001,0 4.999,-13.999 23.665,-23.999z"
-            id="wrench"
-            stroke="null"
-          />
-        </g>
-      </svg>
-      <h1>Alexander Milevski</h1>
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </a>
+    </header>
 
-      <section class="info">
-        <span
-          ><span class="icon-mail-alt"></span
-          ><span class="mail-content">spam@milevski.co</span></span
+    <!-- About Section -->
+    <section id="about" class="section about">
+      <div class="container">
+        <p class="about__text">
+          Software engineer building complex web applications and libraries at
+          the intersection of creativity and technology. Lead R&D at
+          <a href="https://linkurious.com" target="_blank" rel="noopener"
+            >Linkurious</a
+          >: graph visualization, spatial algorithms, computational geometry.
+        </p>
+        <div class="about__links">
+          <a href="/cv.pdf" class="about__link">
+            <span class="icon-doc-text"></span>
+            CV
+          </a>
+          <a
+            href="https://github.com/w8r"
+            target="_blank"
+            rel="noopener"
+            class="about__link"
+          >
+            <span class="icon-github"></span>
+            Github
+          </a>
+          <a
+            href="https://linkedin.com/in/alexandermilevski"
+            target="_blank"
+            rel="noopener"
+            class="about__link"
+          >
+            <span class="icon-linkedin"></span>
+            linked.in
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="section work">
+      <div class="container">
+        <h2 class="section__title">Projects</h2>
+        <div class="work__grid">
+          <!-- Populated from content/work/*.md -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Art Section -->
+    <section id="art" class="section art">
+      <div class="container">
+        <h2 class="section__title">Art</h2>
+        <div class="art__intro">
+          <!-- Populated from content/art/about.md -->
+        </div>
+
+        <div class="art__gallery">
+          <a
+            href="https://art.milevski.co/b/3EcH4"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art1.jpg" alt="A3 Drawing" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/L7vYB"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art2.jpg" alt="Gio" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/3Q2AZ"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art3.jpg" alt="Gio" loading="lazy" />
+          </a>
+          <a
+            href="https://art.milevski.co/b/pQfPd"
+            target="_blank"
+            rel="noopener"
+            class="art__item"
+          >
+            <img src="/images/art/art4.jpg" alt="Ines A3" loading="lazy" />
+          </a>
+        </div>
+
+        <div class="art__exhibitions">
+          <h3 class="art__subtitle">Exhibitions</h3>
+          <ul class="art__list">
+            <!-- Populated from content/art/exhibitions.md -->
+          </ul>
+        </div>
+
+        <a
+          href="https://art.milevski.co"
+          target="_blank"
+          rel="noopener"
+          class="btn btn--primary"
         >
-        <span><span class="icon-location"></span>Paris, France</span>
-        <a href="/cv.pdf?022021"><span class="icon-doc-text"></span>CV</a>
-      </section>
+          Art Shop &rarr;
+        </a>
+      </div>
+    </section>
 
-      <section class="bio">
-        Engineer: maps, visual art, crowdsourcing, image processing
-      </section>
-
-      <section>
-        <div class="payhip-embed-page" data-key="piFYn"></div>
-        <!-- <script
-          type="text/javascript"
-          src="https://payhip.com/embed-page.js?v=24u68984"
-        ></script> -->
-      </section>
-
-      <section class="links">
-        <ul class="links--list">
-          <li class="links--item">
-            <a href="https://github.com/w8r" title="Github"
-              ><span class="icon-github"></span
-            ></a>
-          </li>
-          <!-- <li class="links--item">
-            <a href="mailto:{insert-email}" title="email"><span class="icon-mail-alt"></span></a></li> -->
-          <li class="links--item">
+    <!-- Contact / Footer -->
+    <footer id="contact" class="footer">
+      <div class="container">
+        <div class="footer__content">
+          <div class="footer__info">
+            <p class="footer__location">
+              <span class="icon-location"></span> Paris, France
+            </p>
+            <a href="mailto:alex@milevski.co" class="footer__email"
+              ><span class="icon-mail-alt"></span> alex@milevski.co</a
+            >
+          </div>
+          <div class="footer__social">
             <a
-              href="https://www.linkedin.com/in/alexandermilevski/"
-              title="linked.in"
-              ><span class="icon-linkedin"></span
-            ></a>
-          </li>
-          <li class="links--item">
-            <a href="https://fb.me/alexander.milevski" title="facebook"
-              ><span class="icon-facebook"></span
-            ></a>
-          </li>
-          <li class="links--item">
-            <a href="https://twitter.com/w8r" title="twitter"
-              ><span class="icon-twitter"></span
-            ></a>
-          </li>
-          <li class="links--item">
-            <a href="https://instagram.com/mile8ski/" title="Instagram"
-              ><span class="icon-instagram"></span
-            ></a>
-          </li>
-        </ul>
-      </section>
+              href="https://github.com/w8r"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+            >
+              <span class="icon-github"></span>
+            </a>
+            <a
+              href="https://linkedin.com/in/alexandermilevski"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
+              <span class="icon-linkedin"></span>
+            </a>
+            <a
+              href="https://instagram.com/mile8ski"
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram"
+            >
+              <span class="icon-instagram"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal__backdrop"></div>
+      <div class="modal__content">
+        <button class="modal__close" aria-label="Close">&times;</button>
+        <div class="modal__body" id="modal-body">
+          <!-- Content injected by JS -->
+        </div>
+      </div>
     </div>
-    <script type="module" src="./src/index.js"></script>
+
+    <script type="module" src="./src/index.ts"></script>
   </body>
 </html>

@@ -1,0 +1,225 @@
+html,
+body {
+  font-family: "Fira Sans", sans-serif;
+  color: #2e1c00;
+  background: #e2ddc7;
+}
+
+@font-face {
+  font-family: "fontello";
+  src: url("/font/fontello.eot");
+  src: url("/font/fontello.eot#iefix") format("embedded-opentype"),
+    url("/font/fontello.woff2") format("woff2"),
+    url("/font/fontello.woff") format("woff"),
+    url("/font/fontello.ttf") format("truetype"),
+    url("/font/fontello.svg#fontello") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('font/fontello.svg?30844589#fontello') format('svg');
+  }
+}
+*/
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: 0.2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-location:before {
+  content: "\e800";
+} /* '' */
+.icon-twitter:before {
+  content: "\f099";
+} /* '' */
+.icon-facebook:before {
+  content: "\f09a";
+} /* '' */
+.icon-mail-alt:before {
+  content: "\f0e0";
+} /* '' */
+.icon-linkedin:before {
+  content: "\f0e1";
+} /* '' */
+.icon-github:before {
+  content: "\f113";
+} /* '' */
+.icon-instagram:before {
+  content: "\f16d";
+} /* '' */
+.icon-doc-text:before {
+  content: "\f0f6";
+} /* '' */
+
+.container {
+  max-width: 740px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 0.25em;
+  color: #2e1c00;
+}
+
+.bio,
+.info {
+  text-align: center;
+}
+
+.bio {
+  margin: 2.5em auto;
+}
+
+.info {
+  color: #2e1c00;
+  font-weight: 100;
+  font-size: 0.8em;
+}
+
+.links--list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.links--item {
+  margin: 1em 0.5em;
+  font-size: 1.2em;
+}
+
+.links--item:last-child {
+  margin-right: 0;
+}
+
+.links--item a,
+.info a {
+  color: #2e1c00;
+}
+
+.links--item a:hover,
+.info a:hover {
+  color: #ff2020;
+}
+
+@-webkit-keyframes screw {
+  0% {
+    -webkit-transform: rotate(30deg);
+  }
+  72% {
+    -webkit-transform: rotate(150deg);
+  }
+  80% {
+    -webkit-transform: rotate(170deg);
+  }
+  90% {
+    -webkit-transform: rotate(172deg);
+  }
+  100% {
+    -webkit-transform: rotate(180deg);
+  }
+}
+
+#logo {
+  width: 4em;
+  height: 4em;
+  transform-origin: 84% 15%;
+  -webkit-animation: screw 1.5s linear alternate infinite;
+  position: relative;
+  top: 8em;
+  left: 5em;
+}
+
+#map-container {
+  background-image: url("/images/bouffon-min.jpg");
+  background-size: cover;
+  background-position: top center;
+  height: 450px;
+  margin-bottom: -50px;
+}
+
+#map {
+  width: 51%;
+  height: 60%;
+  top: 35.5%;
+  left: 24.25%;
+  position: relative;
+}
+
+#wrench {
+  fill: #2e1c00;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
+  #logo {
+    display: none;
+  }
+
+  #map-container {
+    background-size: cover;
+    background-position: top center;
+    height: 300px;
+    margin-bottom: 0px;
+  }
+
+  #map {
+    width: 57%;
+    height: 60%;
+    top: 31%;
+    left: 21%;
+    position: relative;
+  }
+
+  .links--item {
+    font-size: 1.5em;
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 370px) {
+  #map {
+    width: 67%;
+    left: 16%;
+  }
+}

@@ -554,8 +554,12 @@ h3 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .card__icon {
@@ -604,7 +608,9 @@ h3 {
   color: var(--w8r-ink);
   text-decoration: none;
   opacity: 0;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -793,6 +799,10 @@ ol.list-spaced > li:last-child {
 
 .art__list > li:last-child {
   border-bottom: none;
+}
+
+.art__exhibitions {
+  margin-top: var(--sp-6);
 }
 
 /* Bauhaus-style button */

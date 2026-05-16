@@ -308,4 +308,14 @@ if (canvas) {
   const { workProjects, artContent } = await loadContent();
   renderWorkCards(workProjects);
   renderArtSection(artContent);
+
+  // Scroll to hash after content loads
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: "instant" });
+      });
+    }
+  }
 })();

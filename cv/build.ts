@@ -34,9 +34,11 @@ const CONTENT_DIR = join(__dirname, "../content");
 const OUTPUT_DIR = join(__dirname, "../public");
 
 // Read and parse markdown files
-function readMarkdownFiles<T>(dir: string): Array<T & { content: string; slug: string }> {
-  const files = readdirSync(dir).filter(f => f.endsWith(".md"));
-  return files.map(file => {
+function readMarkdownFiles<T>(
+  dir: string,
+): Array<T & { content: string; slug: string }> {
+  const files = readdirSync(dir).filter((f) => f.endsWith(".md"));
+  return files.map((file) => {
     const raw = readFileSync(join(dir, file), "utf-8");
     const { attributes, body } = fm<T>(raw);
     return {
@@ -47,18 +49,27 @@ function readMarkdownFiles<T>(dir: string): Array<T & { content: string; slug: s
   });
 }
 
+// Strip shields.io badges from content
+function stripBadges(content: string): string {
+  return content
+    .replace(/!\[stars\]\([^)]+\)/g, "")
+    .replace(/\n\n+/g, "\n\n")
+    .trim();
+}
+
 // Generate CV markdown
 function generateCV(): string {
-  const allWork = readMarkdownFiles<WorkProject>(join(CONTENT_DIR, "work"))
-    .sort((a, b) => a.order - b.order);
+  const allWork = readMarkdownFiles<WorkProject>(
+    join(CONTENT_DIR, "work"),
+  ).sort((a, b) => a.order - b.order);
 
   // Separate regular work from open source
-  const work = allWork.filter(p => p.slug !== "opensource");
-  const opensource = allWork.find(p => p.slug === "opensource");
+  const work = allWork.filter((p) => p.slug !== "opensource");
+  const opensource = allWork.find((p) => p.slug === "opensource");
 
   const art = readMarkdownFiles<ArtContent>(join(CONTENT_DIR, "art"));
-  const artAbout = art.find(a => a.slug === "about");
-  const exhibitions = art.find(a => a.slug === "exhibitions");
+  const artAbout = art.find((a) => a.slug === "about");
+  const exhibitions = art.find((a) => a.slug === "exhibitions");
 
   return `---
 title: Alexander Milevski
@@ -85,30 +96,34 @@ Software engineer building complex web applications and libraries at the interse
 
 ## Experience
 
-${work.map(project => `
+${work
+  .map(
+    (project) => `
 ### ${project.title}
 
 **${project.role}** · ${project.period}${project.link ? ` · [${new URL(project.link).hostname}](${project.link})` : ""}
 
-${project.content}
-`).join("\n")}
+${stripBadges(project.content)}
+`,
+  )
+  .join("\n")}
 
 ### ${opensource?.title || "Open Source"}
 
 **${opensource?.role || "Creator & Maintainer"}** · ${opensource?.period || ""}${opensource?.link ? ` · [${new URL(opensource.link).hostname}](${opensource.link})` : ""}
 
-${opensource?.content || ""}
+${stripBadges(opensource?.content || "")}
 
 ## Skills
 
 | | |
-|---|---|
+|:---|:---|
 | **Languages** | TypeScript, JavaScript, HTML/CSS, SQL, some C++ |
 | **Visualization** | WebGL, Canvas, SVG, D3.js, Three.js, graph algorithms |
 | **GIS** | Leaflet, OpenLayers, Mapbox, ArcGIS API, Geoserver, PostGIS |
 | **Front-end** | React, Vue, performance optimization, large codebase architecture |
-| **Tools** | Git, Vite, Webpack, Node.js, Docker, CI/CD |
-| **Languages** | English (fluent), French (conversational), German (basic), Russian (native) |
+| **Tools** | Git, Vite, Node.js, Docker, CI/CD |
+| **Languages** | English (fluent), French (conversational), German (basic), Russian (native), Polish (basic) |
 
 ## Education
 
@@ -142,9 +157,12 @@ console.log("Generated cv.generated.md");
 
 // Convert to PDF using Pandoc + Typst
 try {
-  execSync(`pandoc "${tempMd}" -o "${join(OUTPUT_DIR, "cv.pdf")}" --pdf-engine=typst`, {
-    stdio: "inherit",
-  });
+  execSync(
+    `pandoc "${tempMd}" -o "${join(OUTPUT_DIR, "cv.pdf")}" --pdf-engine=typst`,
+    {
+      stdio: "inherit",
+    },
+  );
   console.log("Generated public/cv.pdf");
 } catch (error) {
   console.error("Failed to generate PDF:", error);
